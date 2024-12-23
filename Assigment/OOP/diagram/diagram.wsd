@@ -1,0 +1,51 @@
+@startuml
+
+class Employee {
+  - name: String
+  - age: int
+  - gender: String
+  - address: String
+  + Employee()
+  + Employee(String, int, String, String)
+  + void enterInformation()
+  + String getName()
+  + void displayInformation()
+  + ~Employee()
+}
+
+class Worker {
+  - level: int
+  + Worker()
+  + Worker(String, int, String, String, int)
+  + void enterInformation()
+  + void displayInformation()
+}
+
+class Engineer {
+  - major: String
+  + Engineer()
+  + Engineer(String, int, String, String, String)
+  + void enterInformation()
+  + void displayInformation()
+}
+
+class Staff {
+  - job: String
+  + Staff()
+  + Staff(String, int, String, String, String)
+  + void enterInformation()
+  + void displayInformation()
+}
+
+class EmployeeManager {
+  - employeeList: vector<Employee*>
+  + void addEmployee(Employee*)
+  + void searchByName(String&)
+  + void displayEmployeeList()
+}
+
+Employee <|-- Worker
+Employee <|-- Engineer
+Employee <|-- Staff
+EmployeeManager o--> Employee
+@enduml
