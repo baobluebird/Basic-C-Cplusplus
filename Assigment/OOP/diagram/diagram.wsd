@@ -7,34 +7,34 @@ class Employee {
   - address: String
   + Employee()
   + Employee(String, int, String, String)
-  + void enterInformation()
+  + virtual void enterInformation()
   + String getName()
-  + void displayInformation()
-  + ~Employee()
+  + virtual void displayInformation()
+  + virtual ~Employee()
 }
 
 class Worker {
   - level: int
   + Worker()
   + Worker(String, int, String, String, int)
-  + void enterInformation()
-  + void displayInformation()
+  + void enterInformation override()
+  + void displayInformation override()
 }
 
 class Engineer {
   - major: String
   + Engineer()
   + Engineer(String, int, String, String, String)
-  + void enterInformation()
-  + void displayInformation()
+  + void enterInformation override()
+  + void displayInformation override()
 }
 
 class Staff {
   - job: String
   + Staff()
   + Staff(String, int, String, String, String)
-  + void enterInformation()
-  + void displayInformation()
+  + void enterInformation override()
+  + void displayInformation override()
 }
 
 class EmployeeManager {
