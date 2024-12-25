@@ -1,7 +1,9 @@
 #include <stdio.h>
-
-int main(){
-	int c = 5, p = 10;
-	int l = 5/0;
-	return 0;
+#include <stdlib.h>
+#include <string.h>
+int main(void)
+{
+	char c;
+	while ((c = getchar()) != EOF)
+		putchar(c);
 }

@@ -16,44 +16,6 @@
 
 using namespace std;
 
-// EmployeeManager Class
-class EmployeeManager {
-    private:
-        vector<Employee*> employeeList;
-        
-    public:
-        void addEmployee(Employee* employee) {
-            employeeList.push_back(employee);
-        }
-
-        void searchByName(string &name) {
-            bool found = false;
-            for(Employee* employee : employeeList) {
-                if(employee->getName() == name) {
-                    employee->display();
-                    found = true;
-                }
-            }
-            if(!found) {
-                cout << "No employee found with the name: " << name << endl;
-            }
-        }
-
-        void displayAll() {
-            for(int i = 0; i < employeeList.size(); ++i) {
-                cout << "Employee " << i + 1 << " Information" << endl;
-                employeeList[i]->display();
-            }
-        }
-
-        ~EmployeeManager(){
-            for(Employee* employee : employeeList){
-                delete employee;
-            }
-            employeeList.clear();
-        }
-};
-
 // Base Class - Employee
 class Employee {
     protected:
@@ -164,6 +126,43 @@ class Staff : public Employee {
         }
 };
 
+// EmployeeManager Class
+class EmployeeManager {
+    private:
+        vector<Employee*> employeeList;
+        
+    public:
+        void addEmployee(Employee* employee) {
+            employeeList.push_back(employee);
+        }
+
+        void searchByName(string &name) {
+            bool found = false;
+            for(Employee* employee : employeeList) {
+                if(employee->getName() == name) {
+                    employee->display();
+                    found = true;
+                }
+            }
+            if(!found) {
+                cout << "No employee found with the name: " << name << endl;
+            }
+        }
+
+        void displayAll() {
+            for(int i = 0; i < employeeList.size(); ++i) {
+                cout << "Employee " << i + 1 << " Information" << endl;
+                employeeList[i]->display();
+            }
+        }
+
+        ~EmployeeManager(){
+            for(Employee* employee : employeeList){
+                delete employee;
+            }
+            employeeList.clear();
+        }
+};
 
 // Main Function
 int main() {
