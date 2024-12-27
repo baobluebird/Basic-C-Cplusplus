@@ -1,0 +1,38 @@
+@startuml
+
+class Document{
+  - idDoc: int
+  - publisherName: String
+  - editionNumber: int
+  + virtual void detailDocument()
+  + virtual void addDocument()
+  + virtual ~Document()
+}
+
+class Book{
+  - authorName: String
+  - pageNumber: int
+}
+
+class Magazine{
+  - issueNumber: int
+  - issueMonth: String
+}
+
+class News{
+  - releaseDay: int
+}
+
+class Library {
+  - bookList: vector<Document*>
+  + void addDocuments(Document*)
+  + void deleteByIdDocument(idDoc&)
+  + void displayDocument()
+  + void searchByTypeDocuments(String)
+}
+
+Document <|-- Book
+Document <|-- Magazine
+Document <|-- News
+Library o--> Document
+@enduml

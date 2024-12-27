@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-int main(void)
+int var = 20;
+int main()
 {
-	char c;
-	while ((c = getchar()) != EOF)
-		putchar(c);
+    int a = 3;
+    int *p = &a;
+    int y = a /*p/p point x */;
+    printf("%d",y);
 }

@@ -5,7 +5,7 @@ void EmployeeManager::addEmployee(Employee *employee)
     employeeList.push_back(employee);
 }
 
-void EmployeeManager::searchByName(string &name)
+void EmployeeManager::searchByName(string name)
 {
     bool found = false;
     for (Employee *employee : employeeList)

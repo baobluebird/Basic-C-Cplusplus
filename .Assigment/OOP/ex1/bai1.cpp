@@ -13,8 +13,19 @@
 // Thoát khỏi chương trình.
 
 #include<bits/stdc++.h>
+//define
+
+#define AddEmployee 1
+#define SearchEmployeeByName 2
+#define DisplayEmployee 3
 
 using namespace std;
+enum class EmployeeType {
+    Worker = 1,
+    Staff,
+    Engineer
+};
+
 
 // Base Class - Employee
 class Employee {
@@ -69,6 +80,7 @@ class Worker : public Employee {
             Employee::enterInformation();
             cout << "Enter level (1-10): ";
             cin >> level;
+        
             while (level < 1 || level > 10) {
                 cout << "Level must be between 1 and 10. Please re-enter: ";
                 cin >> level;
@@ -129,16 +141,16 @@ class Staff : public Employee {
 // EmployeeManager Class
 class EmployeeManager {
     private:
-        vector<Employee*> employeeList;
+        vector<shared_ptr<Employee>> employeeList;
         
     public:
-        void addEmployee(Employee* employee) {
+        void addEmployee(shared_ptr<Employee> employee) {
             employeeList.push_back(employee);
         }
 
-        void searchByName(string &name) {
+        void searchByName(string name) {
             bool found = false;
-            for(Employee* employee : employeeList) {
+            for(shared_ptr<Employee> employee : employeeList) {
                 if(employee->getName() == name) {
                     employee->display();
                     found = true;
@@ -155,14 +167,43 @@ class EmployeeManager {
                 employeeList[i]->display();
             }
         }
-
-        ~EmployeeManager(){
-            for(Employee* employee : employeeList){
-                delete employee;
-            }
-            employeeList.clear();
-        }
 };
+
+void addWorker(EmployeeManager &manager) {
+    int num;
+    cout << "Number of workers to add: ";
+    cin >> num;
+    for (int i = 0; i < num; ++i) {
+        cout << "Enter information for worker " << i + 1 << ":" << endl;
+        shared_ptr<Employee> employee = make_shared<Worker>();
+        employee->enterInformation();
+        manager.addEmployee(employee);
+    }
+}
+
+void addStaff(EmployeeManager &manager) {
+    int num;
+    cout << "Number of staff to add: ";
+    cin >> num;
+    for (int i = 0; i < num; ++i) {
+        cout << "Enter information for staff " << i + 1 << ":" << endl;
+        shared_ptr<Employee> employee = make_shared<Staff>();
+        employee->enterInformation();
+        manager.addEmployee(employee);
+    }
+}
+
+void addEngineer(EmployeeManager &manager) {
+    int num;
+    cout << "Number of engineers to add: ";
+    cin >> num;
+    for (int i = 0; i < num; ++i) {
+        cout << "Enter information for engineer " << i + 1 << ":" << endl;
+        shared_ptr<Employee> employee = make_shared<Engineer>();
+        employee->enterInformation();
+        manager.addEmployee(employee);
+    }
+}
 
 // Main Function
 int main() {
@@ -182,49 +223,24 @@ int main() {
         }
 
         switch (choice) {
-            case 1: {
+            case AddEmployee: {
                 cout << "1. Add Worker" << endl;
                 cout << "2. Add Staff" << endl;
                 cout << "3. Add Engineer" << endl;
-                int type; 
-                cin >> type;
-                
-                Employee* employee;
+                int typeInput; 
+                cin >> typeInput;
+                EmployeeType type = static_cast<EmployeeType>(typeInput);
                 switch (type) {
-                    case 1: {
-                        cout << "Number of workers to add: ";
-                        int num;
-                        cin >> num;
-                        for(int i = 0; i < num; ++i) {
-                            cout << "Enter information for worker " << i + 1 << ":" << endl;
-                            employee = new Worker();
-                            employee->enterInformation();
-                            manager.addEmployee(employee);
-                        }
+                    case EmployeeType::Worker: {
+                        addWorker(manager);
                         break;
                     }
-                    case 2: {
-                        cout << "Number of staff to add: ";
-                        int num;
-                        cin >> num;
-                        for(int i = 0; i < num; ++i) {
-                            cout << "Enter information for staff " << i + 1 << ":" << endl;
-                            employee = new Staff();
-                            employee->enterInformation();
-                            manager.addEmployee(employee);
-                        }
+                    case EmployeeType::Staff: {
+                        addStaff(manager);
                         break;
                     }
-                    case 3: {
-                        cout << "Number of engineers to add: ";
-                        int num;
-                        cin >> num;
-                        for(int i = 0; i < num; ++i) {
-                            cout << "Enter information for engineer " << i + 1 << ":" << endl;
-                            employee = new Engineer();
-                            employee->enterInformation();
-                            manager.addEmployee(employee);
-                        }
+                    case EmployeeType::Engineer: {
+                        addEngineer(manager);
                         break;
                     }
                     default:
@@ -232,14 +248,14 @@ int main() {
                 }
                 break;
             }
-            case 2: {
+            case SearchEmployeeByName: {
                 string name;
                 cout << "Enter employee's name to search: ";
                 cin >> name;
                 manager.searchByName(name);
                 break;
             }
-            case 3: {
+            case DisplayEmployee: {
                 cout << "--------- All Employees ---------" << endl;
                 manager.displayAll();
                 break;

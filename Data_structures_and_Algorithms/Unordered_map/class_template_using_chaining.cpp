@@ -27,6 +27,7 @@ template <typename Key, typename Value, typename Hash = HashFunction>
 class UnorderedMap
 {
 private:
+    //Linked list
     struct Node
     {
         Key key;

@@ -1,2 +1,2 @@
-ứ 5
-    char str[] = "h";
+
+    printf("Current position: %ld\n", position1);

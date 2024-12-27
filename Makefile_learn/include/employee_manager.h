@@ -10,7 +10,7 @@ class EmployeeManager {
     public:
         void addEmployee(Employee* );
 
-        void searchByName(string&);
+        void searchByName(string);
 
         void displayAll();
 

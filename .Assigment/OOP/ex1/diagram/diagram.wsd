@@ -17,35 +17,36 @@ class Worker {
   - level: int
   + Worker()
   + Worker(String, int, String, String, int)
-  + void enterInformation override()
-  + void displayInformation override()
+  + void enterInformation() override
+  + void displayInformation() override
 }
 
 class Engineer {
   - major: String
   + Engineer()
   + Engineer(String, int, String, String, String)
-  + void enterInformation override()
-  + void displayInformation override()
+  + void enterInformation() override
+  + void displayInformation() override
 }
 
 class Staff {
   - job: String
   + Staff()
   + Staff(String, int, String, String, String)
-  + void enterInformation override()
-  + void displayInformation override()
+  + void enterInformation() override
+  + void displayInformation() override
 }
 
 class EmployeeManager {
   - employeeList: vector<Employee*>
   + void addEmployee(Employee*)
-  + void searchByName(String&)
+  + void searchByName(String)
   + void displayEmployeeList()
 }
 
 Employee <|-- Worker
 Employee <|-- Engineer
 Employee <|-- Staff
-EmployeeManager o--> Employee
+EmployeeManager o--> Employee : manages
+
 @enduml

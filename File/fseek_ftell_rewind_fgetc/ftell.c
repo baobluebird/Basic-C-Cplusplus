@@ -6,12 +6,18 @@ int main() {
         perror("Error opening file");
         return 1;
     }
+   // int b = fseek(fp, 0 , SEEK_END);
+    //printf("%d\n", b);
+    long position1 = ftell(fp);
+    printf("Current position: %ld\n", position1);
 
-    fgetc(fp);  // Đọc một ký tự
-    printf("%c\n", fgetc(fp));
-    long position = ftell(fp);
-    printf("Current position: %ld\n", position);
-
+    char a[100];
+    fgets(a, sizeof(a), fp);  
+    printf("%s", a);
+    fgets(a, sizeof(a), fp);  
+    printf("%s", a);
+    long position2 = ftell(fp);
+    printf("Current position: %ld\n", position2);
     fclose(fp);
     return 0;
 }

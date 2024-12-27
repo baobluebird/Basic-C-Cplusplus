@@ -11,7 +11,7 @@ int main() {
     char str[] = "hi";
     int a = fputs(str,fp);
     printf("%d", a);
-    //fseek(fp, 5, SEEK_SET);
+    fseek(fp, 5, SEEK_SET);
 
     char ch = fgetc(fp);     // Đọc ký tự tại vị trí đó
     printf("Character at position 5: %c\n", ch);

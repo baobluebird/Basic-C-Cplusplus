@@ -1,0 +1,19 @@
+@startuml
+interface Shape {
+  + draw()
+  + calculateArea()
+}
+
+class Circle {
+  + draw()
+  + calculateArea()
+}
+
+class Rectangle {
+  + draw()
+  + calculateArea()
+}
+
+Shape <|.. Circle
+Shape <|.. Rectangle
+@enduml

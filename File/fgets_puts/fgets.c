@@ -7,8 +7,8 @@ int main() {
         return 1;
     }
 
-    char buffer[100];
-    //char *buffer;
+    //char buffer[100];
+    char *buffer;
     while (fgets(buffer, sizeof(buffer), fp)) {
         printf("%s", buffer);  // In từng dòng từ file
     }
