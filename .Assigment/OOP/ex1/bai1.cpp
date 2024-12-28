@@ -23,7 +23,8 @@ using namespace std;
 enum class EmployeeType {
     Worker = 1,
     Staff,
-    Engineer
+    Engineer,
+    
 };
 
 

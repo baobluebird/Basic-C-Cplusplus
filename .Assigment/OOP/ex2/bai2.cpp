@@ -18,7 +18,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-#include <unordered_set>
+#include <set>
 #include <set>
 #include <iomanip> 
 
@@ -40,8 +40,8 @@ class Document{
         string publisherName;
         int editionNumber;
         static int count;
-        static unordered_set<int> manageId;
     public:
+        static set<int> manageId;
         static set<int> recycledIds;  
 
         Document() : publisherName(""), editionNumber(0) {
@@ -56,7 +56,6 @@ class Document{
         void generateUniqueId() {
             if(!recycledIds.empty()){
                 this->idDoc = *recycledIds.begin();
-                recycledIds.erase(recycledIds.begin());
             }else{
                 this->idDoc = count++;
             }
@@ -88,7 +87,6 @@ class Document{
             cin >> this->publisherName;
             cout << "Enter edition number: " << endl;
             cin >> this->editionNumber;
-
         }
 
         virtual string getType() = 0;
@@ -96,10 +94,10 @@ class Document{
         virtual ~Document(){
             manageId.erase(this->idDoc);
             recycledIds.insert(this->idDoc);
+            cout << "Destructor of ID: " << this->idDoc << endl;
         }
 };
-
-unordered_set<int> Document::manageId;
+set<int> Document::manageId;
 set<int> Document::recycledIds;
 int Document::count = 1;
 
@@ -138,15 +136,13 @@ class Book : public Document{
 
 };
 
-
-
 class Magazine : public Document{
     private:
         int issueNumber;
         string issueMonth;
     public: 
         Magazine() : issueNumber(0), issueMonth(""){}
-        Magazine(int idDoc, string publisherName, int editionNumber, string authorName, int issueNumber, string issueMonth)
+        Magazine(int idDoc, string publisherName, int editionNumber, int issueNumber, string issueMonth)
             : Document(idDoc, publisherName, editionNumber), issueNumber(issueNumber), issueMonth(issueMonth) {}
         
         void detailDocument() override {
@@ -204,32 +200,32 @@ class News : public Document{
         }
 }; 
 
-class Library{
+class DocumentManager{
     private:
-        vector<shared_ptr<Document>> listDocuments;
+        vector<unique_ptr<Document>> listDocuments;
     public:
 
-        void addDocument(shared_ptr<Document> document){
-            if(!Document::recycledIds.empty()){
+        void addDocument(unique_ptr<Document> document) {
+            if (!Document::recycledIds.empty()) {
                 int recycleId = *Document::recycledIds.begin();
-                //Document::recycledIds.erase(Document::recycledIds.begin());
-                listDocuments.insert(listDocuments.begin() + recycleId - 1, document);
-            }else{
-                listDocuments.push_back(document);
+                Document::recycledIds.erase(Document::recycledIds.begin());
+                listDocuments.insert(listDocuments.begin() + (recycleId - 1), move(document));
+            } else {
+                listDocuments.push_back(move(document));  
             }
-            
         }
 
-        bool deleteDocumentById(int id){
-            for(size_t i = 0; i < listDocuments.size(); ++i){
-                if(listDocuments[i]->getId() == id){
-                    listDocuments.erase(listDocuments.begin() + i);
-                    cout << "Delete successfully";
-                    return true;
-                }
+
+        bool deleteDocumentById(int id) {
+            if (id < 1 || id > Document::manageId.size()) {
+                cout << "ID not found" << endl;
+                return false;
             }
-            cout << "Id not found" << endl;
-            return false;
+
+            listDocuments.erase(listDocuments.begin() + (id - 1));
+
+            cout << "Delete successfully" << endl;
+            return true;
         }
 
         void displayDocument(){
@@ -242,16 +238,18 @@ class Library{
                  << setw(20) << "PageNumber/IssueMonth"
                  << endl;
             cout << string(65, '-') << endl;
-            for(shared_ptr<Document> doc : listDocuments){
+            for (size_t i = 0; i < listDocuments.size(); ++i) { 
+                unique_ptr<Document>& doc = listDocuments[i];  
                 doc->detailDocument();
             }
             cout << string(65, '-') << endl;
         }
 
-        void searchDocumentByType(string type){
+        void searchDocumentByType(string type) {
             bool found = false;
-            for(shared_ptr<Document> doc : listDocuments){
-                if(doc->getType() == type){
+            for (size_t i = 0; i < listDocuments.size(); ++i) { 
+                unique_ptr<Document>& doc = listDocuments[i];   
+                if (doc->getType() == type) {
                     doc->detailDocument();
                     found = true;
                 }
@@ -262,44 +260,46 @@ class Library{
         }
 };
 
-void addBook(Library& manager){
+void addBook(DocumentManager& manager){
     int num;
     cout << "Number of Book to add: ";
     cin >> num;
     for(int i = 0; i < num; ++i){
         cout << "Enter information for book " << i + 1 << ":" << endl;
-        shared_ptr<Document> document = make_shared<Book>();
+        unique_ptr<Document> document = make_unique<Book>();
         document->addDocument();
-        manager.addDocument(document);
+        manager.addDocument(move(document));
     }
 }
-void addMagazine(Library& manager){
+
+void addMagazine(DocumentManager& manager){
     int num;
     cout << "Number of Magazine to add: ";
     cin >> num;
     for(int i = 0; i < num; ++i){
         cout << "Enter information for magazine " << i + 1 << ":" << endl;
-        shared_ptr<Document> document = make_shared<Magazine>();
+        unique_ptr<Document> document = make_unique<Magazine>();
         document->addDocument();
-        manager.addDocument(document);
+        manager.addDocument(move(document));
     }
 }
-void addNews(Library& manager){
+
+void addNews(DocumentManager& manager){
     int num;
     cout << "Number of News to add: ";
     cin >> num;
     for(int i = 0; i < num; ++i){
         cout << "Enter information for news " << i + 1 << ":" << endl;
-        shared_ptr<Document> document = make_shared<News>();
+        unique_ptr<Document> document = make_unique<News>();
         document->addDocument();
-        manager.addDocument(document);
+        manager.addDocument(move(document));
     }
 }
 
 
 
 int main() {
-    Library manager;
+    DocumentManager manager;
     int choice;
 
     while(1) {

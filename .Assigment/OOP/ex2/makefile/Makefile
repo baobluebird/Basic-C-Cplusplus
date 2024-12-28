@@ -1,5 +1,5 @@
 #name file execute
-TARGET = employee_manager
+TARGET = document_manager
 #name compiler
 CXX = g++
 #compiler flag
@@ -8,7 +8,7 @@ CXXFLAGS = -Wall -std=c++17
 SRC_DIR = src
 INC_DIR = include
 #list source file
-SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/employee.cpp $(SRC_DIR)/employee_manager.cpp $(SRC_DIR)/employee_manager_utils.cpp $(SRC_DIR)/worker.cpp $(SRC_DIR)/engineer.cpp $(SRC_DIR)/staff.cpp
+SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/document.cpp $(SRC_DIR)/document_manager.cpp $(SRC_DIR)/document_manager_utils.cpp $(SRC_DIR)/book.cpp $(SRC_DIR)/magazine.cpp $(SRC_DIR)/news.cpp
 #list object file
 OBJ = $(SRC:.cpp=.o)
 #Create executable file
