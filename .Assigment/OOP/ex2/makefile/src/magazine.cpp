@@ -2,8 +2,8 @@
 
 Magazine::Magazine() : issueNumber(0), issueMonth(""){}
 
-Magazine::Magazine(int idDoc, string publisherName, int editionNumber, int issueNumber, string issueMonth)
-            : Document(idDoc, publisherName, editionNumber), issueNumber(issueNumber), issueMonth(issueMonth) {}
+Magazine::Magazine( string publisherName, int editionNumber, int issueNumber, string issueMonth)
+            : Document(publisherName, editionNumber), issueNumber(issueNumber), issueMonth(issueMonth) {}
 
 void Magazine::detailDocument() {
     cout << left
@@ -16,8 +16,8 @@ void Magazine::detailDocument() {
          << endl;
 }
 
-void Magazine::addDocument() {
-    Document::addDocument();
+void Magazine::inputDocument() {
+    Document::inputDocument();
     cout << "Enter issue number: ";
     cin >> this->issueNumber;
     cout << "Enter issue month: ";

@@ -19,7 +19,6 @@
 #include <vector>
 #include <memory>
 #include <set>
-#include <set>
 #include <iomanip> 
 
 #define AddDoc 1
@@ -47,7 +46,8 @@ class Document{
         Document() : publisherName(""), editionNumber(0) {
             generateUniqueId();
         }
-        Document(int idDoc, string publisherName, int editionNumber){
+
+        Document(string publisherName, int editionNumber){
             generateUniqueId();
             this->publisherName = publisherName;
             this->editionNumber = editionNumber;
@@ -62,14 +62,6 @@ class Document{
             manageId.insert(this->idDoc);
         }
 
-        virtual void detailDocument() {
-            cout << left 
-                 << setw(10) << this->idDoc
-                 << setw(20) << this->publisherName
-                 << setw(15) << this->editionNumber
-                 << endl;
-        }
-
         int getId(){
             return this->idDoc;
         }
@@ -82,12 +74,14 @@ class Document{
             return this->editionNumber;
         }
 
-        virtual void addDocument(){
-            cout << "Enter publisher name: " << endl;
+        virtual void inputDocument(){
+            cout << "Enter publisher name: ";
             cin >> this->publisherName;
-            cout << "Enter edition number: " << endl;
+            cout << "Enter edition number: ";
             cin >> this->editionNumber;
         }
+
+        virtual void detailDocument() = 0;
 
         virtual string getType() = 0;
 
@@ -107,8 +101,8 @@ class Book : public Document{
         int pageNumber;
     public:
         Book() : authorName(""), pageNumber(0) {}
-        Book(int idDoc, string publisherName, int editionNumber, string authorName, int pageNumber)
-            : Document(idDoc, publisherName, editionNumber), authorName(authorName), pageNumber(pageNumber) {}
+        Book(string publisherName, int editionNumber, string authorName, int pageNumber)
+            : Document( publisherName, editionNumber), authorName(authorName), pageNumber(pageNumber) {}
     
         void detailDocument() override {
                 cout << left
@@ -122,11 +116,11 @@ class Book : public Document{
         }
 
 
-        void addDocument(){
-            Document::addDocument();
-            cout << "Enter author name: " << endl;
+        void inputDocument(){
+            Document::inputDocument();
+            cout << "Enter author name: ";
             cin >> this->authorName;
-            cout << "Enter page number: " << endl;
+            cout << "Enter page number: ";
             cin >> this->pageNumber;
         }
 
@@ -142,8 +136,8 @@ class Magazine : public Document{
         string issueMonth;
     public: 
         Magazine() : issueNumber(0), issueMonth(""){}
-        Magazine(int idDoc, string publisherName, int editionNumber, int issueNumber, string issueMonth)
-            : Document(idDoc, publisherName, editionNumber), issueNumber(issueNumber), issueMonth(issueMonth) {}
+        Magazine(string publisherName, int editionNumber, int issueNumber, string issueMonth)
+            : Document(publisherName, editionNumber), issueNumber(issueNumber), issueMonth(issueMonth) {}
         
         void detailDocument() override {
                 cout << left
@@ -157,11 +151,11 @@ class Magazine : public Document{
         }
 
 
-        void addDocument(){
-            Document::addDocument();
-            cout << "Enter issue number: " << endl;
+        void inputDocument(){
+            Document::inputDocument();
+            cout << "Enter issue number: ";
             cin >> this->issueNumber;
-            cout << "Enter issue month: " << endl;
+            cout << "Enter issue month: ";
             cin >> this->issueMonth;
         }
 
@@ -175,8 +169,8 @@ class News : public Document{
         string releaseDay;
     public:
         News() : releaseDay(""){}
-        News(int idDoc, string publisherName, int editionNumber, string releaseDay)
-            : Document(idDoc, publisherName, editionNumber), releaseDay(releaseDay) {}
+        News(string publisherName, int editionNumber, string releaseDay)
+            : Document(publisherName, editionNumber), releaseDay(releaseDay) {}
         
         void detailDocument() override {
             cout << left
@@ -188,9 +182,9 @@ class News : public Document{
                  << endl;
         }
 
-        void addDocument(){
-            Document::addDocument();
-            cout << "Enter release day: " << endl;
+        void inputDocument(){
+            Document::inputDocument();
+            cout << "Enter release day: ";
             cin >> this->releaseDay;
 
         }
@@ -267,7 +261,7 @@ void addBook(DocumentManager& manager){
     for(int i = 0; i < num; ++i){
         cout << "Enter information for book " << i + 1 << ":" << endl;
         unique_ptr<Document> document = make_unique<Book>();
-        document->addDocument();
+        document->inputDocument();
         manager.addDocument(move(document));
     }
 }
@@ -279,7 +273,7 @@ void addMagazine(DocumentManager& manager){
     for(int i = 0; i < num; ++i){
         cout << "Enter information for magazine " << i + 1 << ":" << endl;
         unique_ptr<Document> document = make_unique<Magazine>();
-        document->addDocument();
+        document->inputDocument();
         manager.addDocument(move(document));
     }
 }
@@ -291,7 +285,7 @@ void addNews(DocumentManager& manager){
     for(int i = 0; i < num; ++i){
         cout << "Enter information for news " << i + 1 << ":" << endl;
         unique_ptr<Document> document = make_unique<News>();
-        document->addDocument();
+        document->inputDocument();
         manager.addDocument(move(document));
     }
 }
@@ -323,7 +317,6 @@ int main() {
                 int typeInput; 
                 cin >> typeInput;
                 DocumentType type = static_cast<DocumentType>(typeInput);
-                shared_ptr<Document> document;
                 switch (type) {
                     case DocumentType::Book: {
                         addBook(manager);
@@ -338,6 +331,7 @@ int main() {
                         break;
                     }
                     default:
+                        cout << "Invalid choice" << endl;
                         break;
                 }
                 break;
@@ -362,6 +356,7 @@ int main() {
                 break;
             }
             default:
+                cout << "Invalid choice" << endl;
                 break;
         }
     }

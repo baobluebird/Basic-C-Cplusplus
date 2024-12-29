@@ -2,8 +2,8 @@
 
 Book::Book() : authorName(""), pageNumber(0) {}
 
-Book::Book(int idDoc, string publisherName, int editionNumber, string authorName, int pageNumber)
-    : Document(idDoc, publisherName, editionNumber), authorName(authorName), pageNumber(pageNumber) {}
+Book::Book(string publisherName, int editionNumber, string authorName, int pageNumber)
+    : Document(publisherName, editionNumber), authorName(authorName), pageNumber(pageNumber) {}
 
 void Book::detailDocument() {
     cout << left
@@ -16,8 +16,8 @@ void Book::detailDocument() {
          << endl;
 }
 
-void Book::addDocument() {
-    Document::addDocument();
+void Book::inputDocument() {
+    Document::inputDocument();
     cout << "Enter author name: ";
     cin >> authorName;
     cout << "Enter page number: ";

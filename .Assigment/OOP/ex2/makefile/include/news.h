@@ -9,11 +9,11 @@ private:
 
 public:
     News();
-    News(int, string, int, string);
+    News(string, int, string);
 
     void detailDocument() override;
     
-    void addDocument() override;
+    void inputDocument() override;
 
     string getType() override;
 };

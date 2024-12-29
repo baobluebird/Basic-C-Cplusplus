@@ -9,11 +9,11 @@ private:
     int pageNumber;
 public:
     Book();
-    Book(int, string, int, string, int);
+    Book(string, int, string, int);
 
     void detailDocument() override;
 
-    void addDocument() override;
+    void inputDocument() override;
 
     string getType() override;
 };

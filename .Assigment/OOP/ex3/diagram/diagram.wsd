@@ -1,0 +1,58 @@
+@startuml
+
+class Candidate{
+  - id: int
+  - name: String
+  - address: String
+  - priorityLevel: int
+  - count: static int
+  - manageId: static set<int>
+  - recycledIds: static set<int>
+  + Candidate();
+  + Candidate(int, string, int);
+  + void generateUniqueId();
+  + int getId();
+  + string getName();
+  + string getAddress();
+  + int getPriorityLevel();
+  + virtual string getBlock() = 0;
+  + virtual void detailCandidate();
+  + virtual ~Document();
+}
+
+class CandidateA{
+  - subjectCombinationA: String
+  + CandidateA();
+  + CandidateA(int, string, string, int);
+  + void detailCandidate() override;
+  + string getBlock() override;
+}
+
+class CandidateB{
+  - subjectCombinationB: String
+  + Magazine();
+  + Magazine(int, string, string, int);
+  + void detailCandidate() override;
+  + string getBlock() override;
+}
+
+class CandidateC{
+  - subjectCombinationC: String
+  + CandidateC();
+  + CandidateC(int, string, string, int);
+  + void detailDocument() override;
+  + string getBlock() override;
+}
+
+class CandidateManager {
+  - listCandidates: vector<unique_ptr<Candidate>>
+  + void addCandidate(unique_ptr<Candidate>);
+  + void displayCandidate();
+  + void searchDocumentById(string);
+}
+
+Candidate <|-- CandidateA : Generalization 
+Candidate <|-- CandidateB : Generalization 
+Candidate <|-- CandidateC : Generalization 
+CandidateManager o--> Candidate : Aggregation, Directed Association
+@enduml

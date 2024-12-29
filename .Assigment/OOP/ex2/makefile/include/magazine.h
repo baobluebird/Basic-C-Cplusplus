@@ -10,11 +10,11 @@ private:
 
 public:
     Magazine();
-    Magazine(int, string, int, int, string);
+    Magazine(string, int, int, string);
 
     void detailDocument() override;
 
-    void addDocument() override;
+    void inputDocument() override;
     
     string getType() override;
 };

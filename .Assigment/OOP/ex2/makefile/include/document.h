@@ -20,11 +20,9 @@ public:
     static set<int> manageId;
     static set<int> recycledIds;
     Document();
-    Document(int, string, int);
+    Document(string, int);
 
     void generateUniqueId();
-
-    virtual void detailDocument();
 
     int getId();
 
@@ -32,7 +30,9 @@ public:
 
     int getEditionNumber();
 
-    virtual void addDocument();
+    virtual void inputDocument();
+
+    virtual void detailDocument() = 0;
     
     virtual string getType() = 0;
 

@@ -8,7 +8,7 @@ Document::Document() : publisherName(""), editionNumber(0) {
     generateUniqueId();
 }
 
-Document::Document(int idDoc, string publisherName, int editionNumber){
+Document::Document(string publisherName, int editionNumber){
     generateUniqueId();
     this->publisherName = publisherName;
     this->editionNumber = editionNumber;
@@ -23,12 +23,6 @@ void Document::generateUniqueId() {
     manageId.insert(this->idDoc);
 }       
 
-void Document::detailDocument() {
-    cout << left 
-         << setw(10) << this->idDoc
-         << setw(20) << this->publisherName
-         << setw(15) << this->editionNumber << endl;
-}
 
 int Document::getId() {
     return this->idDoc;
@@ -42,7 +36,7 @@ int Document::getEditionNumber() {
     return this->editionNumber;
 }
 
-void Document::addDocument() {
+void Document::inputDocument() {
     cout << "Enter publisher name: ";
     cin >> this->publisherName;
     cout << "Enter edition number: ";

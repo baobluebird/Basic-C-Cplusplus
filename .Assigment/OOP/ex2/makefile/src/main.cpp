@@ -26,7 +26,6 @@ int main() {
                 int typeInput; 
                 cin >> typeInput;
                 DocumentType type = static_cast<DocumentType>(typeInput);
-                shared_ptr<Document> document;
                 switch (type) {
                     case DocumentType::Book: {
                         addBook(manager);

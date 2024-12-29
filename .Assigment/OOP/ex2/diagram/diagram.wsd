@@ -4,6 +4,16 @@ class Document{
   - idDoc: int
   - publisherName: String
   - editionNumber: int
+  - count: static int
+  - manageId: static set<int>
+  - recycledIds: static set<int>
+  + Document();
+  + Document(int, string, int);
+  + void generateUniqueId();
+  + int getId();
+  + string getPublisherName();
+  + int getEditionNumber();
+  + virtual string getType() = 0;
   + virtual void detailDocument()
   + virtual void addDocument()
   + virtual ~Document()
@@ -12,27 +22,42 @@ class Document{
 class Book{
   - authorName: String
   - pageNumber: int
+  + Book();
+  + Book(int, string, int, string, int);
+  + void detailDocument() override;
+  + void addDocument() override;
+  + string getType() override;
 }
 
 class Magazine{
   - issueNumber: int
   - issueMonth: String
+  + Magazine();
+  + Magazine(int, string, int, int, string);
+  + void detailDocument() override;
+  + void addDocument() override;
+  + string getType() override;
 }
 
 class News{
   - releaseDay: int
+  + News();
+  + News(int, string, int, string);
+  + void detailDocument() override;
+  + void addDocument() override;
+  + string getType() override;
 }
 
-class Library {
-  - bookList: vector<Document*>
-  + void addDocuments(Document*)
-  + void deleteByIdDocument(idDoc&)
-  + void displayDocument()
-  + void searchByTypeDocuments(String)
+class DocumentManager {
+  - listDocuments: vector<unique_ptr<Document>>
+  + void addDocument(unique_ptr<Document> );
+  + void deleteDocumentById(int);
+  + void displayDocument();
+  + void searchDocumentByType(string);
 }
 
 Document <|-- Book
 Document <|-- Magazine
 Document <|-- News
-Library o--> Document
+DocumentManager o--> Document
 @enduml

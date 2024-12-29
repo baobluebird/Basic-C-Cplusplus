@@ -14,7 +14,7 @@ void ErrorHandler(status_enum_t status) {
             printf("LENGHT_INVALID\n");
             break;
         default:
-            printf("Unknown error.\n");
+            printf("ERROR.\n");
             break;
     }
 }

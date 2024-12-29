@@ -2,8 +2,8 @@
 
 News::News() : releaseDay(""){}
 
-News::News(int idDoc, string publisherName, int editionNumber, string releaseDay)
-            : Document(idDoc, publisherName, editionNumber), releaseDay(releaseDay) {}
+News::News( string publisherName, int editionNumber, string releaseDay)
+            : Document(publisherName, editionNumber), releaseDay(releaseDay) {}
 
 void News::detailDocument() {
     cout << left
@@ -15,8 +15,8 @@ void News::detailDocument() {
          << endl;
 }
 
-void News::addDocument() {
-    Document::addDocument();
+void News::inputDocument() {
+    Document::inputDocument();
     cout << "Enter release day: ";
     cin >> this->releaseDay;
 }

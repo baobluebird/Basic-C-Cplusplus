@@ -44,9 +44,9 @@ class EmployeeManager {
   + void displayEmployeeList()
 }
 
-Employee <|-- Worker
-Employee <|-- Engineer
-Employee <|-- Staff
-EmployeeManager o--> Employee : manages
+Employee <|-- Worker : Generalization 
+Employee <|-- Engineer : Generalization 
+Employee <|-- Staff : Generalization 
+EmployeeManager o--> Employee : Aggregation, Directed Association
 
 @enduml

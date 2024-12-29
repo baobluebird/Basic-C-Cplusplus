@@ -1,0 +1,30 @@
+@startuml
+
+class Person {
+    - idNumber: int
+    - name: String
+    - age: int
+    - job: String
+    - listIdNumber : static set<int> 
+    + void inputInfoPerson();
+    + void displayInfoPerson();
+}
+
+class Household {
+    - numMember: int
+    - address: String
+    - listPersons: vector<shared_ptr<Person>>
+    + void inputInfoHousehold();
+    + void displayInfoHousehold();
+}
+
+class Neighborhood {
+    - listHouseholds: vector<unique_ptr<Household>>
+    + void addHousehold();
+    + void displayNeighborhood();
+}
+
+Household *--> Person : Composition, Directed Association
+Neighborhood o--> Household : Aggregation, Directed Association
+
+@enduml

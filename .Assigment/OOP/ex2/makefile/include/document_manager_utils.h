@@ -10,11 +10,13 @@
 #define DeleteDoc 2
 #define DisplayDoc 3
 #define SearchByType 4
+
 enum class DocumentType {
     Book = 1,
     Magazine,
     News
 };
+
 void addBook(DocumentManager& manager);
 void addMagazine(DocumentManager& manager);
 void addNews(DocumentManager& manager);

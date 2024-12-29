@@ -1,0 +1,28 @@
+@startuml
+
+class Student {
+    - name: String
+    - age: int
+    - address: String
+    + int getAge();
+    + void inputInfoStudent();
+    + void displayInfoStudent();
+}
+
+class Class{
+    - nameClass: String
+    - listStudents: vector<shared_ptr<Student>>
+    + void inputInfoClass();
+    + void displayInfoClass();
+}
+
+class School {
+    - listClass: vector<unique_ptr<ClassStudent>>
+    + void addClass();
+    + void displaySchool();
+}
+
+Class o--> Student : Aggregation
+School *-->  Class : Composition
+
+@enduml

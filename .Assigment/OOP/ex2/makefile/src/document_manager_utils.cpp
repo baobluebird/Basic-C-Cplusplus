@@ -7,7 +7,7 @@ void addBook(DocumentManager& manager) {
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for book " << i + 1 << ":" << endl;
         unique_ptr<Document> document = make_unique<Book>();
-        document->addDocument();
+        document->inputDocument();
         manager.addDocument(move(document));
     }
 }
@@ -19,7 +19,7 @@ void addMagazine(DocumentManager& manager) {
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for magazine " << i + 1 << ":" << endl;
         unique_ptr<Document> document = make_unique<Magazine>();
-        document->addDocument();
+        document->inputDocument();
         manager.addDocument(move(document));
     }
 }
@@ -31,7 +31,7 @@ void addNews(DocumentManager& manager) {
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for news " << i + 1 << ":" << endl;
         unique_ptr<Document> document = make_unique<News>();
-        document->addDocument();
+        document->inputDocument();
         manager.addDocument(move(document));
     }
 }

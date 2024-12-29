@@ -1,0 +1,34 @@
+@startuml
+abstract class Student {
+    - fullName : string
+    - doB : string
+    - sex : string
+    - phoneNumber : string
+    - universityName : string
+    - gradeLevel : string
+    --
+    + displayInfo() : void
+    + inputInfo() : void
+    + calculateScore() : float
+}
+
+class GoodStudent {
+    - gpa : float
+    - bestRewardName : string
+    --
+    + displayInfo() : void
+    + calculateScore() : float
+}
+
+class NormalStudent {
+    - englishScore : float
+    - entryTestScore : float
+    --
+    + displayInfo() : void
+    + calculateScore() : float
+}
+
+Student <|-- GoodStudent : Generalization 
+Student <|-- NormalStudent : Generalization 
+
+@enduml
