@@ -11,7 +11,7 @@
 using namespace std;
 
 class Document {
-protected:
+private:
     int idDoc;
     string publisherName;
     int editionNumber;

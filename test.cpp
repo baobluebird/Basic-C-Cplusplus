@@ -1,62 +1,53 @@
 #include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
-// Lớp interface
-class Shape {
-public:
-    virtual void draw() const = 0; // Hàm thuần ảo
-    virtual double calculateArea() const = 0; // Hàm thuần ảo
-
-    // Virtual destructor để hỗ trợ kế thừa
-    virtual ~Shape() {}
+class A{
+    private:
+        int a;
+    public:
+        A(){
+            cout << "Constructor of A" << endl;
+        }
+        ~A(){
+            cout << "Destructor of A" << endl;
+        }
 };
 
-// Lớp dẫn xuất cụ thể
-class Circle : public Shape {
-private:
-    double radius;
-
-public:
-    Circle(double r) : radius(r) {}
-
-    void draw() const override {
-        cout << "Drawing Circle with radius: " << radius << endl;
-    }
-
-    double calculateArea() const override {
-        return 3.14159 * radius * radius;
-    }
+class B {
+    private:
+        int b;
+        //A a;
+    public:
+        B(){
+            cout << "Constructor of B" << endl;
+        }
+        ~B(){
+            cout << "Destructor of B" << endl;
+        }
 };
 
-// Lớp dẫn xuất cụ thể khác
-class Rectangle : public Shape {
-private:
-    double width, height;
-
-public:
-    Rectangle(double w, double h) : width(w), height(h) {}
-
-    void draw() const override {
-        cout << "Drawing Rectangle with width: " << width << " and height: " << height << endl;
-    }
-
-    double calculateArea() const override {
-        return width * height;
-    }
+class C{
+    private:
+        int c;
+        vector<B> listB;
+        //B a[5];
+    public:
+        C(){
+            cout << "Constructor of C" << endl;
+        }
+        ~C(){
+            cout << "Destructor of C" << endl;
+        }
+        void addB(){
+            B b;
+            listB.push_back(b);
+        }
 };
-
-int main() {
-    Shape* circle = new Circle(5.0);
-    Shape* rectangle = new Rectangle(4.0, 6.0);
-
-    circle->draw();
-    cout << "Circle Area: " << circle->calculateArea() << endl;
-
-    rectangle->draw();
-    cout << "Rectangle Area: " << rectangle->calculateArea() << endl;
-
-    delete circle;
-    delete rectangle;
-
+int main(){
+    C c;
+    c.addB();
     return 0;
 }

@@ -12,7 +12,7 @@ class Engineer : public Employee {
 
         void enterInformation() override;
 
-        void display() override;
+        void displayInformation() override;
 
 };
 

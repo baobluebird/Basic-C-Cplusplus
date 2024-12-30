@@ -17,12 +17,12 @@ class Class{
 }
 
 class School {
-    - listClass: vector<unique_ptr<ClassStudent>>
+    - listClass: vector<unique_ptr<Class>>
     + void addClass();
     + void displaySchool();
 }
 
-Class o--> Student : Aggregation
-School *-->  Class : Composition
+Class o--> Student : Aggregation, Directed Association
+School o-->  Class : Aggregation, Directed Association
 
 @enduml

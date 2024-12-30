@@ -4,7 +4,7 @@ Intern::Intern() : Majors(""), Semester(0), University_name(""){
     type = employeeType::Intern;
 }
 
-Intern::Intern(string fullName, string birthDay, int phone, string email, string Majors, int Semester, string University_name)
+Intern::Intern(string fullName, string birthDay, string phone, string email, string Majors, int Semester, string University_name)
     : Employee(fullName, birthDay, phone, email, employeeType::Intern), Majors(Majors), Semester(Semester), University_name(University_name){
     this->type = employeeType::Intern;
 }
@@ -16,7 +16,7 @@ void Intern::detailEmployee(){
          << setw(20) << getFullName()
          << setw(15) << getBirthDay()
          << setw(15) << getPhone()
-         << setw(25) << getEmail()
+         << setw(20) << getEmail()
          << setw(20) << Majors
          << setw(20) << Semester
          << setw(30) << University_name

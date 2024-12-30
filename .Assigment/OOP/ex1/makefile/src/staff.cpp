@@ -10,8 +10,8 @@ void Staff::enterInformation(){
     cin >> job;
 }
 
-void Staff::display(){
+void Staff::displayInformation(){
     cout << "--------- Staff Information ---------" << endl;
-    Employee::display();
+    Employee::displayInformation();
     cout << "Job: " << this->job << endl;
 }

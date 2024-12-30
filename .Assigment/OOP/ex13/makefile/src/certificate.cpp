@@ -8,8 +8,8 @@ Certificate::Certificate(int id, string name, string rank, string date)
 void Certificate::addCertificate(){
     cout << "Enter Certificate ID: ";
     cin >> this->CertificatedID;
-    cout << "Enter Certificate Name: ";
     cin.ignore();
+    cout << "Enter Certificate Name: ";
     getline(cin, this->CertificateName);
     cout << "Enter Certificate Rank: ";
     getline(cin, this->CertificateRank);

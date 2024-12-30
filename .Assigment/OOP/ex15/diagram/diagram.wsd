@@ -1,0 +1,50 @@
+@startuml
+title Class Diagram - Student Management System
+
+class Student {
+    - string studentID
+    - string fullName
+    - string dob
+    - int yearEnrolled
+    - float entryScore
+    - vector<StudyResult> studyResults
+    + bool isRegular()*;
+    + void input();
+    + void output();
+    + float getAverageScore(string semester);
+}
+
+class RegularStudent {
+    + bool isRegular();
+    + void output();
+}
+
+class PartTimeStudent {
+    - string linkedLocation
+    + bool isRegular();
+    + void output();
+    + string getLinkedLocation();
+}
+
+class StudyResult {
+    + string semesterName;
+    + float avgScore;
+}
+
+class Faculty {
+    - string facultyName
+    - vector<unique_ptr<Student>> students
+    + void addStudent(unique_ptr<Student> student);
+    + int countRegularStudents();
+    + Student* getTopEntryScoreStudent();
+    + vector<unique_ptr<Student>> getPartTimeStudentsByLocation;
+    + void sortStudents();
+    + void displayStatistics();
+    + void displayStudents();
+}
+
+Student <|-- RegularStudent : Generalization 
+Student <|-- PartTimeStudent : Generalization 
+Student --> StudyResult : has
+Faculty --> Student : manages
+@enduml

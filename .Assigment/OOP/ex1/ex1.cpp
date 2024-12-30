@@ -27,8 +27,6 @@ enum class EmployeeType {
     
 };
 
-
-// Base Class - Employee
 class Employee {
     protected:
         string name;
@@ -58,17 +56,18 @@ class Employee {
 
         string getName() { return name; }
 
-        virtual void display() {
+        virtual void displayInformation() {
             cout << "Name: " << this->name << endl;
             cout << "Age: " << this->age << endl;
             cout << "Gender: " << this->gender << endl;
             cout << "Address: " << this->address << endl;
         }
 
-        virtual ~Employee() {}
+        virtual ~Employee() {
+            cout << "Destructor of Employee: " << this->name << endl;
+        }
 };
 
-// Derived Class - Worker
 class Worker : public Employee {
     private:
         int level;
@@ -88,14 +87,13 @@ class Worker : public Employee {
             }
         }
 
-        void display() {
+        void displayInformation() {
             cout << "---------- Worker Information ----------" << endl;
-            Employee::display();
+            Employee::displayInformation();
             cout << "Level: " << this->level << endl;
         }
 };
 
-// Derived Class - Engineer
 class Engineer : public Employee {
     private:
         string major;
@@ -110,14 +108,13 @@ class Engineer : public Employee {
             cin >> major;
         }
 
-        void display() {
+        void displayInformation() {
             cout << "-------- Engineer Information --------" << endl;
-            Employee::display();
+            Employee::displayInformation();
             cout << "Major: " << this->major << endl;
         }
 };
 
-// Derived Class - Staff
 class Staff : public Employee {
     private:
         string job;
@@ -132,28 +129,27 @@ class Staff : public Employee {
             cin >> job;
         }
 
-        void display() {
+        void displayInformation() {
             cout << "--------- Staff Information ---------" << endl;
-            Employee::display();
+            Employee::displayInformation();
             cout << "Job: " << this->job << endl;
         }
 };
 
-// EmployeeManager Class
 class EmployeeManager {
     private:
-        vector<shared_ptr<Employee>> employeeList;
+        vector<unique_ptr<Employee>> employeeList;
         
     public:
-        void addEmployee(shared_ptr<Employee> employee) {
-            employeeList.push_back(employee);
+        void addEmployee(unique_ptr<Employee> employee) {
+            employeeList.push_back(move(employee));
         }
 
         void searchByName(string name) {
             bool found = false;
-            for(shared_ptr<Employee> employee : employeeList) {
+            for(auto& employee : employeeList) {
                 if(employee->getName() == name) {
-                    employee->display();
+                    employee->displayInformation();
                     found = true;
                 }
             }
@@ -165,7 +161,7 @@ class EmployeeManager {
         void displayAll() {
             for(int i = 0; i < employeeList.size(); ++i) {
                 cout << "Employee " << i + 1 << " Information" << endl;
-                employeeList[i]->display();
+                employeeList[i]->displayInformation();
             }
         }
 };
@@ -176,9 +172,9 @@ void addWorker(EmployeeManager &manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for worker " << i + 1 << ":" << endl;
-        shared_ptr<Employee> employee = make_shared<Worker>();
+        unique_ptr<Employee> employee = make_unique<Worker>();
         employee->enterInformation();
-        manager.addEmployee(employee);
+        manager.addEmployee(move(employee));
     }
 }
 
@@ -188,9 +184,9 @@ void addStaff(EmployeeManager &manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for staff " << i + 1 << ":" << endl;
-        shared_ptr<Employee> employee = make_shared<Staff>();
+        unique_ptr<Employee> employee = make_unique<Staff>();
         employee->enterInformation();
-        manager.addEmployee(employee);
+        manager.addEmployee(move(employee));
     }
 }
 
@@ -200,9 +196,9 @@ void addEngineer(EmployeeManager &manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for engineer " << i + 1 << ":" << endl;
-        shared_ptr<Employee> employee = make_shared<Engineer>();
+        unique_ptr<Employee> employee = make_unique<Engineer>();
         employee->enterInformation();
-        manager.addEmployee(employee);
+        manager.addEmployee(move(employee));
     }
 }
 

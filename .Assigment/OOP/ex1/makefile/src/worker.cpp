@@ -16,9 +16,9 @@ void Worker::enterInformation()
     }
 }
 
-void Worker::display()
+void Worker::displayInformation()
 {
     cout << "---------- Worker Information ----------" << endl;
-    Employee::display();
+    Employee::displayInformation();
     cout << "Level: " << this->level << endl;
 }

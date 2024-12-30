@@ -24,11 +24,13 @@ string Employee::getName(){
     return this->name;
 }
 
-void Employee::display(){
+void Employee::displayInformation(){
     cout << "Name: " << this->name <<endl;
     cout << "Age: " << this->age <<endl;
     cout << "Gender: " << this->gender <<endl;
     cout << "Address: " << this->address <<endl;
 }
 
-Employee::~Employee(){}
+Employee::~Employee(){
+    cout << "Destructor of Employee: " << this->name << endl;
+}

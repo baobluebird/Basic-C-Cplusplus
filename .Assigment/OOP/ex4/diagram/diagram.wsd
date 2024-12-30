@@ -13,7 +13,7 @@ class Person {
 class Household {
     - numMember: int
     - address: String
-    - listPersons: vector<shared_ptr<Person>>
+    - listPersons: vector<unique_ptr<Person>>
     + void inputInfoHousehold();
     + void displayInfoHousehold();
 }
@@ -24,7 +24,7 @@ class Neighborhood {
     + void displayNeighborhood();
 }
 
-Household *--> Person : Composition, Directed Association
+Household o--> Person : Aggregation, Directed Association
 Neighborhood o--> Household : Aggregation, Directed Association
 
 @enduml

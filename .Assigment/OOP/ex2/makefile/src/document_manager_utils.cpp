@@ -6,7 +6,7 @@ void addBook(DocumentManager& manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for book " << i + 1 << ":" << endl;
-        unique_ptr<Document> document = make_unique<Book>();
+        shared_ptr<Document> document = make_shared<Book>();
         document->inputDocument();
         manager.addDocument(move(document));
     }
@@ -18,7 +18,7 @@ void addMagazine(DocumentManager& manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for magazine " << i + 1 << ":" << endl;
-        unique_ptr<Document> document = make_unique<Magazine>();
+        shared_ptr<Document> document = make_shared<Magazine>();
         document->inputDocument();
         manager.addDocument(move(document));
     }
@@ -30,7 +30,7 @@ void addNews(DocumentManager& manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for news " << i + 1 << ":" << endl;
-        unique_ptr<Document> document = make_unique<News>();
+        shared_ptr<Document> document = make_shared<News>();
         document->inputDocument();
         manager.addDocument(move(document));
     }

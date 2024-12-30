@@ -5,43 +5,43 @@ class Employee {
   - age: int
   - gender: String
   - address: String
-  + Employee()
-  + Employee(String, int, String, String)
-  + virtual void enterInformation()
-  + String getName()
-  + virtual void displayInformation()
-  + virtual ~Employee()
+  + Employee();
+  + Employee(string , int , string , string );
+  + string getName();
+  + virtual void enterInformation();
+  + virtual void displayInformation();
+  + virtual ~Employee();
 }
 
 class Worker {
   - level: int
-  + Worker()
-  + Worker(String, int, String, String, int)
-  + void enterInformation() override
-  + void displayInformation() override
+  + Worker();
+  + Worker(string , int , string , string , int );
+  + void enterInformation() override;
+  + void displayInformation() override;
 }
 
 class Engineer {
   - major: String
-  + Engineer()
-  + Engineer(String, int, String, String, String)
-  + void enterInformation() override
-  + void displayInformation() override
+  + Engineer();
+  + Engineer(string, int, string, string, string);
+  + void enterInformation() override;
+  + void displayInformation() override;
 }
 
 class Staff {
   - job: String
   + Staff()
-  + Staff(String, int, String, String, String)
-  + void enterInformation() override
-  + void displayInformation() override
+  + Staff(string , int , string , string , string );
+  + void enterInformation() override;
+  + void displayInformation() override;
 }
 
 class EmployeeManager {
-  - employeeList: vector<Employee*>
-  + void addEmployee(Employee*)
-  + void searchByName(String)
-  + void displayEmployeeList()
+  - employeeList: vector<unique_ptr<Employee>>
+  + void addEmployee(unique_ptr<Employee>);
+  + void searchByName(String);
+  + void displayEmployeeList();
 }
 
 Employee <|-- Worker : Generalization 

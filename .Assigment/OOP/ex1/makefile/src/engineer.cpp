@@ -11,8 +11,8 @@ void Engineer::enterInformation(){
     cin >> major;
 }
 
-void Engineer::display(){
+void Engineer::displayInformation(){
     cout << "-------- Engineer Information --------" << endl;
-    Employee::display();
+    Employee::displayInformation();
     cout << "Major: " << this->major << endl;
 }

@@ -11,7 +11,7 @@ class Staff : public Employee {
 
         void enterInformation() override;
 
-        void display() override;
+        void displayInformation() override;
 };
 
 #endif

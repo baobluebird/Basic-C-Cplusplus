@@ -14,9 +14,11 @@ class Employee{
         Employee();
         Employee(string , int , string , string );
 
-        virtual void enterInformation();
         string getName();
-        virtual void display();
+
+        virtual void enterInformation();
+        
+        virtual void displayInformation();
 
         virtual ~Employee();
 };

@@ -7,9 +7,9 @@ void addWorker(EmployeeManager &manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for worker " << i + 1 << ":" << endl;
-        shared_ptr<Employee> employee = make_shared<Worker>();
+        unique_ptr<Employee> employee = make_unique<Worker>();
         employee->enterInformation();
-        manager.addEmployee(employee);
+        manager.addEmployee(move(employee));
     }
 }
 
@@ -19,9 +19,9 @@ void addStaff(EmployeeManager &manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for staff " << i + 1 << ":" << endl;
-        shared_ptr<Employee> employee = make_shared<Staff>();
+        unique_ptr<Employee> employee = make_unique<Staff>();
         employee->enterInformation();
-        manager.addEmployee(employee);
+        manager.addEmployee(move(employee));
     }
 }
 
@@ -31,8 +31,8 @@ void addEngineer(EmployeeManager &manager) {
     cin >> num;
     for (int i = 0; i < num; ++i) {
         cout << "Enter information for engineer " << i + 1 << ":" << endl;
-        shared_ptr<Employee> employee = make_shared<Engineer>();
+        unique_ptr<Employee> employee = make_unique<Engineer>();
         employee->enterInformation();
-        manager.addEmployee(employee);
+        manager.addEmployee(move(employee));
     }
 }

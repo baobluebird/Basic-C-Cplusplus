@@ -10,7 +10,7 @@ class Intern : public Employee{
     public:
         Intern();
 
-        Intern(string , string , int , string , string , int , string );
+        Intern(string , string , string , string , string , int , string );
 
         void detailEmployee() override;
 

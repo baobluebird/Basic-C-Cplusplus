@@ -7,9 +7,9 @@
 
 class EmployeeManager {
     private:
-        vector<shared_ptr<Employee>> employeeList;
+        vector<unique_ptr<Employee>> employeeList;
     public:
-        void addEmployee(shared_ptr<Employee>);
+        void addEmployee(unique_ptr<Employee>);
 
         void searchByName(string);
 

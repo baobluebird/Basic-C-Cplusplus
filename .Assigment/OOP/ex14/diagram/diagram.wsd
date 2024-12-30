@@ -6,26 +6,23 @@ abstract class Student {
     - phoneNumber : string
     - universityName : string
     - gradeLevel : string
-    --
-    + displayInfo() : void
-    + inputInfo() : void
-    + calculateScore() : float
+    + void displayInfo();
+    + void inputInfo();
+    + float calculateScore();
 }
 
 class GoodStudent {
     - gpa : float
     - bestRewardName : string
-    --
-    + displayInfo() : void
-    + calculateScore() : float
+    + void displayInfo();
+    + float calculateScore(); 
 }
 
 class NormalStudent {
     - englishScore : float
     - entryTestScore : float
-    --
-    + displayInfo() : void
-    + calculateScore() : float
+    + void displayInfo();
+    + float calculateScore(); 
 }
 
 Student <|-- GoodStudent : Generalization 

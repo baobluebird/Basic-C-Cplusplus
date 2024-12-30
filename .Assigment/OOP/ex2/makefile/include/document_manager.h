@@ -6,10 +6,10 @@
 
 class DocumentManager {
 private:
-    vector<unique_ptr<Document>> listDocuments;
+    vector<shared_ptr<Document>> listDocuments;
 
 public:
-    void addDocument(unique_ptr<Document> );
+    void addDocument(shared_ptr<Document> );
     
     void deleteDocumentById(int);
 

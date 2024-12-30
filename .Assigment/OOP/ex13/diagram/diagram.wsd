@@ -9,6 +9,7 @@ abstract class Employee {
   - type: enum employeeType
   - Employee_type: int
   - Employee_count: static int
+  - certificates: vector<shared_ptr<Certificate>>
   - manageId : static set<int> 
   - recycledIds : static set<int>
   + Employee()
@@ -70,8 +71,8 @@ class Certificate {
 }
 
 class EmployeeManager {
-  - employeeList: vector<Employee*>
-  + void addEmployee(unique_ptr<Employee> );
+  - employeeList: vector<shared_ptr<Employee>>
+  + void addEmployee(shared_ptr<Employee> );
   + void editEmployeeById(int);
   + bool deleteEmployeeById(int );
   + void displayEmployee();

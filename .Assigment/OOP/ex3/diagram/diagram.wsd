@@ -15,6 +15,7 @@ class Candidate{
   + string getName();
   + string getAddress();
   + int getPriorityLevel();
+  + void inputCandidate();
   + virtual string getBlock() = 0;
   + virtual void detailCandidate();
   + virtual ~Document();

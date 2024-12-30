@@ -10,7 +10,7 @@ class Experience : public Employee{
     public:
         Experience();
         
-        Experience(string , string , int , string ,int , string );
+        Experience(string , string , string , string ,int , string );
     
         void detailEmployee() override;
 

@@ -4,7 +4,7 @@ Fresher::Fresher() : Graduation_date(""), Graduation_rank(""), Education(""){
     type = employeeType::Fresher;
 }
 
-Fresher::Fresher(string fullName, string birthDay, int phone, string email, string Graduation_date, string Graduation_rank, string Education)
+Fresher::Fresher(string fullName, string birthDay, string phone, string email, string Graduation_date, string Graduation_rank, string Education)
     : Employee(fullName, birthDay, phone, email, employeeType::Fresher), Graduation_date(Graduation_date), Graduation_rank(Graduation_rank), Education(Education){
     this->type = employeeType::Fresher;
 }
@@ -16,7 +16,7 @@ void Fresher::detailEmployee(){
          << setw(20) << getFullName()
          << setw(15) << getBirthDay()
          << setw(15) << getPhone()
-         << setw(25) << getEmail()
+         << setw(20) << getEmail()
          << setw(20) << Graduation_date
          << setw(20) << Graduation_rank
          << setw(30) << Education

@@ -10,7 +10,7 @@ class Fresher : public Employee{
     public: 
         Fresher();
         
-        Fresher(string , string , int , string , string , string , string );
+        Fresher(string , string , string , string , string , string , string );
         
         void detailEmployee() override;
 

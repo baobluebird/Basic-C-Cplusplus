@@ -1,12 +1,12 @@
 #include "document_manager.h"
 
-void DocumentManager::addDocument(unique_ptr<Document> document) {
+void DocumentManager::addDocument(shared_ptr<Document> document) {
     if (!Document::recycledIds.empty()) {
         int recycleId = *Document::recycledIds.begin();
         Document::recycledIds.erase(Document::recycledIds.begin());
-        listDocuments.insert(listDocuments.begin() + (recycleId - 1), move(document));
+        listDocuments.insert(listDocuments.begin() + (recycleId - 1), document);
     } else {
-        listDocuments.push_back(move(document));
+        listDocuments.push_back(document);
     }
 }
 
@@ -32,7 +32,7 @@ void DocumentManager::displayDocument() {
          << setw(20) << "PageNumber/IssueMonth"
          << endl;
     cout << string(65, '-') << endl;
-    for (const auto& doc : listDocuments) {
+    for (shared_ptr<Document> doc : listDocuments) {
         doc->detailDocument();
     }
     cout << string(65, '-') << endl;
@@ -40,7 +40,7 @@ void DocumentManager::displayDocument() {
 
 void DocumentManager::searchDocumentByType(string type) {
     bool found = false;
-    for (const auto& doc : listDocuments) {
+    for (shared_ptr<Document> doc : listDocuments) {
         if (doc->getType() == type) {
             doc->detailDocument();
             found = true;

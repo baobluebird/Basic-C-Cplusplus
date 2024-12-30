@@ -7,6 +7,7 @@
 #include <set>
 #include <iomanip> 
 #include <regex>
+#include <limits>
 
 enum class employeeType{
     Experience = 0,
@@ -19,7 +20,7 @@ class Employee{
         int ID;
         string fullName;
         string birthDay;
-        int phone;
+        string phone;
         string email;
         employeeType type;
         static int employeeCount;
@@ -31,7 +32,7 @@ class Employee{
 
         Employee();
 
-        Employee(string , string , int , string ,  employeeType );
+        Employee(string , string , string , string ,  employeeType );
         void generateUniqueId();
 
         int getId();
@@ -40,7 +41,7 @@ class Employee{
 
         string getBirthDay();
 
-        int getPhone();
+        string getPhone();
 
         string getEmail();
 

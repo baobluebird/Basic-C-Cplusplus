@@ -50,7 +50,7 @@ class Household{
     private:
         int numMember;
         string address;
-        vector<shared_ptr<Person>> listPerson;
+        vector<unique_ptr<Person>> listPerson;
     public:
         Household(): numMember(0), address(""){}
         
@@ -61,7 +61,7 @@ class Household{
             cin >> this->address;
             for(int i = 0; i < this->numMember; ++i){
                 cout << "Enter information of person " << i + 1 << ":" << endl;
-                shared_ptr<Person> person = make_shared<Person>();
+                unique_ptr<Person> person = make_unique<Person>();
                 person->inputInfoPerson();
                 listPerson.push_back(person);
             }
@@ -77,7 +77,7 @@ class Household{
                  << setw(10) << "Job"
                  << endl;
             cout << string(65, '-') << endl; 
-            for(shared_ptr<Person> person : listPerson){
+            for(auto& person : listPerson){
                 person->displayInfoPerson();
             } 
             cout << string(65, '-') << endl;      
@@ -100,7 +100,7 @@ class Neighborhood{
                 unique_ptr<Household> household = make_unique<Household>();
                 cout << "Enter information of household " << i + 1 <<":" << endl;
                 household->inputInfoHousehold();
-                listHousehold.push_back(move(household));
+                listHousehold.push_back(household);
             }
         }
 

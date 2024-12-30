@@ -115,7 +115,6 @@ class Book : public Document{
                      << endl;
         }
 
-
         void inputDocument(){
             Document::inputDocument();
             cout << "Enter author name: ";

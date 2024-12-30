@@ -235,7 +235,7 @@ void addCandidateA(CandidateManager& manager){
     cout << "Number of Candidate A to add: ";
     cin >> num;
     for(int i = 0; i < num; ++i){
-        cout << "Enter information for book " << i + 1 << ":" << endl;
+        cout << "Enter information for candidate a " << i + 1 << ":" << endl;
         unique_ptr<Candidate> document = make_unique<CandidateA>();
         document->inputCandidate();
         manager.addCandidate(move(document));
@@ -244,10 +244,10 @@ void addCandidateA(CandidateManager& manager){
 
 void addCandidateB(CandidateManager& manager){
     int num;
-    cout << "Number of Magazine to add: ";
+    cout << "Number of Candidate B to add: ";
     cin >> num;
     for(int i = 0; i < num; ++i){
-        cout << "Enter information for magazine " << i + 1 << ":" << endl;
+        cout << "Enter information for candidate b " << i + 1 << ":" << endl;
         unique_ptr<Candidate> document = make_unique<CandidateB>();
         document->inputCandidate();
         manager.addCandidate(move(document));
@@ -256,10 +256,10 @@ void addCandidateB(CandidateManager& manager){
 
 void addCandidateC(CandidateManager& manager){
     int num;
-    cout << "Number of News to add: ";
+    cout << "Number of Candidate C to add: ";
     cin >> num;
     for(int i = 0; i < num; ++i){
-        cout << "Enter information for news " << i + 1 << ":" << endl;
+        cout << "Enter information for candidate c " << i + 1 << ":" << endl;
         unique_ptr<Candidate> document = make_unique<CandidateC>();
         document->inputCandidate();
         manager.addCandidate(move(document));

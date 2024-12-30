@@ -10,9 +10,9 @@ void Household::inputInfoHousehold(){
     for (int i = 0; i < this->numMember; ++i)
     {
         cout << "Enter information of person " << i + 1 << ":" << endl;
-        shared_ptr<Person> person = make_shared<Person>();
+        unique_ptr<Person> person = make_unique<Person>();
         person->inputInfoPerson();
-        listPerson.push_back(person);
+        listPersons.push_back(move(person));
     }
 }
 
@@ -26,7 +26,7 @@ void Household::displayInfoHousehold(){
          << setw(10) << "Job"
          << endl;
     cout << string(65, '-') << endl;
-    for (shared_ptr<Person> person : listPerson)
+    for (auto& person : listPersons)
     {
         person->displayInfoPerson();
     }
