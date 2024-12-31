@@ -1,13 +1,16 @@
-#ifndef EMPLOYYE_MANAGER_H
-#define EMPLOYYE_MANAGER_H
+#ifndef EMPLOYEE_MANAGER_H
+#define EMPLOYEE_MANAGER_H
 
 #include "employees.h"
+
 class EmployeeManager{
     private:
-        vector<unique_ptr<Employee>> listEmployees;
+        vector<shared_ptr<Employee>> listEmployees;
     public:
 
-        void addEmployee(unique_ptr<Employee> );
+        void addEmployee(shared_ptr<Employee>);
+
+        void addEmployeeByType(employeeType);
 
         void editEmployeeById(int);
 
@@ -21,7 +24,6 @@ class EmployeeManager{
 
         void displayFresher();
 
-        void searchEmployeeByType(string);
 };
 
 #endif

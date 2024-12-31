@@ -1,13 +1,12 @@
 #ifndef EMPLOYEE_H
 #define EMPLOYEE_H
 #include "certificate.h"
-
 #include <vector>
 #include <memory>
 #include <set>
 #include <iomanip> 
-#include <regex>
 #include <limits>
+#include <regex>
 
 enum class employeeType{
     Experience = 0,
@@ -25,27 +24,9 @@ class Employee{
         employeeType type;
         static int employeeCount;
         vector<unique_ptr<Certificate>> certificates;
-
-    public:
-        static set<int> manageId;
-        static set<int> recycledIds;  
-
-        Employee();
-
-        Employee(string , string , string , string ,  employeeType );
-        void generateUniqueId();
-
-        int getId();
-
-        string getFullName();
-
-        string getBirthDay();
-
-        string getPhone();
-
-        string getEmail();
-
-        bool isValidBirthDay(const string&);
+        set<int> manageIdCer;
+    protected:
+        bool isValidDate(const string&);
 
         bool isValidPhone(const string&);
 
@@ -53,9 +34,32 @@ class Employee{
 
         bool isValidFullName(const string&);
 
+        bool isValidString(const string&);
+
+    public:
+        static set<int> manageId;
+        static set<int> recycledIds;  
         static string employeeTypeToString(employeeType type);
 
+        Employee();
+
+        Employee(string , string , string , string ,  employeeType );
+
+        void generateUniqueId();
+
+        void inputName(bool);
+
+        void inputBirthday(bool);
+
+        void inputPhone(bool);
+
+        void inputEmail(bool);
+
+        void inputCertificates();
+
         void displayCertificates();
+
+        void displayBasicInfo();
 
         virtual void inputEmployee();
 

@@ -1,90 +1,13 @@
 #include "employees.h"
+#include "utils_employees.h"
+#include <regex>
 
-class BirthDayException : public exception {
-public:
-    const char* what() const noexcept override {
-        return "Invalid birthday format!";
-    }
-};
-
-class PhoneException : public exception {
-public:
-    const char* what() const noexcept override {
-        return "Invalid phone number!";
-    }
-};
-
-class EmailException : public exception {
-public:
-    const char* what() const noexcept override {
-        return "Invalid email format!";
-    }
-};
-
-class FullNameException : public exception {
-public:
-    const char* what() const noexcept override {
-        return "Full name cannot be empty!";
-    }
-};
-
-class MenuException : public exception {
-public:
-    const char* what() const noexcept override {
-        return "Invalid menu choice! Please enter a valid number.";
-    }
-};
 
 set<int> Employee::manageId;
 set<int> Employee::recycledIds;
 int Employee::employeeCount = 1;
 
-Employee::Employee() : fullName(""), birthDay(""), phone(""), email(""){
-    generateUniqueId();
-}
-
-Employee::Employee(string fullName, string birthDay, string phone, string email, employeeType type){
-    generateUniqueId();
-    this->fullName = fullName;
-    this->birthDay = birthDay;
-    this->phone = phone;
-    this->email = email;
-    this->type = type;
-}
-
-void Employee::generateUniqueId(){
-    if (!recycledIds.empty())
-    {
-        this->ID = *recycledIds.begin();
-    }
-    else
-    {
-        this->ID = employeeCount++;
-    }
-    manageId.insert(this->ID);
-}
-
-int Employee::getId(){
-    return this->ID;
-}
-
-string Employee::getFullName(){
-    return this->fullName;
-}
-
-string Employee::getBirthDay(){
-    return this->birthDay;
-}
-
-string Employee::getPhone(){
-    return this->phone;
-}
-
-string Employee::getEmail(){
-    return this->email;
-}
-
-bool Employee::isValidBirthDay(const string &birthday){
+bool Employee::isValidDate(const string& birthday) {
     regex pattern(R"(^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$)"); 
     if (!regex_match(birthday, pattern)) return false;
 
@@ -100,19 +23,23 @@ bool Employee::isValidBirthDay(const string &birthday){
     return day <= daysInMonth[month];
 }
 
-bool Employee::isValidPhone(const string &phone){
+bool Employee::isValidPhone(const string& phone) {
     regex pattern(R"(^0\d{9}$)"); 
     return regex_match(phone, pattern);
 }
 
-bool Employee::isValidEmail(const string &email){
-    regex pattern(R"((\w+)(\.|\w)*@(\w+)(\.\w+)+)");
+bool Employee::isValidEmail(const string& email) {
+    regex pattern(R"((\w+)(\.|\w)*@(\w+)(\.\w+)+)"); 
     return regex_match(email, pattern);
 }
 
-bool Employee::isValidFullName(const string &fullName){
-    regex pattern(R"(^[A-Za-zÀ-ỹ\s]+$)");
-    return regex_match(fullName, pattern) && !fullName.empty();
+bool Employee::isValidFullName(const string& fullName) {
+    regex pattern(R"(^[A-Za-zÀ-ỹ ]{3,}$)");
+    return regex_match(fullName, pattern);
+}
+
+bool Employee::isValidString(const string& str) {
+    return !str.empty() && regex_match(str, regex("^[A-Za-zÀ-ỹ\\s]+$"));
 }
 
 string Employee::employeeTypeToString(employeeType type) {
@@ -124,179 +51,364 @@ string Employee::employeeTypeToString(employeeType type) {
     }
 }
 
-void Employee::inputEmployee(){
-    while (true){
-        try{
-            cout << "Enter Full Name: ";
+Employee::Employee() : fullName(""), birthDay(""), phone(""), email(""){
+    generateUniqueId();
+}
+
+Employee::Employee(string fullName, string birthDay, string phone, string email, employeeType type){
+    generateUniqueId();
+    this->fullName = fullName;
+    this->birthDay = birthDay;
+    this->phone = phone;
+    this->email = email;
+    this->type = type;
+}
+
+void Employee::generateUniqueId(){
+    if (!recycledIds.empty()){
+        this->ID = *recycledIds.begin();
+    }
+    else{
+        this->ID = employeeCount++;
+    }
+    manageId.insert(this->ID);
+}
+
+void Employee::inputName(bool isInput){
+    while (true) {
+        try {
+            isInput == true ? cout << "Enter Full Name: " : cout << "Enter new Full Name: ";
             cin.ignore();
             getline(cin, this->fullName);
-            if (!isValidFullName(this->fullName)){
+            if (!isValidFullName(this->fullName)) {
                 throw FullNameException();
             }
             break;
-        }
-        catch (const FullNameException &e){
+        } catch (const FullNameException& e) {
             cerr << "Error: " << e.what() << endl;
-            cout << "Name must not contain numbers or special characters. Please try again.\n";
         }
     }
+}
 
-    while (true){
-        try{
-            cout << "Enter Birthday (dd/mm/yyyy): ";
+void Employee::inputBirthday(bool isInput){
+    while (true) {
+        try {
+            isInput == true ? cout << "Enter Birthday (dd/mm/yyyy): " : cout << "Enter new Birthday (dd/mm/yyyy): ";
             cin >> this->birthDay;
-            if (!isValidBirthDay(this->birthDay)){
-                throw BirthDayException();
+            if (!isValidDate(this->birthDay)) {
+                throw DateException();
             }
             break;
-        }
-        catch (const BirthDayException &e){
+        } catch (const DateException& e) {
             cerr << "Error: " << e.what() << endl;
         }
     }
+}
 
-    while (true){
-        try{
-            cout << "Enter Phone: ";
+void Employee::inputPhone(bool isInput){
+    while (true) {
+        try {
+            isInput == true ? cout << "Enter Phone: " : cout << "Enter new Phone: ";
             string phoneInput;
             cin >> phoneInput;
-            if (!isValidPhone(phoneInput)){
+            if (!isValidPhone(phoneInput)) {
                 throw PhoneException();
             }
             this->phone = phoneInput;
             break;
+        } catch (const PhoneException& e) {
+            cerr << "Error: " << e.what() << endl;
         }
-        catch (const PhoneException &e){
+    }
+}
+
+void Employee::inputEmail(bool isInput){
+    while (true) {
+        try {
+            isInput == true ? cout << "Enter Email: " : cout << "Enter new Email: ";
+            cin >> this->email;
+            if (!isValidEmail(this->email)) {
+                throw EmailException();
+            }
+            break;
+        } catch (const EmailException& e) {
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
+}  
+
+void Employee::inputCertificates(){
+    int num;
+    while (true) {
+        try {
+            cout << "Number of Certificates to add: ";
+            cin >> num;
+
+            if (cin.fail() || num < 0) { 
+                cin.clear();  
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  
+                throw MustBeNumberException();
+            }
+
+            if (num == 0) {
+                cout << "No certificates to add." << endl;
+                return;  
+            }
+
+            break; 
+        }catch (const MustBeNumberException& e) {
             cerr << "Error: " << e.what() << endl;
         }
     }
 
-    while (true){
-        try{
-            cout << "Enter Email: ";
-            cin >> this->email;
-            if (!isValidEmail(this->email)){
-                throw EmailException();
-            }
-            break;
-        }
-        catch (const EmailException &e){
-            cerr << "Error: " << e.what() << endl;
-        }
-    }
-    int num;
-    cout << "Number of Certificate to add: ";
-    cin >> num;
     cin.ignore();
-    for (int i = 0; i < num; ++i){
+    for (int i = 0; i < num; ++i) {
         cout << "Enter information for Certificate " << i + 1 << ":" << endl;
+                
+        int idCer;
+        while (true) {
+            try {
+                cout << "Enter Certificate ID: ";
+                cin >> idCer;
+
+                if (cin.fail() || idCer < 1) { 
+                    cin.clear();  
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');  
+                    throw MustBeNumberException();
+                }
+
+                if (manageIdCer.find(idCer) != manageIdCer.end()) {
+                    cout << "Certificate ID already exists. Please enter a different ID." << endl;
+                    continue;
+                }
+
+                break; 
+            }
+            catch (const MustBeNumberException& e) {
+                cerr << "Error: " << e.what() << endl;
+            }
+        }
+
         unique_ptr<Certificate> cer = make_unique<Certificate>();
-        cer->addCertificate();
+        cer->addCertificate(idCer);
+        manageIdCer.insert(cer->getId());
         certificates.push_back(move(cer));
     }
 }
 
-void Employee::displayCertificates(){
-    cout << string(60, '+') << endl;
+void Employee::displayCertificates() {
+    cout << string(60, '*') << endl;
     cout << "Certificates of " << fullName << ":" << endl;
-    for (const auto &cert : certificates){
-        cert->infoCertificates();
+    if(certificates.empty()){
+        cout << "No certificates found." << endl;
+    }else{
+        for (const auto& cert : certificates) {
+            cert->infoCertificates();
+        }
     }
-    cout << string(60, '+') << endl;
+    cout << string(60, '*') << endl;
 }
 
-void Employee::editEmployee(){
+void Employee::displayBasicInfo() {
+    cout << left
+        << setw(10) << this->ID
+        << setw(20) << Employee::employeeTypeToString(this->type)
+        << setw(20) << this->fullName
+        << setw(15) << this->birthDay
+        << setw(15) << this->phone
+        << setw(20) << this->email;
+}
+
+void Employee::inputEmployee(){
+            
+    inputName(true);
+
+    inputBirthday(true);
+
+    inputPhone(true);
+
+    inputEmail(true);
+
+    inputCertificates();
+            
+}
+
+void Employee::editEmployee() {
     int choice;
     while (true) {
+        detailEmployee();
         cout << "Select the field to edit:\n";
         cout << "1. Full Name\n";
         cout << "2. Birthday\n";
         cout << "3. Phone\n";
         cout << "4. Email\n";
         cout << "5. Certificates\n";
-        cout << "0. Finish Editing\n";
+        cout << "0. Next Editing\n";
         cout << "Your choice: ";
         cin >> choice;
+
         cin.ignore();
+
         switch (choice) {
-            case 1: {
-                while (true) {
-                    try {
-                        cout << "Enter Full Name: ";
-                        getline(cin, this->fullName);
-                        if (!isValidFullName(this->fullName)) {
-                            throw FullNameException();
+            case EditName: {
+                inputName(false);
+                break;
+            }
+            case EditBirthDay: {
+                inputBirthday(false);
+                break;
+            }
+            case EditPhone: {
+                inputPhone(false);
+                break;
+            }
+            case EditEmail: {
+                inputEmail(false);
+                break;
+            }
+            case EditCertificates: {
+                if (certificates.empty()) {
+                    cout << "No certificates found for this employee.\n";
+                    break;
+                }
+
+                cout << "---- Current Certificates ----\n";
+                for (size_t i = 0; i < certificates.size(); ++i) {
+                    cout << i + 1 << ". ";
+                    certificates[i]->infoCertificates();
+                }
+
+                int selectedId;
+                cout << "Enter Certificate ID to edit (or 0 to cancel): ";
+                cin >> selectedId;
+
+                if (selectedId == 0) {
+                    cout << "Canceled editing certificates.\n";
+                    break;
+                }
+
+                bool found = false;
+                for (size_t i = 0; i < certificates.size(); ++i) {
+                    if (certificates[i]->getId() == selectedId) {
+                        found = true;
+                        cout << "Editing Certificate ID: " << selectedId << "\n";
+
+                        int subChoice;
+                        while (true) {
+                            certificates[i]->infoCertificates();
+                            cout << "\nSelect the attribute to edit:\n";
+                            cout << "1. Certificate ID\n";
+                            cout << "2. Certificate Name\n";
+                            cout << "3. Certificate Rank\n";
+                            cout << "4. Certificate Date\n";
+                            cout << "0. Finish Editing\n";
+                            cout << "Your choice: ";
+                            cin >> subChoice;
+                            cin.ignore();
+
+                            switch (subChoice) {
+                                case EditCerID: {  
+                                    int newId;
+                                    while (true) {
+                                        try {
+                                            cout << "Enter new Certificate ID: ";
+                                            cin >> newId;
+
+                                            if (cin.fail() || newId < 1) {
+                                                cin.clear();
+                                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                                                throw MustBeNumberException();
+                                            }
+
+                                            if (manageIdCer.find(newId) != manageIdCer.end() && newId != selectedId) {
+                                                cout << "Certificate ID already exists. Try again.\n";
+                                                continue;
+                                            }
+
+                                            manageIdCer.erase(certificates[i]->getId());
+                                            certificates[i]->setId(newId);
+                                            manageIdCer.insert(newId);
+                                            break;
+                                        }
+                                        catch (const MustBeNumberException& e) {
+                                            cerr << "Error: " << e.what() << endl;
+                                        }
+                                    }
+                                    break;
+                                }
+                                case EditCerName: {
+                                    string newName;  
+                                    while (true) {
+                                        try {
+                                            cout << "Enter new Certificate Name: ";
+                                            getline(cin, newName);
+
+                                            if (!isValidString(newName)) {
+                                                throw MustBeStringException();
+                                            }
+                                            certificates[i]->setName(newName);
+                                            break;
+                                        }
+                                        catch (const MustBeStringException& e) {
+                                            cerr << "Error: " << e.what() << endl;
+                                        }
+                                    }
+                                    break;
+                                }
+                                case EditCerRank: {
+                                    string newRank;
+                                    while (true) {
+                                        try {
+                                            cout << "Enter new Certificate Rank: ";
+                                            getline(cin, newRank);
+
+                                            if (!isValidString(newRank)) {
+                                                throw MustBeStringException();
+                                            }
+                                            certificates[i]->setRank(newRank);
+                                            break;
+                                        }
+                                        catch (const MustBeStringException& e) {
+                                            cerr << "Error: " << e.what() << endl;
+                                        }
+                                    }
+                                    break;
+                                }
+                                case EditCerDate: {  
+                                    string newDate;
+                                    while (true) {
+                                        try {
+                                            cout << "Enter new Certificate Date (dd/mm/yyyy): ";
+                                            getline(cin, newDate);
+
+                                            if (!isValidDate(newDate)) {
+                                                throw DateException();
+                                            }
+                                            certificates[i]->setDate(newDate);
+                                            break;
+                                        }
+                                        catch (const DateException& e) {
+                                            cerr << "Error: " << e.what() << endl;
+                                        }
+                                    }
+                                    break;
+                                }
+                                case 0:
+                                    cout << "Finished editing certificate.\n";
+                                    return;
+                                default:
+                                    cout << "Invalid choice! Please try again.\n";
+                            }
                         }
-                        break;
-                    } catch (const FullNameException& e) {
-                        cerr << "Error: " << e.what() << endl;
                     }
                 }
-                break;
-            }
-            case 2: {
-                while (true) {
-                    try {
-                        cout << "Enter Birthday (dd/mm/yyyy): ";
-                        cin >> this->birthDay;
-                        if (!isValidBirthDay(this->birthDay)) {
-                            throw BirthDayException();
-                        }
-                        break;
-                    } catch (const BirthDayException& e) {
-                        cerr << "Error: " << e.what() << endl;
-                    }
+
+                if (!found) {
+                    cout << "No certificate found with ID " << selectedId << ".\n";
                 }
                 break;
             }
-            case 3: {
-                while (true) {
-                    try {
-                        cout << "Enter Phone: ";
-                        string phoneInput;
-                        cin >> phoneInput;
-                        if (!isValidPhone(phoneInput)) {
-                            throw PhoneException();
-                        }
-                        this->phone = phoneInput;
-                        break;
-                    } catch (const PhoneException& e) {
-                        cerr << "Error: " << e.what() << endl;
-                    }
-                }
-                break;
-            }
-            case 4: {
-                while (true) {
-                    try {
-                        cout << "Enter Email: ";
-                        cin >> this->email;
-                        if (!isValidEmail(this->email)) {
-                            throw EmailException();
-                        }
-                        break;
-                    } catch (const EmailException& e) {
-                        cerr << "Error: " << e.what() << endl;
-                    }
-                }
-                break;
-            }
-            case 5: {
-                cout << "Updating certificates...\n";
-                certificates.clear();
-                int num;
-                cout << "Number of Certificates to add: ";
-                cin >> num;
-                cin.ignore();
-                for (int i = 0; i < num; ++i) {
-                    cout << "Enter information for Certificate " << i + 1 << ":" << endl;
-                    unique_ptr<Certificate> cer = make_unique<Certificate>();
-                    cer->addCertificate();
-                    certificates.push_back(move(cer));
-                }
-                break;
-            }
-            case 0:
+            case FinishEdit:
                 cout << "Finished editing.\n";
                 return;
             default:

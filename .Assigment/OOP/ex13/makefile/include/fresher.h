@@ -12,13 +12,20 @@ class Fresher : public Employee{
         
         Fresher(string , string , string , string , string , string , string );
         
+        string getType() override;
+
         void detailEmployee() override;
+
+        void inputGraduationDate(bool);
+
+        void inputGraduationRank(bool);
+
+        void inputEducation(bool);
 
         void inputEmployee() override;
 
+        void editEmployee() override;
 
-        string getType();
 };
-
 
 #endif

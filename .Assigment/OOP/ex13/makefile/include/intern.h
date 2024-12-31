@@ -12,12 +12,20 @@ class Intern : public Employee{
 
         Intern(string , string , string , string , string , int , string );
 
+        string getType() override;
+
         void detailEmployee() override;
 
+        void inputMajors(bool);
+
+        void inputSemester(bool);
+
+        void inputUniversityName(bool);
 
         void inputEmployee() override;
 
-        string getType();
+        void editEmployee() override;
+
 }; 
 
 

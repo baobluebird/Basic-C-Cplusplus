@@ -1,4 +1,6 @@
 #include "intern.h"
+#include "utils_employees.h"
+
 
 Intern::Intern() : Majors(""), Semester(0), University_name(""){
     type = employeeType::Intern;
@@ -9,14 +11,13 @@ Intern::Intern(string fullName, string birthDay, string phone, string email, str
     this->type = employeeType::Intern;
 }
 
+string Intern::getType(){
+    return "Intern";
+}
+
 void Intern::detailEmployee(){
+    displayBasicInfo();
     cout << left
-         << setw(10) << getId()
-         << setw(20) << Employee::employeeTypeToString(this->type)
-         << setw(20) << getFullName()
-         << setw(15) << getBirthDay()
-         << setw(15) << getPhone()
-         << setw(20) << getEmail()
          << setw(20) << Majors
          << setw(20) << Semester
          << setw(30) << University_name
@@ -24,16 +25,97 @@ void Intern::detailEmployee(){
     displayCertificates();
 }
 
-void Intern::inputEmployee(){
-    Employee::inputEmployee();
-    cout << "Enter Majors: ";
-    cin >> this->Majors;
-    cout << "Enter Semester: ";
-    cin >> this->Semester;
-    cout << "Enter University Name: ";
-    cin >> this->University_name;
+void Intern::inputMajors(bool isInput){
+    while (true) {
+        try {
+            isInput == true ? cout << "Enter Majors: " : cout << "Enter new Majors: ";
+            cin.ignore();
+            getline(cin, this->Majors);
+            if (!isValidString(this->Majors)) {
+                throw MustBeStringException();
+            }
+            break;
+        }
+        catch (const MustBeStringException& e) {
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
 }
 
-string Intern::getType(){
-    return Employee::employeeTypeToString(type);
+void Intern::inputSemester(bool isInput){
+    while (true) {
+        try {
+            isInput == true ? cout << "Enter Semester: " : cout << "Enter new Semester: ";
+            cin >> this->Semester;
+            if (cin.fail() || Semester < 0) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw MustBeNumberException();
+            }
+            break;
+        }
+        catch (const MustBeNumberException& e) {
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
+}
+
+void Intern::inputUniversityName(bool isInput){
+    while (true) {
+        try {
+            isInput == true ? cout << "Enter University Name: " : cout << "Enter new University Name: ";
+            cin.ignore();
+            getline(cin, this->University_name);
+            if (!isValidString(this->University_name)) {
+                throw MustBeStringException();
+            }
+            break;
+        }
+        catch (const MustBeStringException& e) {
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
+}
+
+
+void Intern::inputEmployee(){
+    Employee::inputEmployee();
+    inputMajors(true);
+    inputSemester(true);
+    inputUniversityName(true);
+}
+
+void Intern::editEmployee(){
+    Employee::editEmployee();  
+    int choice;
+    while (true) {
+        detailEmployee();
+        cout << "Select the field to edit:\n";
+        cout << "6. Majors\n";
+        cout << "7. Semester\n";
+        cout << "8. University Name\n";
+        cout << "0. Finish Editing\n";
+        cout << "Your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case EditMajors: {  
+                inputMajors(false);
+                break;
+            }
+            case EditSemester: {  
+                inputSemester(false);
+                break;
+            }
+            case EditUniversityName: {  
+                inputUniversityName(false);
+                break;
+            }
+            case FinishEdit:
+                cout << "Finished editing.\n";
+                return;
+            default:
+                cout << "Invalid choice! Please select again.\n";
+        }
+    }
 }

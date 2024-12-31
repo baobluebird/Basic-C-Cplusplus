@@ -2,6 +2,7 @@
 #define CERTIFICATE_H
 #include <iostream>
 #include <string>
+
 using namespace std;
 class Certificate {
     private:
@@ -9,12 +10,26 @@ class Certificate {
         string CertificateName;
         string CertificateRank;
         string CertificatedDate;
+    protected:
+        bool isValidString(const string&);
+
+        bool isValidDate(const string&);
     public:
         Certificate(); 
 
         Certificate(int , string , string , string );
 
-        void addCertificate();
+        int getId();
+
+        void setId(int);
+
+        void setName(string);
+
+        void setRank(string);
+
+        void setDate(string);
+
+        void addCertificate(int);
 
         void infoCertificates();
 };

@@ -11,15 +11,18 @@ class Experience : public Employee{
         Experience();
         
         Experience(string , string , string , string ,int , string );
+
+        string getType() override;
     
         void detailEmployee() override;
 
+        void inputExperienceInYear(bool);
+
+        void inputProSkill(bool);
 
         void inputEmployee() override;
 
-
-        string getType();
-
+        void editEmployee() override;
 };
 
 #endif

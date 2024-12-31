@@ -15,7 +15,6 @@ using namespace std;
 #define DisplayExperience 5
 #define DisplayFresher 6
 #define DisplayIntern 7
-#define SearchByType 8
 #define Exit 0
 //define editEmployee
 #define EditName 1
@@ -35,6 +34,11 @@ using namespace std;
 #define EditMajors 6
 #define EditSemester 7
 #define EditUniversityName 8
+//define editEmployee Certificate
+#define EditCerID 1
+#define EditCerName 2
+#define EditCerRank 3
+#define EditCerDate 4
 
 
 enum class employeeType{
@@ -53,7 +57,7 @@ public:
 class PhoneException : public exception {
 public:
     const char* what() const noexcept override {
-        return "Invalid phone number!";
+        return "Invalid phone number! Must be starts with 0 and contains no characters";
     }
 };
 
@@ -67,7 +71,7 @@ public:
 class FullNameException : public exception {
 public:
     const char* what() const noexcept override {
-        return "Full name cannot be empty!";
+        return "Invalid name. Name must not contain numbers or special characters (Minimum 3 characters)!";
     }
 };
 
@@ -247,8 +251,8 @@ class Employee{
         }
 
         bool isValidFullName(const string& fullName) {
-            regex pattern(R"(^[A-Za-zÀ-ỹ\s]+$)");
-            return regex_match(fullName, pattern) && !fullName.empty();
+            regex pattern(R"(^[A-Za-zÀ-ỹ ]{3,}$)");
+            return regex_match(fullName, pattern);
         }
 
         bool isValidString(const string& str) {
@@ -258,6 +262,7 @@ class Employee{
     public:
         static set<int> manageId;
         static set<int> recycledIds;  
+        static string employeeTypeToString(employeeType type);
 
         Employee() : fullName(""), birthDay(""), phone(""), email("") {
             generateUniqueId();
@@ -281,32 +286,10 @@ class Employee{
             manageId.insert(this->ID);
         }
 
-        int getId(){
-            return this->ID;
-        }
-
-        string getFullName(){
-            return this->fullName;
-        }
-
-        string getBirthDay(){
-            return this->birthDay;
-        }
-
-        string getPhone(){
-            return this->phone;
-        }
-
-        string getEmail(){
-            return this->email;
-        }
-
-        static string employeeTypeToString(employeeType type);
-
-        virtual void inputEmployee(){
+        void inputName(bool isInput){
             while (true) {
                 try {
-                    cout << "Enter Full Name: ";
+                    isInput == true ? cout << "Enter Full Name: " : cout << "Enter new Full Name: ";
                     cin.ignore();
                     getline(cin, this->fullName);
                     if (!isValidFullName(this->fullName)) {
@@ -315,13 +298,14 @@ class Employee{
                     break;
                 } catch (const FullNameException& e) {
                     cerr << "Error: " << e.what() << endl;
-                    cout << "Name must not contain numbers or special characters. Please try again.\n";
                 }
             }
+        }
 
+        void inputBirthday(bool isInput){
             while (true) {
                 try {
-                    cout << "Enter Birthday (dd/mm/yyyy): ";
+                    isInput == true ? cout << "Enter Birthday (dd/mm/yyyy): " : cout << "Enter new Birthday (dd/mm/yyyy): ";
                     cin >> this->birthDay;
                     if (!isValidDate(this->birthDay)) {
                         throw DateException();
@@ -331,10 +315,12 @@ class Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
+        }
 
+        void inputPhone(bool isInput){
             while (true) {
                 try {
-                    cout << "Enter Phone: ";
+                    isInput == true ? cout << "Enter Phone: " : cout << "Enter new Phone: ";
                     string phoneInput;
                     cin >> phoneInput;
                     if (!isValidPhone(phoneInput)) {
@@ -346,10 +332,12 @@ class Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
+        }
 
+        void inputEmail(bool isInput){
             while (true) {
                 try {
-                    cout << "Enter Email: ";
+                    isInput == true ? cout << "Enter Email: " : cout << "Enter new Email: ";
                     cin >> this->email;
                     if (!isValidEmail(this->email)) {
                         throw EmailException();
@@ -359,6 +347,9 @@ class Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
+        }   
+
+        void inputCertificates(){
             int num;
             while (true) {
                 try {
@@ -431,6 +422,30 @@ class Employee{
             cout << string(60, '*') << endl;
         }
 
+        void displayBasicInfo() {
+            cout << left
+                << setw(10) << this->ID
+                << setw(20) << Employee::employeeTypeToString(this->type)
+                << setw(20) << this->fullName
+                << setw(15) << this->birthDay
+                << setw(15) << this->phone
+                << setw(20) << this->email;
+        }
+
+        virtual void inputEmployee(){
+            
+            inputName(true);
+
+            inputBirthday(true);
+
+            inputPhone(true);
+
+            inputEmail(true);
+
+            inputCertificates();
+            
+        }
+
         virtual void editEmployee() {
             int choice;
             while (true) {
@@ -449,65 +464,19 @@ class Employee{
 
                 switch (choice) {
                     case EditName: {
-                        while (true) {
-                            try {
-                                cout << "Enter Full Name: ";
-                                getline(cin, this->fullName);
-                                if (!isValidFullName(this->fullName)) {
-                                    throw FullNameException();
-                                }
-                                break;
-                            } catch (const FullNameException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputName(false);
                         break;
                     }
                     case EditBirthDay: {
-                        while (true) {
-                            try {
-                                cout << "Enter Birthday (dd/mm/yyyy): ";
-                                cin >> this->birthDay;
-                                if (!isValidDate(this->birthDay)) {
-                                    throw DateException();
-                                }
-                                break;
-                            } catch (const DateException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputBirthday(false);
                         break;
                     }
                     case EditPhone: {
-                        while (true) {
-                            try {
-                                cout << "Enter Phone: ";
-                                string phoneInput;
-                                cin >> phoneInput;
-                                if (!isValidPhone(phoneInput)) {
-                                    throw PhoneException();
-                                }
-                                this->phone = phoneInput;
-                                break;
-                            } catch (const PhoneException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputPhone(false);
                         break;
                     }
                     case EditEmail: {
-                        while (true) {
-                            try {
-                                cout << "Enter Email: ";
-                                cin >> this->email;
-                                if (!isValidEmail(this->email)) {
-                                    throw EmailException();
-                                }
-                                break;
-                            } catch (const EmailException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputEmail(false);
                         break;
                     }
                     case EditCertificates: {
@@ -551,7 +520,7 @@ class Employee{
                                     cin.ignore();
 
                                     switch (subChoice) {
-                                        case 1: {  
+                                        case EditCerID: {  
                                             int newId;
                                             while (true) {
                                                 try {
@@ -580,7 +549,7 @@ class Employee{
                                             }
                                             break;
                                         }
-                                        case 2: {
+                                        case EditCerName: {
                                             string newName;  
                                             while (true) {
                                                 try {
@@ -599,7 +568,7 @@ class Employee{
                                             }
                                             break;
                                         }
-                                        case 3: {
+                                        case EditCerRank: {
                                             string newRank;
                                             while (true) {
                                                 try {
@@ -618,7 +587,7 @@ class Employee{
                                             }
                                             break;
                                         }
-                                        case 4: {  
+                                        case EditCerDate: {  
                                             string newDate;
                                             while (true) {
                                                 try {
@@ -652,7 +621,6 @@ class Employee{
                         }
                         break;
                     }
-
                     case FinishEdit:
                         cout << "Finished editing.\n";
                         return;
@@ -661,7 +629,6 @@ class Employee{
                 }
             }
         }
-
 
         virtual void detailEmployee() = 0;
 
@@ -672,6 +639,7 @@ class Employee{
             recycledIds.insert(this->ID);
             cout << "Destructor of ID: " << this->ID << endl;
         }
+        
         //for testing
         void addTestCertificate(int id, const string& name, const string& rank, const string& date) {
             if (manageIdCer.find(id) != manageIdCer.end()) {
@@ -682,7 +650,7 @@ class Employee{
             unique_ptr<Certificate> cert = make_unique<Certificate>(id, name, rank, date);
             manageIdCer.insert(cert->getId());
             certificates.push_back(move(cert));
-            cout << "Certificate " << id << " added successfully to employee ID " << getId() << "." << endl;
+            cout << "Certificate " << id << " added successfully to employee ID " << this->ID << "." << endl;
         }
 
 };
@@ -714,27 +682,24 @@ class Experience : public Employee{
         : Employee(fullName, birthDay, phone, email, employeeType::Experience), ExpInYear(ExpInYear), ProSkill(ProSkill) {
             this->type = employeeType::Experience;
         }
+
+        string getType() override {
+            return "Experience";
+        }
     
         void detailEmployee() override {
+            displayBasicInfo();
             cout << left
-                << setw(10) << getId()
-                << setw(20) << Employee::employeeTypeToString(this->type)
-                << setw(20) << getFullName()
-                << setw(15) << getBirthDay()
-                << setw(15) << getPhone()
-                << setw(20) << getEmail()
                 << setw(26) << ExpInYear
                 << setw(20) << ProSkill
                 << endl;
             displayCertificates();
         }
 
-
-        void inputEmployee() override{
-            Employee::inputEmployee();
+        void inputExperienceInYear(bool isInput){
             while (true) {
                 try {
-                    cout << "Enter new Experience In Year: ";
+                    isInput == true ? cout << "Enter Experience In Year: " : cout << "Enter new Experience In Year: ";
                     cin >> this->ExpInYear;
                     if (cin.fail() || ExpInYear < 0) {
                         cin.clear();
@@ -747,9 +712,12 @@ class Experience : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
+        }
+
+        void inputProSkill(bool isInput){
             while (true) {
                 try {
-                    cout << "Enter new Pro Skill: ";
+                    isInput == true ? cout << "Enter Pro Skill: " : cout << "Enter new Pro Skill: ";
                     getline(cin, this->ProSkill);
                     if (!isValidString(this->ProSkill)) {
                         throw MustBeStringException();
@@ -760,6 +728,12 @@ class Experience : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
+        }
+
+        void inputEmployee() override{
+            Employee::inputEmployee();
+            inputExperienceInYear(true);
+            inputProSkill(true);
         }
 
         void editEmployee() override {
@@ -777,40 +751,11 @@ class Experience : public Employee{
 
                 switch (choice) {
                     case EditExpInYear: { 
-                        while (true) {
-                            try {
-                                cout << "Enter new Experience In Year: ";
-                                cin >> this->ExpInYear;
-
-                                if (cin.fail() || ExpInYear < 0) {
-                                    cin.clear();
-                                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                    throw MustBeNumberException();
-                                }
-                                break;
-                            }
-                            catch (const MustBeNumberException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputExperienceInYear(false);
                         break;
                     }
                     case EditProSkill: { 
-                        while (true) {
-                            try {
-                                cout << "Enter new Pro Skill: ";
-                                cin.ignore();
-                                getline(cin, this->ProSkill);
-
-                                if (!isValidString(this->ProSkill)) {
-                                    throw MustBeStringException();
-                                }
-                                break;
-                            }
-                            catch (const MustBeStringException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputProSkill(false);
                         break;
                     }
                     case FinishEdit:
@@ -820,10 +765,6 @@ class Experience : public Employee{
                         cout << "Invalid choice! Please select again.\n";
                 }
             }
-        }
-
-        string getType(){
-            return Employee::employeeTypeToString(type);
         }
 
 };
@@ -843,15 +784,14 @@ class Fresher : public Employee{
         : Employee(fullName, birthDay, phone, email, employeeType::Fresher), Graduation_date(Graduation_date), Graduation_rank(Graduation_rank), Education(Education) {
             this->type = employeeType::Fresher;
         }
+
+        string getType() override {
+            return "Fresher";
+        }
         
         void detailEmployee() override {
-            cout << left
-                << setw(10) << getId()                               
-                << setw(20) << Employee::employeeTypeToString(this->type)
-                << setw(20) << getFullName() 
-                << setw(15) << getBirthDay()                       
-                << setw(15) << getPhone()                        
-                << setw(20) << getEmail()                          
+            displayBasicInfo();
+            cout << left                       
                 << setw(26) << Graduation_date                        
                 << setw(27) << Graduation_rank                        
                 << setw(30) << Education                               
@@ -859,12 +799,10 @@ class Fresher : public Employee{
             displayCertificates();
         }
 
-
-        void inputEmployee() override{
-            Employee::inputEmployee();
+        void inputGraduationDate(bool isInput){
             while (true) {
                 try {
-                    cout << "Enter new Graduation Date: ";
+                    isInput == true ? cout << "Enter Graduation Date: " : cout << "Enter new Graduation Date: ";
                     cin >> this->Graduation_date;
                     if (!isValidDate(this->Graduation_date)) {
                         throw DateException();
@@ -875,9 +813,12 @@ class Fresher : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
-            while(true){
-                try{
-                    cout << "Enter new Graduation Rank: ";
+        }
+
+        void inputGraduationRank(bool isInput){
+            while (true) {
+                try {
+                    isInput == true ? cout << "Enter Graduation Rank: " : cout << "Enter new Graduation Rank: ";
                     cin.ignore();
                     getline(cin, this->Graduation_rank);
                     if (!isValidString(this->Graduation_rank)) {
@@ -889,9 +830,12 @@ class Fresher : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
-            while(true){
-                try{
-                    cout << "Enter new Education: ";
+        }
+
+        void inputEducation(bool isInput){
+            while (true) {
+                try {
+                    isInput == true ? cout << "Enter Education: " : cout << "Enter new Education: ";
                     getline(cin, this->Education);
                     if (!isValidString(this->Education)) {
                         throw MustBeStringException();
@@ -902,6 +846,13 @@ class Fresher : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
+        }
+
+        void inputEmployee() override{
+            Employee::inputEmployee();
+            inputGraduationDate(true);
+            inputGraduationRank(true);
+            inputEducation(true);
         }
 
         void editEmployee() override {
@@ -920,56 +871,15 @@ class Fresher : public Employee{
 
                 switch (choice) {
                     case EditGraduationDate: {  
-                        while (true) {
-                            try {
-                                cout << "Enter new Graduation Date: ";
-                                cin >> this->Graduation_date;
-
-                                if (!isValidDate(this->Graduation_date)) {
-                                    throw DateException();
-                                }
-                                break;
-                            }
-                            catch (const DateException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputGraduationDate(false);
                         break;
                     }
                     case EditGraduationRank: {  
-                        while (true) {
-                            try {
-                                cout << "Enter new Graduation Rank: ";
-                                cin.ignore();
-                                getline(cin, this->Graduation_rank);
-
-                                if (!isValidString(this->Graduation_rank)) {
-                                    throw MustBeStringException();
-                                }
-                                break;
-                            }
-                            catch (const MustBeStringException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputGraduationRank(false);
                         break;
                     }
                     case EditEducation: {  
-                        while (true) {
-                            try {
-                                cout << "Enter new Education: ";
-                                cin.ignore();
-                                getline(cin, this->Education);
-
-                                if (!isValidString(this->Education)) {
-                                    throw MustBeStringException();
-                                }
-                                break;
-                            }
-                            catch (const MustBeStringException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputEducation(false);
                         break;
                     }
                     case FinishEdit:
@@ -981,9 +891,6 @@ class Fresher : public Employee{
             }
         }
 
-        string getType(){
-            return Employee::employeeTypeToString(type);
-        }
 };
 
 class Intern : public Employee{
@@ -1002,14 +909,13 @@ class Intern : public Employee{
             this->type = employeeType::Intern;
         }
 
+        string getType() override {
+            return "Intern";
+        }
+        
         void detailEmployee() override {
+            displayBasicInfo();
             cout << left
-                << setw(10) << getId()
-                << setw(20) << Employee::employeeTypeToString(this->type)
-                << setw(20) << getFullName()
-                << setw(15) << getBirthDay()
-                << setw(15) << getPhone()
-                << setw(20) << getEmail()
                 << setw(26) << Majors
                 << setw(27) << Semester
                 << setw(30) << University_name
@@ -1017,12 +923,12 @@ class Intern : public Employee{
             displayCertificates();
         }
 
-        void inputEmployee() override{
-            Employee::inputEmployee();
-            while(true){
-                try{
-                    cout << "Enter Majors: ";
-                    cin >> this->Majors;
+        void inputMajors(bool isInput){
+            while (true) {
+                try {
+                    isInput == true ? cout << "Enter Majors: " : cout << "Enter new Majors: ";
+                    cin.ignore();
+                    getline(cin, this->Majors);
                     if (!isValidString(this->Majors)) {
                         throw MustBeStringException();
                     }
@@ -1032,9 +938,12 @@ class Intern : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
-            while(true){
-                try{
-                    cout << "Enter Semester: ";
+        }
+
+        void inputSemester(bool isInput){
+            while (true) {
+                try {
+                    isInput == true ? cout << "Enter Semester: " : cout << "Enter new Semester: ";
                     cin >> this->Semester;
                     if (cin.fail() || Semester < 0) {
                         cin.clear();
@@ -1047,9 +956,12 @@ class Intern : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
-            while(true){
-                try{
-                    cout << "Enter University Name: ";
+        }
+
+        void inputUniversityName(bool isInput){
+            while (true) {
+                try {
+                    isInput == true ? cout << "Enter University Name: " : cout << "Enter new University Name: ";
                     cin.ignore();
                     getline(cin, this->University_name);
                     if (!isValidString(this->University_name)) {
@@ -1061,6 +973,13 @@ class Intern : public Employee{
                     cerr << "Error: " << e.what() << endl;
                 }
             }
+        }
+
+        void inputEmployee() override{
+            Employee::inputEmployee();
+            inputMajors(true);
+            inputSemester(true);
+            inputUniversityName(true);
         }
 
         void editEmployee() override {
@@ -1079,58 +998,15 @@ class Intern : public Employee{
 
                 switch (choice) {
                     case EditMajors: {  
-                        while (true) {
-                            try {
-                                cout << "Enter new Majors: ";
-                                cin.ignore();
-                                getline(cin, this->Majors);
-
-                                if (!isValidString(this->Majors)) {
-                                    throw MustBeStringException();
-                                }
-                                break;
-                            }
-                            catch (const MustBeStringException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputMajors(false);
                         break;
                     }
                     case EditSemester: {  
-                        while (true) {
-                            try {
-                                cout << "Enter new Semester: ";
-                                cin >> this->Semester;
-
-                                if (cin.fail() || Semester < 0) {
-                                    cin.clear();
-                                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                    throw MustBeNumberException();
-                                }
-                                break;
-                            }
-                            catch (const MustBeNumberException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputSemester(false);
                         break;
                     }
                     case EditUniversityName: {  
-                        while (true) {
-                            try {
-                                cout << "Enter new University Name: ";
-                                cin.ignore();
-                                getline(cin, this->University_name);
-
-                                if (!isValidString(this->University_name)) {
-                                    throw MustBeStringException();
-                                }
-                                break;
-                            }
-                            catch (const MustBeStringException& e) {
-                                cerr << "Error: " << e.what() << endl;
-                            }
-                        }
+                        inputUniversityName(false);
                         break;
                     }
                     case FinishEdit:
@@ -1142,9 +1018,6 @@ class Intern : public Employee{
             }
         }
 
-        string getType(){
-            return Employee::employeeTypeToString(type);
-        }
 }; 
 
 class EmployeeManager{
@@ -1213,14 +1086,19 @@ class EmployeeManager{
             return true;
         }
 
-        void displayEmployee(){
+        void settingDisplay(){
             cout << left
                  << setw(10) << "ID"
                  << setw(20) << "Employee Type"
                  << setw(20) << "Full Name"
                  << setw(15) << "BirthDay"
                  << setw(15) << "Phone"
-                 << setw(20) << "Email"
+                 << setw(20) << "Email";
+        }
+
+        void displayEmployee(){
+            settingDisplay();
+            cout << left
                  << setw(20) << "ExpInYear/GradDate/Majors-"
                  << setw(20) << "ProSkill/GradRank/Semester-"
                  << setw(30) << "Education/University"
@@ -1231,39 +1109,12 @@ class EmployeeManager{
                 doc->detailEmployee();
             }
             cout << string(170, '-') << endl;
-        }
-
-        void displayIntern(){
-            cout << left
-                 << setw(10) << "ID"
-                 << setw(20) << "Employee Type"
-                 << setw(20) << "Full Name"
-                 << setw(15) << "BirthDay"
-                 << setw(15) << "Phone"
-                 << setw(20) << "Email"
-                 << setw(20) << "Majors"
-                 << setw(20) << "Semester"
-                 << setw(30) << "University Name"
-                 << endl;
-            cout << string(170, '-') << endl;
-            for (size_t i = 0; i < listEmployees.size(); ++i) { 
-                shared_ptr<Employee> doc = listEmployees[i];  
-                if (doc->getType() == "Intern") {
-                    doc->detailEmployee();
-                }
-            }
-            cout << string(170, '-') << endl;
-        }
+        }   
 
         void displayExperience(){
+            settingDisplay();
             cout << left
-                 << setw(10) << "ID"
-                 << setw(20) << "Employee Type"
-                 << setw(20) << "Full Name"
-                 << setw(15) << "BirthDay"
-                 << setw(15) << "Phone"
-                 << setw(20) << "Email"
-                 << setw(20) << "ExpInYear"
+                 << setw(26) << "ExpInYear"
                  << setw(20) << "ProSkill"
                  << endl;
             cout << string(170, '-') << endl;
@@ -1276,16 +1127,28 @@ class EmployeeManager{
             cout << string(170, '-') << endl;
         }
 
-        void displayFresher(){
+        void displayIntern(){
+            settingDisplay();
             cout << left
-                 << setw(10) << "ID"
-                 << setw(20) << "Employee Type"
-                 << setw(20) << "Full Name"
-                 << setw(15) << "BirthDay"
-                 << setw(15) << "Phone"
-                 << setw(20) << "Email"
-                 << setw(20) << "Graduation Date"
-                 << setw(20) << "Graduation Rank"
+                 << setw(26) << "Majors"
+                 << setw(27) << "Semester"
+                 << setw(30) << "University Name"
+                 << endl;
+            cout << string(170, '-') << endl;
+            for (size_t i = 0; i < listEmployees.size(); ++i) { 
+                shared_ptr<Employee> doc = listEmployees[i];  
+                if (doc->getType() == "Intern") {
+                    doc->detailEmployee();
+                }
+            }
+            cout << string(170, '-') << endl;
+        }
+
+        void displayFresher(){
+            settingDisplay();
+            cout << left
+                 << setw(26) << "Graduation Date"
+                 << setw(27) << "Graduation Rank"
                  << setw(30) << "Education"
                  << endl;
             cout << string(170, '-') << endl;
@@ -1298,19 +1161,6 @@ class EmployeeManager{
             cout << string(170, '-') << endl;
         }
 
-        void searchEmployeeByType(string type) {
-            bool found = false;
-            for (size_t i = 0; i < listEmployees.size(); ++i) { 
-                shared_ptr<Employee> doc = listEmployees[i];   
-                if (doc->getType() == type) {
-                    doc->detailEmployee();
-                    found = true;
-                }
-            }
-            if (!found) {
-                cout << "No employee of type " << type << " found." << endl;
-            }
-        }
 };
 
 void createSampleEmployees(EmployeeManager& manager) {
@@ -1319,8 +1169,6 @@ void createSampleEmployees(EmployeeManager& manager) {
     manager.addEmployee(emp1);
     //ues testAddCertificate to add certificate for testing
     emp1->addTestCertificate(101, "Java Certification", "Advanced", "10/10/2020");
-
-
 
     shared_ptr<Employee> emp2 = make_shared<Fresher>("Tran Van B", "15/05/1995", "0987654321", "b@gmail.com", "20/06/2020", "Good", "HUST");
     manager.addEmployee(emp2);
@@ -1350,7 +1198,6 @@ int main() {
             cout << "5. Display all experience" << endl;
             cout << "6. Display all fresher" << endl;
             cout << "7. Display all intern" << endl;
-            cout << "8. Search employee by type" << endl;
             cout << "0. Exit program" << endl;
             cout << "Your choice: ";
             
@@ -1443,19 +1290,6 @@ int main() {
                 case DisplayIntern: {
                     cout << "--------- All Intern ---------" << endl;
                     manager.displayIntern();
-                    break;
-                }
-                case SearchByType: {
-                    string type;
-                    cout << "Enter employee's type to search: ";
-                    cin >> type;
-
-                    if (cin.fail()) {
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                        throw MenuException();
-                    }
-                    manager.searchEmployeeByType(type);
                     break;
                 }
                 case Exit:
