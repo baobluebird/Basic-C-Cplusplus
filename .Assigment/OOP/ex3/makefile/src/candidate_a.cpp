@@ -15,7 +15,6 @@ void CandidateA::detailCandidate() {
          << endl;
 }
 
-string CandidateA::getBlock ()
-{
+string CandidateA::getBlock (){
     return "Candidate A";
 }

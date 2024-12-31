@@ -11,11 +11,10 @@ void CandidateC::detailCandidate() {
          << setw(16) << getName()
          << setw(16) << getAddress()
          << setw(20) << getPriorityLevel()
-         << setw(40) << "Math, Physics, Chemistry"
+         << setw(40) << "Literature, History, Geography"
          << endl;
 }
 
-string CandidateC::getBlock()
-{
+string CandidateC::getBlock(){
     return "Candidate C";
 }

@@ -1,5 +1,5 @@
 #include "document_manager.h"
-#include "document_manager_utils.h"
+#include "utils_document.h"
 
 int main() {
     DocumentManager manager;
@@ -23,25 +23,16 @@ int main() {
                 cout << "1. Add Book" << endl;
                 cout << "2. Add Magazine" << endl;
                 cout << "3. Add News" << endl;
-                int typeInput; 
+                int typeInput;
                 cin >> typeInput;
-                DocumentType type = static_cast<DocumentType>(typeInput);
-                switch (type) {
-                    case DocumentType::Book: {
-                        addBook(manager);
-                        break;
-                    }
-                    case DocumentType::Magazine: {
-                        addMagazine(manager);
-                        break;
-                    }
-                    case DocumentType::News: {
-                        addNews(manager);
-                        break;
-                    }
-                    default:
-                        break;
+                
+                if (typeInput < 1 || typeInput > 3) {
+                    cout << "Invalid document type. Please enter again (1-3)." << endl;
+                    break;
                 }
+
+                DocumentType type = static_cast<DocumentType>(typeInput);
+                manager.addDocumentByType(type);
                 break;
             }
             case DeleteDoc: {

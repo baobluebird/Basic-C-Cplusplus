@@ -1,5 +1,6 @@
+#include "utils_employee.h"
+#include "employee_manager.h"
 
-#include "employee_manager_utils.h"
 
 int main() {
     EmployeeManager manager;
@@ -24,25 +25,14 @@ int main() {
                 cout << "3. Add Engineer" << endl;
                 int typeInput; 
                 cin >> typeInput;
-                EmployeeType type = static_cast<EmployeeType>(typeInput);
-                shared_ptr<Employee> employee;
-                switch (type) {
-                    case EmployeeType::Worker: {
-                        addWorker(manager);
-                        break;
-                    }
-                    case EmployeeType::Staff: {
-                        addStaff(manager);
-                        break;
-                    }
-                    case EmployeeType::Engineer: {
-                        addEngineer(manager);
-                        break;
-                    }
-                    default:
-                        cout << "Invalid input" << endl;
-                        break;
+
+                if (typeInput < 1 || typeInput > 3) {
+                    cout << "Invalid employee type. Please enter again (1-3)." << endl;
+                    break;
                 }
+
+                EmployeeType type = static_cast<EmployeeType>(typeInput);
+                manager.addEmployeeByType(type);
                 break;
             }
             case SearchEmployeeByName: {

@@ -176,19 +176,52 @@ class CandidateC: public Candidate{
 
 class CandidateManager{
     private:
-        vector<unique_ptr<Candidate>> listCandidates;
+        vector<shared_ptr<Candidate>> listCandidates;
     public:
 
-        void addCandidate(unique_ptr<Candidate> candidate) {
+        void addCandidate(shared_ptr<Candidate> candidate) {
             if (!Candidate::recycledIds.empty()) {
                 int recycleId = *Candidate::recycledIds.begin();
                 Candidate::recycledIds.erase(Candidate::recycledIds.begin());
-                listCandidates.insert(listCandidates.begin() + (recycleId - 1), move(candidate));
+                listCandidates.insert(listCandidates.begin() + (recycleId - 1), candidate);
             } else {
-                listCandidates.push_back(move(candidate));  
+                listCandidates.push_back(candidate);  
             }
         }
 
+        void addCandidateByType(CandidateType type) {
+            int num;
+            cout << "Number of candidates to add: ";
+            cin >> num;
+            cin.ignore();
+            string typeStr;
+
+            for (int i = 0; i < num; ++i) {
+                shared_ptr<Candidate> candidate;
+
+                switch (type) {
+                    case CandidateType::CandidateA:
+                        typeStr = "Candidate A";
+                        candidate = make_shared<CandidateA>();
+                        break;
+                    case CandidateType::CandidateB:
+                        typeStr = "Candidate B";
+                        candidate = make_shared<CandidateB>();
+                        break;
+                    case CandidateType::CandidateC:
+                        typeStr = "Candidate C";
+                        candidate = make_shared<CandidateC>();
+                        break;
+                    default:
+                        cout << "Invalid candidate type." << endl;
+                        return;
+                }
+
+                cout << "Enter information for candidate " << typeStr << " " << i + 1 << ":" << endl;
+                candidate->inputCandidate();
+                addCandidate(candidate);
+            }
+        }
 
         void displayCandidate(){
             cout << left
@@ -201,7 +234,7 @@ class CandidateManager{
                  << endl;
             cout << string(100, '-') << endl;
             for (size_t i = 0; i < listCandidates.size(); ++i) { 
-                unique_ptr<Candidate>& candidate = listCandidates[i];  
+                shared_ptr<Candidate>& candidate = listCandidates[i];  
                 candidate->detailCandidate();
             }
             cout << string(100, '-') << endl;
@@ -210,7 +243,7 @@ class CandidateManager{
         void searchDocumentById(int id) {
             bool found = false;
             for (size_t i = 0; i < listCandidates.size(); ++i) { 
-                unique_ptr<Candidate>& candidate = listCandidates[i];   
+                shared_ptr<Candidate>& candidate = listCandidates[i];   
                 if (candidate->getId() == id) {
                 cout << left
                      << setw(5) << "ID"
@@ -229,44 +262,6 @@ class CandidateManager{
             }
         }
 };
-
-void addCandidateA(CandidateManager& manager){
-    int num;
-    cout << "Number of Candidate A to add: ";
-    cin >> num;
-    for(int i = 0; i < num; ++i){
-        cout << "Enter information for candidate a " << i + 1 << ":" << endl;
-        unique_ptr<Candidate> document = make_unique<CandidateA>();
-        document->inputCandidate();
-        manager.addCandidate(move(document));
-    }
-}
-
-void addCandidateB(CandidateManager& manager){
-    int num;
-    cout << "Number of Candidate B to add: ";
-    cin >> num;
-    for(int i = 0; i < num; ++i){
-        cout << "Enter information for candidate b " << i + 1 << ":" << endl;
-        unique_ptr<Candidate> document = make_unique<CandidateB>();
-        document->inputCandidate();
-        manager.addCandidate(move(document));
-    }
-}
-
-void addCandidateC(CandidateManager& manager){
-    int num;
-    cout << "Number of Candidate C to add: ";
-    cin >> num;
-    for(int i = 0; i < num; ++i){
-        cout << "Enter information for candidate c " << i + 1 << ":" << endl;
-        unique_ptr<Candidate> document = make_unique<CandidateC>();
-        document->inputCandidate();
-        manager.addCandidate(move(document));
-    }
-}
-
-
 
 int main() {
     CandidateManager manager;
@@ -289,28 +284,18 @@ int main() {
                 cout << "1. Add Candidate A" << endl;
                 cout << "2. Add Candidate B" << endl;
                 cout << "3. Add Candidate C" << endl;
-                int typeInput; 
+                int typeInput;
                 cin >> typeInput;
-                CandidateType type = static_cast<CandidateType>(typeInput);
-                switch (type) {
-                    case CandidateType::CandidateA: {
-                        addCandidateA(manager);
-                        break;
-                    }
-                    case CandidateType::CandidateB: {
-                        addCandidateB(manager);
-                        break;
-                    }
-                    case CandidateType::CandidateC: {
-                        addCandidateC(manager);
-                        break;
-                    }
-                    default:
-                        break;
+
+                if (typeInput < 1 || typeInput > 3) {
+                    cout << "Invalid candidate type. Please enter again (1-3)." << endl;
+                    break;
                 }
+
+                CandidateType type = static_cast<CandidateType>(typeInput);
+                manager.addCandidateByType(type);
                 break;
             }
-
             case DisplayCandidate: {
                 cout << "--------- All Candidates ---------" << endl;
                 manager.displayCandidate();

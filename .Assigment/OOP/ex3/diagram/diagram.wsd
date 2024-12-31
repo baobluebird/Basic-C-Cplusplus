@@ -46,8 +46,8 @@ class CandidateC{
 }
 
 class CandidateManager {
-  - listCandidates: vector<unique_ptr<Candidate>>
-  + void addCandidate(unique_ptr<Candidate>);
+  - listCandidates: vector<shared_ptr<Candidate>>
+  + void addCandidate(shared_ptr<Candidate>);
   + void displayCandidate();
   + void searchDocumentById(string);
 }

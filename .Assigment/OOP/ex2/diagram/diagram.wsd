@@ -49,8 +49,9 @@ class News{
 }
 
 class DocumentManager {
-  - listDocuments: vector<unique_ptr<Document>>
-  + void addDocument(unique_ptr<Document> );
+  - listDocuments: vector<shared_ptr<Document>>
+  + void addDocument(shared_ptr<Document> );
+  + void addDocumentByType(DocumentType);
   + void deleteDocumentById(int);
   + void displayDocument();
   + void searchDocumentByType(string);

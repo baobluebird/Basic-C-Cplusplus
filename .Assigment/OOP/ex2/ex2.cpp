@@ -208,6 +208,40 @@ class DocumentManager{
             }
         }
 
+        void addDocumentByType(DocumentType type) {
+            int num;
+            cout << "Number of documents to add: ";
+            cin >> num;
+            cin.ignore();
+            string typeStr;
+            
+            for (int i = 0; i < num; ++i) {
+                unique_ptr<Document> document;
+                
+                switch (type) {
+                    case DocumentType::Book:
+                        typeStr = "Book";
+                        document = make_unique<Book>();
+                        break;
+                    case DocumentType::Magazine:
+                        typeStr = "Magazine";
+                        document = make_unique<Magazine>();
+                        break;
+                    case DocumentType::News:
+                        typeStr = "News";
+                        document = make_unique<News>();
+                        break;
+                    default:
+                        cout << "Invalid document type." << endl;
+                        return;
+                }
+
+                cout << "Enter information for document " << typeStr << " " << i + 1 << ":" << endl;
+                document->inputDocument();
+                addDocument(move(document));
+            }
+        }
+
 
         bool deleteDocumentById(int id) {
             if (id < 1 || id > Document::manageId.size()) {
@@ -253,44 +287,6 @@ class DocumentManager{
         }
 };
 
-void addBook(DocumentManager& manager){
-    int num;
-    cout << "Number of Book to add: ";
-    cin >> num;
-    for(int i = 0; i < num; ++i){
-        cout << "Enter information for book " << i + 1 << ":" << endl;
-        unique_ptr<Document> document = make_unique<Book>();
-        document->inputDocument();
-        manager.addDocument(move(document));
-    }
-}
-
-void addMagazine(DocumentManager& manager){
-    int num;
-    cout << "Number of Magazine to add: ";
-    cin >> num;
-    for(int i = 0; i < num; ++i){
-        cout << "Enter information for magazine " << i + 1 << ":" << endl;
-        unique_ptr<Document> document = make_unique<Magazine>();
-        document->inputDocument();
-        manager.addDocument(move(document));
-    }
-}
-
-void addNews(DocumentManager& manager){
-    int num;
-    cout << "Number of News to add: ";
-    cin >> num;
-    for(int i = 0; i < num; ++i){
-        cout << "Enter information for news " << i + 1 << ":" << endl;
-        unique_ptr<Document> document = make_unique<News>();
-        document->inputDocument();
-        manager.addDocument(move(document));
-    }
-}
-
-
-
 int main() {
     DocumentManager manager;
     int choice;
@@ -313,26 +309,16 @@ int main() {
                 cout << "1. Add Book" << endl;
                 cout << "2. Add Magazine" << endl;
                 cout << "3. Add News" << endl;
-                int typeInput; 
+                int typeInput;
                 cin >> typeInput;
-                DocumentType type = static_cast<DocumentType>(typeInput);
-                switch (type) {
-                    case DocumentType::Book: {
-                        addBook(manager);
-                        break;
-                    }
-                    case DocumentType::Magazine: {
-                        addMagazine(manager);
-                        break;
-                    }
-                    case DocumentType::News: {
-                        addNews(manager);
-                        break;
-                    }
-                    default:
-                        cout << "Invalid choice" << endl;
-                        break;
+                
+                if (typeInput < 1 || typeInput > 3) {
+                    cout << "Invalid document type. Please enter again (1-3)." << endl;
+                    break;
                 }
+
+                DocumentType type = static_cast<DocumentType>(typeInput);
+                manager.addDocumentByType(type);
                 break;
             }
             case DeleteDoc: {

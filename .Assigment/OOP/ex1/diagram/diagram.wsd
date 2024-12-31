@@ -38,9 +38,10 @@ class Staff {
 }
 
 class EmployeeManager {
-  - employeeList: vector<unique_ptr<Employee>>
-  + void addEmployee(unique_ptr<Employee>);
-  + void searchByName(String);
+  - employeeList: vector<shared_ptr<Employee>>
+  + void addEmployee(shared_ptr<Employee>);
+  + void addEmployeeByType(EmployeeType);
+  + void searchByName(String name);
   + void displayEmployeeList();
 }
 

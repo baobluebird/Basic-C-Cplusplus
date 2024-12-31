@@ -8,7 +8,7 @@ CXXFLAGS = -Wall -std=c++17
 SRC_DIR = src
 INC_DIR = include
 #list source file
-SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/employee.cpp $(SRC_DIR)/employee_manager.cpp $(SRC_DIR)/employee_manager_utils.cpp $(SRC_DIR)/worker.cpp $(SRC_DIR)/engineer.cpp $(SRC_DIR)/staff.cpp
+SRC = $(SRC_DIR)/main.cpp $(SRC_DIR)/employee.cpp $(SRC_DIR)/employee_manager.cpp $(SRC_DIR)/worker.cpp $(SRC_DIR)/engineer.cpp $(SRC_DIR)/staff.cpp
 #list object file
 OBJ = $(SRC:.cpp=.o)
 #Create executable file

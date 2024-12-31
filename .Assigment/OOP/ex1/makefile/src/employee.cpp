@@ -10,13 +10,13 @@ Employee::Employee(string name, int age, string gender, string address){
 }
 
 void Employee::enterInformation(){
-    cout << "Enter your name: " << endl;
+    cout << "Enter employee's name: ";
     cin >> name;
-    cout << "Enter your age: " << endl;
+    cout << "Enter employee's age: ";
     cin >> age;
-    cout << "Enter your gender: " << endl;
+    cout << "Enter employee's gender: ";
     cin >> gender;
-    cout << "Enter your address: " << endl;
+    cout << "Enter employee's address: ";
     cin >> address;
 }
 

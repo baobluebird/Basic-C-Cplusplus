@@ -12,20 +12,24 @@
 // Hiện thị thông tin về danh sách các cán bộ.
 // Thoát khỏi chương trình.
 
-#include<bits/stdc++.h>
-//define
+#include <iostream>
+#include <string>
+#include <memory>
+#include <vector>
 
+//define
 #define AddEmployee 1
 #define SearchEmployeeByName 2
 #define DisplayEmployee 3
-
-using namespace std;
 enum class EmployeeType {
     Worker = 1,
     Staff,
     Engineer,
     
 };
+
+using namespace std;
+
 
 class Employee {
     protected:
@@ -138,11 +142,44 @@ class Staff : public Employee {
 
 class EmployeeManager {
     private:
-        vector<unique_ptr<Employee>> employeeList;
+        vector<shared_ptr<Employee>> employeeList;
         
     public:
-        void addEmployee(unique_ptr<Employee> employee) {
-            employeeList.push_back(move(employee));
+        void addEmployee(shared_ptr<Employee> employee) {
+            employeeList.push_back(employee);
+        }
+
+        void addEmployeeByType(EmployeeType type) {
+            int num;
+            cout << "Number of employees to add: ";
+            cin >> num;
+            cin.ignore();
+            string typeStr;
+            
+            for (int i = 0; i < num; ++i) {
+                shared_ptr<Employee> employee;
+                switch (type) {
+                    case EmployeeType::Worker:
+                        typeStr = "Worker";
+                        employee = make_shared<Worker>();
+                        break;
+                    case EmployeeType::Staff:
+                        typeStr = "Staff";
+                        employee = make_shared<Staff>();
+                        break;
+                    case EmployeeType::Engineer:
+                        typeStr = "Engineer";
+                        employee = make_shared<Engineer>();
+                        break;
+                    default:
+                        cout << "Invalid employee type." << endl;
+                        return;
+                }
+                
+                cout << "Enter information for " << typeStr << " " << i + 1 << ":" << endl;
+                employee->enterInformation();
+                addEmployee(employee);
+            }
         }
 
         void searchByName(string name) {
@@ -166,43 +203,6 @@ class EmployeeManager {
         }
 };
 
-void addWorker(EmployeeManager &manager) {
-    int num;
-    cout << "Number of workers to add: ";
-    cin >> num;
-    for (int i = 0; i < num; ++i) {
-        cout << "Enter information for worker " << i + 1 << ":" << endl;
-        unique_ptr<Employee> employee = make_unique<Worker>();
-        employee->enterInformation();
-        manager.addEmployee(move(employee));
-    }
-}
-
-void addStaff(EmployeeManager &manager) {
-    int num;
-    cout << "Number of staff to add: ";
-    cin >> num;
-    for (int i = 0; i < num; ++i) {
-        cout << "Enter information for staff " << i + 1 << ":" << endl;
-        unique_ptr<Employee> employee = make_unique<Staff>();
-        employee->enterInformation();
-        manager.addEmployee(move(employee));
-    }
-}
-
-void addEngineer(EmployeeManager &manager) {
-    int num;
-    cout << "Number of engineers to add: ";
-    cin >> num;
-    for (int i = 0; i < num; ++i) {
-        cout << "Enter information for engineer " << i + 1 << ":" << endl;
-        unique_ptr<Employee> employee = make_unique<Engineer>();
-        employee->enterInformation();
-        manager.addEmployee(move(employee));
-    }
-}
-
-// Main Function
 int main() {
     EmployeeManager manager;
     int choice;
@@ -226,23 +226,14 @@ int main() {
                 cout << "3. Add Engineer" << endl;
                 int typeInput; 
                 cin >> typeInput;
-                EmployeeType type = static_cast<EmployeeType>(typeInput);
-                switch (type) {
-                    case EmployeeType::Worker: {
-                        addWorker(manager);
-                        break;
-                    }
-                    case EmployeeType::Staff: {
-                        addStaff(manager);
-                        break;
-                    }
-                    case EmployeeType::Engineer: {
-                        addEngineer(manager);
-                        break;
-                    }
-                    default:
-                        break;
+
+                if (typeInput < 1 || typeInput > 3) {
+                    cout << "Invalid employee type. Please enter again (1-3)." << endl;
+                    break;
                 }
+
+                EmployeeType type = static_cast<EmployeeType>(typeInput);
+                manager.addEmployeeByType(type);
                 break;
             }
             case SearchEmployeeByName: {

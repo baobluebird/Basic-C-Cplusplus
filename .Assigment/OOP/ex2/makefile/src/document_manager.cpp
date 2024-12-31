@@ -10,6 +10,39 @@ void DocumentManager::addDocument(shared_ptr<Document> document) {
     }
 }
 
+void DocumentManager::addDocumentByType(DocumentType type) {
+    int num;
+    cout << "Number of documents to add: ";
+    cin >> num;
+    cin.ignore();
+    string typeStr;
+    
+    for (int i = 0; i < num; ++i) {
+        unique_ptr<Document> document;
+        
+        switch (type) {
+            case DocumentType::Book:
+                typeStr = "Book";
+                document = make_unique<Book>();
+                break;
+            case DocumentType::Magazine:
+                typeStr = "Magazine";
+                document = make_unique<Magazine>();
+                break;
+            case DocumentType::News:
+                typeStr = "News";
+                document = make_unique<News>();
+                break;
+            default:
+                cout << "Invalid document type." << endl;
+                return;
+        }
+        cout << "Enter information for " << typeStr << " " << i + 1 << ":" << endl;
+        document->inputDocument();
+        addDocument(move(document));
+    }
+}
+
 void DocumentManager::deleteDocumentById(int id) {
     int sizeList = listDocuments.size();
     if (id < 1 || id > sizeList) {

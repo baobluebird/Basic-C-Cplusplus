@@ -1,4 +1,5 @@
-#include "candidate_manager_utils.h"
+#include "utils_candidate.h"
+#include "candidate_manager.h"
 
 int main() {
     CandidateManager manager;
@@ -21,28 +22,18 @@ int main() {
                 cout << "1. Add Candidate A" << endl;
                 cout << "2. Add Candidate B" << endl;
                 cout << "3. Add Candidate C" << endl;
-                int typeInput; 
+                int typeInput;
                 cin >> typeInput;
-                CandidateType type = static_cast<CandidateType>(typeInput);
-                switch (type) {
-                    case CandidateType::CandidateA: {
-                        addCandidateA(manager);
-                        break;
-                    }
-                    case CandidateType::CandidateB: {
-                        addCandidateB(manager);
-                        break;
-                    }
-                    case CandidateType::CandidateC: {
-                        addCandidateC(manager);
-                        break;
-                    }
-                    default:
-                        break;
+
+                if (typeInput < 1 || typeInput > 3) {
+                    cout << "Invalid candidate type. Please enter again (1-3)." << endl;
+                    break;
                 }
+
+                CandidateType type = static_cast<CandidateType>(typeInput);
+                manager.addCandidateByType(type);
                 break;
             }
-
             case DisplayCandidate: {
                 cout << "--------- All Candidates ---------" << endl;
                 manager.displayCandidate();

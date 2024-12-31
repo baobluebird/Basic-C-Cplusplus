@@ -2,14 +2,21 @@
 #define EMPLOYEE_MANAGER_H
 
 #include "employee.h"
-#include <vector>
-#include <memory>
-
+#include "staff.h"
+#include "engineer.h"
+#include "worker.h"
+enum class EmployeeType {
+    Worker = 1,
+    Staff,
+    Engineer
+};
 class EmployeeManager {
     private:
-        vector<unique_ptr<Employee>> employeeList;
+        vector<shared_ptr<Employee>> employeeList;
     public:
-        void addEmployee(unique_ptr<Employee>);
+        void addEmployee(shared_ptr<Employee>);
+
+        void addEmployeeByType(EmployeeType);
 
         void searchByName(string);
 

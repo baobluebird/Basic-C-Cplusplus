@@ -11,7 +11,7 @@ void CandidateB::detailCandidate() {
          << setw(16) << getName()
          << setw(16) << getAddress()
          << setw(20) << getPriorityLevel()
-         << setw(40) << "Math, Physics, Chemistry"
+         << setw(40) << "Math, Chemistry, Biology"
          << endl;
 }
 
