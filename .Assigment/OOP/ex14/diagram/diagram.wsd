@@ -25,7 +25,11 @@ class NormalStudent {
     + float calculateScore(); 
 }
 
-Student <|-- GoodStudent : Generalization 
-Student <|-- NormalStudent : Generalization 
+class StudentManager{
+    - students: vector<shared_ptr<Student>>
+}
 
+Student <|-- GoodStudent : is-a 
+Student <|-- NormalStudent : is-a 
+StudentManager o--> Student : has-a
 @enduml

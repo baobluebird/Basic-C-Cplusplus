@@ -1,53 +1,58 @@
 @startuml
 
-class Employee {
-  - name: String
-  - age: int
-  - gender: String
-  - address: String
-  + Employee();
-  + Employee(string , int , string , string );
-  + string getName();
-  + virtual void enterInformation();
-  + virtual void displayInformation();
-  + virtual ~Employee();
+abstract class Employee {
+    - name: String
+    - age: int
+    - gender: String
+    - address: String
+    --
+    + Employee()
+    + Employee(string, int, string, string)
+    + string getName()
+    + virtual void enterInformation()
+    + virtual void displayInformation()
+    + virtual ~Employee()
 }
 
 class Worker {
-  - level: int
-  + Worker();
-  + Worker(string , int , string , string , int );
-  + void enterInformation() override;
-  + void displayInformation() override;
+    - level: int
+    --
+    + Worker()
+    + Worker(string, int, string, string, int)
+    + void enterInformation() override
+    + void displayInformation() override
 }
 
 class Engineer {
-  - major: String
-  + Engineer();
-  + Engineer(string, int, string, string, string);
-  + void enterInformation() override;
-  + void displayInformation() override;
+    - major: String
+    --
+    + Engineer()
+    + Engineer(string, int, string, string, string)
+    + void enterInformation() override
+    + void displayInformation() override
 }
 
 class Staff {
-  - job: String
-  + Staff()
-  + Staff(string , int , string , string , string );
-  + void enterInformation() override;
-  + void displayInformation() override;
+    - job: String
+    --
+    + Staff()
+    + Staff(string, int, string, string, string)
+    + void enterInformation() override
+    + void displayInformation() override
 }
 
 class EmployeeManager {
-  - employeeList: vector<shared_ptr<Employee>>
-  + void addEmployee(shared_ptr<Employee>);
-  + void addEmployeeByType(EmployeeType);
-  + void searchByName(String name);
-  + void displayEmployeeList();
+    - employeeList: vector<shared_ptr<Employee>>
+    --
+    + void addEmployee(shared_ptr<Employee>)
+    + void addEmployeeByType(EmployeeType)
+    + void searchByName(String name)
+    + void displayEmployeeList()
 }
 
-Employee <|-- Worker : Generalization 
-Employee <|-- Engineer : Generalization 
-Employee <|-- Staff : Generalization 
-EmployeeManager o--> Employee : Aggregation, Directed Association
+Employee <|-- Worker
+Employee <|-- Engineer
+Employee <|-- Staff
+EmployeeManager o--> Employee
 
 @enduml

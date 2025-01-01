@@ -5,26 +5,29 @@ class Person {
     - name: String
     - age: int
     - job: String
-    - listIdNumber : static set<int> 
-    + void inputInfoPerson();
-    + void displayInfoPerson();
+    - listIdNumber: static set<int>
+    --
+    + void inputInfoPerson()
+    + void displayInfoPerson()
 }
 
 class Household {
     - numMember: int
     - address: String
     - listPersons: vector<unique_ptr<Person>>
-    + void inputInfoHousehold();
-    + void displayInfoHousehold();
+    --
+    + void inputInfoHousehold()
+    + void displayInfoHousehold()
 }
 
 class Neighborhood {
     - listHouseholds: vector<unique_ptr<Household>>
-    + void addHousehold();
-    + void displayNeighborhood();
+    --
+    + void addHousehold()
+    + void displayNeighborhood()
 }
 
-Household o--> Person : Aggregation, Directed Association
-Neighborhood o--> Household : Aggregation, Directed Association
+Household o--> Person
+Neighborhood o--> Household
 
 @enduml

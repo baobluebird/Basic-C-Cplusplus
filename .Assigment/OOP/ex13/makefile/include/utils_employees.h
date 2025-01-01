@@ -1,6 +1,12 @@
 #ifndef EMPLOYEE_MANAGER_UTILS_H
 #define EMPLOYEE_MANAGER_UTILS_H
 #include <iostream>
+#include <vector>
+#include <memory>
+#include <set>
+#include <iomanip> 
+#include <limits>
+#include <regex>
 //define menu
 #define AddEmployee 1
 #define EditEmployee 2

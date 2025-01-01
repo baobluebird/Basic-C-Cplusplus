@@ -1,11 +1,17 @@
 #include "employees.h"
-#include "utils_employees.h"
-#include <regex>
-
 
 set<int> Employee::manageId;
 set<int> Employee::recycledIds;
 int Employee::employeeCount = 1;
+
+string Employee::employeeTypeToString(employeeType type) {
+    switch (type) {
+        case employeeType::Experience: return "Experience";
+        case employeeType::Fresher: return "Fresher";
+        case employeeType::Intern: return "Intern";
+        default: return "Unknown";
+    }
+}
 
 bool Employee::isValidDate(const string& birthday) {
     regex pattern(R"(^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$)"); 
@@ -40,15 +46,6 @@ bool Employee::isValidFullName(const string& fullName) {
 
 bool Employee::isValidString(const string& str) {
     return !str.empty() && regex_match(str, regex("^[A-Za-zÀ-ỹ\\s]+$"));
-}
-
-string Employee::employeeTypeToString(employeeType type) {
-    switch (type) {
-        case employeeType::Experience: return "Experience";
-        case employeeType::Fresher: return "Fresher";
-        case employeeType::Intern: return "Intern";
-        default: return "Unknown";
-    }
 }
 
 Employee::Employee() : fullName(""), birthDay(""), phone(""), email(""){

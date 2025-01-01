@@ -4,25 +4,28 @@ class Student {
     - name: String
     - age: int
     - address: String
-    + int getAge();
-    + void inputInfoStudent();
-    + void displayInfoStudent();
+    --
+    + int getAge()
+    + void inputInfoStudent()
+    + void displayInfoStudent()
 }
 
-class Class{
+class Class {
     - nameClass: String
     - listStudents: vector<shared_ptr<Student>>
-    + void inputInfoClass();
-    + void displayInfoClass();
+    --
+    + void inputInfoClass()
+    + void displayInfoClass()
 }
 
 class School {
     - listClass: vector<unique_ptr<Class>>
-    + void addClass();
-    + void displaySchool();
+    --
+    + void addClass()
+    + void displaySchool()
 }
 
-Class o--> Student : Aggregation, Directed Association
-School o-->  Class : Aggregation, Directed Association
+Class o--> Student
+School o--> Class
 
 @enduml

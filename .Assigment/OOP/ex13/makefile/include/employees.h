@@ -1,12 +1,7 @@
 #ifndef EMPLOYEE_H
 #define EMPLOYEE_H
 #include "certificate.h"
-#include <vector>
-#include <memory>
-#include <set>
-#include <iomanip> 
-#include <limits>
-#include <regex>
+#include "utils_employees.h"
 
 enum class employeeType{
     Experience = 0,
@@ -39,11 +34,11 @@ class Employee{
     public:
         static set<int> manageId;
         static set<int> recycledIds;  
-        static string employeeTypeToString(employeeType type);
+        static string employeeTypeToString(employeeType);
 
         Employee();
 
-        Employee(string , string , string , string ,  employeeType );
+        Employee(string , string , string , string , employeeType);
 
         void generateUniqueId();
 

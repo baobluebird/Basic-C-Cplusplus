@@ -1,90 +1,125 @@
 @startuml
 
 abstract class Employee {
-  - ID: int
-  - fullName: String
-  - birthDay: String
-  - phone: String
-  - email: String
-  - type: enum employeeType
-  - Employee_type: int
-  - Employee_count: static int
-  - certificates: vector<shared_ptr<Certificate>>
-  - manageId : static set<int> 
-  - recycledIds : static set<int>
-  + Employee()
-  + Employee(int, String, String, String, String)
-  + int getId();
-  + string getFullName();
-  + string getBirthDay();
-  + int getPhone();
-  + string getEmail();
-  + bool isValidBirthDay(const string&);
-  + bool isValidPhone(const string&);
-  + bool isValidEmail(const string&);
-  + bool isValidFullName(const string&);
-  + void displayCertificates();
-  + static string employeeTypeToString(employeeType type);
-  + virtual void inputEmployee();
-  + virtual void editEmployee();
-  + virtual void detailEmployee() = 0;
-  + virtual string getType() = 0;
-  + virtual ~Employee();
+    - ID: int
+    - fullName: String
+    - birthDay: String
+    - phone: String
+    - email: String
+    - type: enum employeeType
+    - Employee_type: int
+    - Employee_count: static int
+    - certificates: vector<unique_ptr<Certificate>>
+    - manageId: static set<int> 
+    - recycledIds: static set<int>
+    --
+    + bool isValidBirthDay(const string &)
+    + bool isValidPhone(const string &)
+    + bool isValidEmail(const string &)
+    + bool isValidFullName(const string &)
+    + bool isValidString(const string &)
+    --
+    + void generateUniqueId()
+    + void inputName(bool)
+    + void inputBirthday(bool)
+    + void inputPhone(bool)
+    + void inputEmail(bool)
+    + void inputCertificates()
+    + void displayCertificates()
+    + void displayBasicInfo()
+    + virtual void inputEmployee()
+    + virtual void editEmployee()
+    + virtual void detailEmployee() = 0
+    + virtual string getType() = 0
+    + virtual ~Employee()
 }
 
 class Experience {
-  - level: int
-  + Worker()
-  + Worker(String, int, String, String, int)
-  + void enterInformation() override
-  + void displayInformation() override
-  + string getType();
+    - ExpInYear: int
+    - ProSkill: string 
+    - type: employeeType
+    --
+    + Experience()
+    + Experience(string, string, string, string, int, string)
+    + string getType() override
+    + void detailEmployee() override
+    + void inputExperienceInYear(bool)
+    + void inputProSkill(bool)
+    + void inputEmployee() override
+    + void editEmployee() override
 }
 
 class Fresher {
-  - major: String
-  + Engineer()
-  + Engineer(String, int, String, String, String)
-  + void enterInformation() override
-  + void displayInformation() override
-  + string getType();
+    - Graduation_date: string 
+    - Graduation_rank: string 
+    - Education: string 
+    - type: employeeType
+    --
+    + Fresher()
+    + Fresher(string, string, string, string, string, string, string)
+    + string getType() override
+    + void detailEmployee() override
+    + void inputGraduationDate(bool)
+    + void inputGraduationRank(bool)
+    + void inputEducation(bool)
+    + void inputEmployee() override
+    + void editEmployee() override
 }
 
 class Intern {
-  - job: String
-  + Staff()
-  + Staff(String, int, String, String, String)
-  + void enterInformation() override
-  + void displayInformation() override
-  + string getType();
+    - Majors: string 
+    - Semester: int 
+    - University_name: string 
+    - type: employeeType
+    --
+    + Intern()
+    + Intern(string, string, string, string, string, int, string)
+    + string getType() override
+    + void detailEmployee() override
+    + void inputMajors(bool)
+    + void inputSemester(bool)
+    + void inputUniversityName(bool)
+    + void inputEmployee() override
+    + void editEmployee() override
 }
 
 class Certificate {
-    - int CertificatedID
-    - string CertificateName
-    - string CertificateRank
-    - string CertificatedDate
-    + Certificate(); 
-    + Certificate(int , string , string , string );
-    + void addCertificate();
-    + void infoCertificates();
+    - CertificatedID: int
+    - CertificateName: string
+    - CertificateRank: string
+    - CertificatedDate: string
+    --
+    + bool isValidString(const string &)
+    + bool isValidDate(const string &)
+    --
+    + Certificate() 
+    + Certificate(int, string, string, string)
+    + int getId()
+    + void setId(int)
+    + void setName(string)
+    + void setRank(string)
+    + void setDate(string)
+    + void addCertificate(int)
+    + void infoCertificates()
 }
 
 class EmployeeManager {
-  - employeeList: vector<shared_ptr<Employee>>
-  + void addEmployee(shared_ptr<Employee> );
-  + void editEmployeeById(int);
-  + bool deleteEmployeeById(int );
-  + void displayEmployee();
-  + void displayIntern();
-  + void displayExperience();
-  + void displayFresher();
-  + void searchEmployeeByType(string);
+    - employeeList: vector<shared_ptr<Employee>>
+    --
+    + void addEmployee(shared_ptr<Employee>)
+    + void addEmployeeByType(employeeType)
+    + void editEmployeeById(int)
+    + bool deleteEmployeeById(int)
+    + void displayEmployee()
+    + void displayIntern()
+    + void displayExperience()
+    + void displayFresher()
 }
 
-Employee <|-- Experience : Generalization 
-Employee <|-- Fresher : Generalization 
-Employee <|-- Intern : Generalization 
-EmployeeManager o--> Employee : manages
-Employee o--> Certificate : manages
+Employee <|-- Experience : is-a
+Employee <|-- Fresher : is-a
+Employee <|-- Intern : is-a
+EmployeeManager o--> Employee : has-a
+Employee o--> Certificate : has-a
+
 @enduml

@@ -1,64 +1,70 @@
 @startuml
 
-class Document{
-  - idDoc: int
-  - publisherName: String
-  - editionNumber: int
-  - count: static int
-  - manageId: static set<int>
-  - recycledIds: static set<int>
-  + Document();
-  + Document(int, string, int);
-  + void generateUniqueId();
-  + int getId();
-  + string getPublisherName();
-  + int getEditionNumber();
-  + virtual string getType() = 0;
-  + virtual void detailDocument() = 0;
-  + virtual void inputDocument();
-  + virtual ~Document();
+abstract class Document {
+    - idDoc: int
+    - publisherName: String
+    - editionNumber: int
+    - count: static int
+    - manageId: static set<int>
+    - recycledIds: static set<int>
+    --
+    + Document()
+    + Document(int, string, int)
+    + void generateUniqueId()
+    + int getId()
+    + string getPublisherName()
+    + int getEditionNumber()
+    + virtual string getType() = 0
+    + virtual void detailDocument() = 0
+    + virtual void inputDocument()
+    + virtual ~Document()
 }
 
-class Book{
-  - authorName: String
-  - pageNumber: int
-  + Book();
-  + Book(int, string, int, string, int);
-  + void detailDocument() override;
-  + void inputDocument() override;
-  + string getType() override;
+class Book {
+    - authorName: String
+    - pageNumber: int
+    --
+    + Book()
+    + Book(int, string, int, string, int)
+    + void detailDocument() override
+    + void inputDocument() override
+    + string getType() override
 }
 
-class Magazine{
-  - issueNumber: int
-  - issueMonth: String
-  + Magazine();
-  + Magazine(int, string, int, int, string);
-  + void detailDocument() override;
-  + void inputDocument() override;
-  + string getType() override;
+class Magazine {
+    - issueNumber: int
+    - issueMonth: String
+    --
+    + Magazine()
+    + Magazine(int, string, int, int, string)
+    + void detailDocument() override
+    + void inputDocument() override
+    + string getType() override
 }
 
-class News{
-  - releaseDay: int
-  + News();
-  + News(int, string, int, string);
-  + void detailDocument() override;
-  + void inputDocument() override;
-  + string getType() override;
+class News {
+    - releaseDay: int
+    --
+    + News()
+    + News(int, string, int, string)
+    + void detailDocument() override
+    + void inputDocument() override
+    + string getType() override
 }
 
 class DocumentManager {
-  - listDocuments: vector<shared_ptr<Document>>
-  + void addDocument(shared_ptr<Document> );
-  + void addDocumentByType(DocumentType);
-  + void deleteDocumentById(int);
-  + void displayDocument();
-  + void searchDocumentByType(string);
+    - listDocuments: vector<shared_ptr<Document>>
+    --
+    + void addDocument(shared_ptr<Document>)
+    + void addDocumentByType(DocumentType)
+    + void deleteDocumentById(int)
+    + void displayDocument()
+    + void searchDocumentByType(string)
 }
 
 Document <|-- Book
 Document <|-- Magazine
 Document <|-- News
-DocumentManager o--> Document : Aggregation, Directed Association
+DocumentManager o--> Document
+
 @enduml
