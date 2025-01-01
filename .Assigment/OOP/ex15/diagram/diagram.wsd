@@ -1,49 +1,116 @@
 @startuml
 
-class Student {
-    - string studentID
-    - string fullName
-    - string dob
-    - int yearEnrolled
-    - float entryScore
-    - vector<StudyResult> studyResults
-    + bool isRegular()*;
-    + void input();
-    + void output();
-    + float getAverageScore(string semester);
+abstract class Student {
+    - studentID: string 
+    - fullName: string 
+    - dob: string 
+    - yearEnrolled: int 
+    - entryScore: float 
+    - studyResults: vector<StudyResult> 
+    --
+    + bool isValidDate(const string&);
+    + bool isValidFullName(const string&);
+    + bool isValidYear(const string&);
+    + bool isValidScore(const float&);
+    + bool isValidString(const string&);
+    + Student();
+    + Student(string, string, string, int, float);
+    + string getStudentID();
+    + int getYearEnrolled();
+    + float getEntryScore();
+    + string getFullName();
+    + float getAverageScore(string);
+    + void inputName();
+    + void inputBirthday();
+    + void inputYearEnrolled();
+    + void inputEntryScore();
+    + void addStudyResult(string, float);
+    + void displayStudyResults();
+    + float getLatestSemesterScoreAbove8();
+    + float getHighestSemesterScore();
+    + virtual void inputStudent();
+    + virtual void displayStudent();
+    + virtual string getLinkedLocation();
+    + virtual bool isRegular() = 0;
+    + virtual ~Student() {};
 }
 
 class RegularStudent {
-    + bool isRegular();
-    + void output();
+    + RegularStudent(){}
+    + RegularStudent(string, string, string, int, float);
+    + bool isRegular() override;
+    + void displayStudent() override;
 }
 
 class PartTimeStudent {
-    - string linkedLocation
-    + bool isRegular();
-    + void output();
-    + string getLinkedLocation();
+    - linkedLocation: string 
+    --
+    + PartTimeStudent();
+    + PartTimeStudent(string, string, string, int, float, string);
+    + bool isRegular() override;
+    + void inputLinkedLocation();
+    + void inputStudent() override;
+    + void displayStudent() override;
+    + string getLinkedLocation() override;
 }
 
 class StudyResult {
-    + string semesterName;
-    + float avgScore;
+    - semesterName: string
+    - avgScore: float
+    --
+    + bool isValidString(const string&);
+    + bool isValidScore(const float&);
+    + StudyResult();
+    + StudyResult(string, float);
+    + string getSemesterName();
+    + float getAvgScore();
+    + void inputSemester();
+    + void inputAvgScore();
+    + void addStudyResult();
+    + void displayStudyResult();
 }
 
 class Faculty {
-    - string facultyName
-    - vector<unique_ptr<Student>> students
-    + void addStudent(unique_ptr<Student> student);
-    + int countRegularStudents();
-    + Student* getTopEntryScoreStudent();
-    + vector<unique_ptr<Student>> getPartTimeStudentsByLocation;
-    + void sortStudents();
-    + void displayStatistics();
+    - facultyName: string 
+    - students: vector<unique_ptr<Student>> 
+    --
+    + Faculty();
+    + Faculty(string);
+    + string getFacultyName();
+    + void addStudent(shared_ptr<Student>);
+    + void addStudentByType();
+    + void checkIsRegularById(string);
+    + float getAverageScoreById(string, string);
+    + int displayTotalRegularStudents();
+    + float findStudentHighestEntryScore();
+    + void listPartTimeStudentsByLocation(string);
+    + void listStudentsAbove8InLatestSemester();
+    + void findStudentHighestSemesterScore();
+    + void sortStudentsByTypeAndYear();
+    + void countStudentsByYear();
     + void displayStudents();
+}
+
+class University{
+    - listFaculties: vector<shared_ptr<Faculty>>
+    --
+    + void addFaculty(shared_ptr<Faculty>);
+    + void displayFaculties();
+    + void checkIsRegularById(string);
+    + float getAverageScoreById(string, string);
+    + void displayTotalRegularStudents();
+    + void findStudentHighestEntryScore();
+    + void listPartTimeStudentsByLocation(string);
+    + void listStudentsAbove8InLatestSemester();
+    + void findStudentHighestSemesterScore();
+    + void sortStudentsByTypeAndYear();
+    + void countStudentsByYear();
+    + void addSampleData();
 }
 
 Student <|-- RegularStudent : is-a
 Student <|-- PartTimeStudent : is-a
 Student o--> StudyResult : has-a
 Faculty o--> Student : manages
+University o--> Faculty : manages
 @enduml
