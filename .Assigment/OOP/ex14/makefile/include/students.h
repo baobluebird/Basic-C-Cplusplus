@@ -12,6 +12,8 @@ private:
     string fullName, doB, sex, phoneNumber, universityName, gradeLevel;
 
 public:
+    Student() : fullName(""), doB(""), sex(""), phoneNumber(""), universityName(""), gradeLevel("") {}
+    
     Student(string, string, string, string, string, string);
     
     string getFullName();

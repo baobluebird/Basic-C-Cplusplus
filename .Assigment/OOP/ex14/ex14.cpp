@@ -66,6 +66,7 @@ private:
     string fullName, doB, sex, phoneNumber, universityName, gradeLevel;
 
 public:
+    Student() : fullName(""), doB(""), sex(""), phoneNumber(""), universityName(""), gradeLevel("") {}
     Student(string fullName, string doB, string sex, string phoneNumber, string universityName, string gradeLevel){
         if (!isValidFullName(fullName)) {
             throw InvalidFullNameException();
@@ -121,6 +122,7 @@ private:
     float gpa;
     string bestRewardName;
 public:
+    GoodStudent() : gpa(0.0f), bestRewardName("") {}
     GoodStudent(string fullName, string doB, string sex, string phoneNumber, string universityName, string gradeLevel, float gpa, string bestRewardName)
         : Student(fullName, doB, sex, phoneNumber, universityName, gradeLevel), gpa(gpa), bestRewardName(bestRewardName) {}
 
@@ -154,6 +156,7 @@ private:
     int englishScore;
     float entryTestScore;
 public:
+    NormalStudent() : englishScore(0), entryTestScore(0.0f) {}
     NormalStudent(string fullName, string doB, string sex, string phoneNumber, string universityName, string gradeLevel, int englishScore, float entryTestScore)
         : Student(fullName, doB, sex, phoneNumber, universityName, gradeLevel), englishScore(englishScore), entryTestScore(entryTestScore) {}
 
@@ -184,11 +187,11 @@ public:
 
 class StudentManager {
 private:    
-    vector<shared_ptr<Student>> students;
+    vector<shared_ptr<Student>> listStudents;
 
 public:
     void addStudent(shared_ptr<Student> student) {
-        students.push_back(student);
+        listStudents.push_back(student);
     }
 
     void readFromFile(const string& filename, string isGoodStudent) {
@@ -277,7 +280,7 @@ public:
         vector<shared_ptr<Student>> goodStudents;
         vector<shared_ptr<Student>> normalStudents;
 
-        for (shared_ptr<Student> student : students) {
+        for (shared_ptr<Student> student : listStudents) {
             if (student->getType() == "Good Student") {
                 goodStudents.push_back(student);
             } else {
@@ -326,7 +329,7 @@ public:
     }
 
     void displayAllStudents() {
-        sort(students.begin(), students.end(), [](shared_ptr<Student> a, shared_ptr<Student> b) {
+        sort(listStudents.begin(), listStudents.end(), [](shared_ptr<Student> a, shared_ptr<Student> b) {
             if (a->getFullName() != b->getFullName()) {
                 return a->getFullName() < b->getFullName();
             }
@@ -342,7 +345,7 @@ public:
                      << setw(10) << "GPA/TOEIC"
                      << setw(10) << "BestRewardName/EntryTest" << endl;
         cout << string(125, '-') << endl;
-        for (shared_ptr<Student> s : students) {
+        for (shared_ptr<Student> s : listStudents) {
             s->ShowMyInfor();
         }
     }

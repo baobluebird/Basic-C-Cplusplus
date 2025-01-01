@@ -1,5 +1,4 @@
 @startuml
-title Class Diagram - Student Management System
 
 class Student {
     - string studentID
@@ -43,8 +42,8 @@ class Faculty {
     + void displayStudents();
 }
 
-Student <|-- RegularStudent : Generalization 
-Student <|-- PartTimeStudent : Generalization 
-Student --> StudyResult : has
-Faculty --> Student : manages
+Student <|-- RegularStudent : is-a
+Student <|-- PartTimeStudent : is-a
+Student o--> StudyResult : has-a
+Faculty o--> Student : manages
 @enduml

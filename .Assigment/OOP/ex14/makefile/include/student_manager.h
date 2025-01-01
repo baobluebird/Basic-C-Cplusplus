@@ -4,7 +4,7 @@
 
 class StudentManager {
 private:    
-    vector<shared_ptr<Student>> students;
+    vector<shared_ptr<Student>> listStudents;
 
 public:
     void addStudent(shared_ptr<Student>);

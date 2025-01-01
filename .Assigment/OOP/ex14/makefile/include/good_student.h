@@ -7,6 +7,8 @@ private:
     float gpa;
     string bestRewardName;
 public:
+    GoodStudent() : gpa(0.0f), bestRewardName("") {}
+    
     GoodStudent(string, string, string, string, string, string, float, string);
         
     void ShowMyInfor() override;

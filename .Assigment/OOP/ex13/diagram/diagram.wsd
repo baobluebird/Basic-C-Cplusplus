@@ -119,7 +119,7 @@ class EmployeeManager {
 Employee <|-- Experience : is-a
 Employee <|-- Fresher : is-a
 Employee <|-- Intern : is-a
-EmployeeManager o--> Employee : has-a
+EmployeeManager o--> Employee : manages
 Employee o--> Certificate : has-a
 
 @enduml

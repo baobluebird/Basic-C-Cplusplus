@@ -3,7 +3,7 @@
 #include "normal_student.h"
 
 void StudentManager::addStudent(shared_ptr<Student> student){
-    students.push_back(student);
+    listStudents.push_back(student);
 }
 
 void StudentManager::readFromFile(const string &filename, string isGoodStudent){
@@ -96,7 +96,7 @@ void StudentManager::displayRecruitedStudents(int n){
     vector<shared_ptr<Student>> goodStudents;
     vector<shared_ptr<Student>> normalStudents;
 
-    for (shared_ptr<Student> student : students){
+    for (shared_ptr<Student> student : listStudents){
         if (student->getType() == "Good Student")
         {
             goodStudents.push_back(student);
@@ -144,7 +144,7 @@ void StudentManager::displayRecruitedStudents(int n){
 }
 
 void StudentManager::displayAllStudents(){
-    sort(students.begin(), students.end(), [](shared_ptr<Student> a, shared_ptr<Student> b){
+    sort(listStudents.begin(), listStudents.end(), [](shared_ptr<Student> a, shared_ptr<Student> b){
             if (a->getFullName() != b->getFullName()) {
                 return a->getFullName() < b->getFullName();
             }
@@ -159,7 +159,7 @@ void StudentManager::displayAllStudents(){
          << setw(10) << "GPA/TOEIC"
          << setw(10) << "BestRewardName/EntryTest" << endl;
     cout << string(125, '-') << endl;
-    for (shared_ptr<Student> s : students){
+    for (shared_ptr<Student> s : listStudents){
         s->ShowMyInfor();
     }
 }

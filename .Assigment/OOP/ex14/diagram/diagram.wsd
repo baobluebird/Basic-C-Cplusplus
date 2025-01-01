@@ -6,30 +6,48 @@ abstract class Student {
     - phoneNumber : string
     - universityName : string
     - gradeLevel : string
-    + void displayInfo();
-    + void inputInfo();
-    + float calculateScore();
+    + Student(string, string, string, string, string, string);
+    + string getFullName();
+    + string getPhoneNumber();
+    + virtual float getGPA();
+    + virtual int getEnglishScore();
+    + virtual float getEntryTestScore();
+    + virtual void ShowMyInfor();
+    + virtual string getType() = 0;
+    + virtual ~Student();
 }
 
 class GoodStudent {
     - gpa : float
     - bestRewardName : string
-    + void displayInfo();
-    + float calculateScore(); 
+    + GoodStudent(string, string, string, string, string, string, float, string);   
+    + void ShowMyInfor() override;
+    + float getGPA() override;
+    + int getEnglishScore() override;
+    + float getEntryTestScore() override;
+    + string getType() override;
 }
 
 class NormalStudent {
     - englishScore : float
     - entryTestScore : float
-    + void displayInfo();
-    + float calculateScore(); 
+    + NormalStudent(string, string, string, string, string, string, int, float);
+    + void ShowMyInfor() override;
+    + int getEnglishScore() override;
+    + float getEntryTestScore() override;
+    + float getGPA() override;
+    + string getType() override;
 }
 
 class StudentManager{
     - students: vector<shared_ptr<Student>>
+    + void addStudent(shared_ptr<Student>);
+    + void readFromFile(const string&, string);
+    + void displayRecruitedStudents(int);
+    + void displayAllStudents();
 }
 
 Student <|-- GoodStudent : is-a 
 Student <|-- NormalStudent : is-a 
-StudentManager o--> Student : has-a
+StudentManager o--> Student : manages
 @enduml

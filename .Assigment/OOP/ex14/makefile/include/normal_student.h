@@ -7,9 +7,10 @@ private:
     int englishScore;
     float entryTestScore;
 public:
+    NormalStudent() : englishScore(0), entryTestScore(0.0f) {}
+    
     NormalStudent(string, string, string, string, string, string, int, float);
         
-
     void ShowMyInfor() override;
 
     int getEnglishScore() override;
