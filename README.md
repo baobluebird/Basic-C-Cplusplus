@@ -1,3 +1,3 @@
 # Basic-C-Cplusplus
 
-Path of OOP Asignment: .\Assigment\OOP
+Path of OOP Asignment: .Assigment/OOP
