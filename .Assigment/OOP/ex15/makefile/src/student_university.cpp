@@ -62,9 +62,9 @@ string Student::getFullName(){
 }
 
 float Student::getAverageScore(string semester){
-    for (auto &studyResult : studyResults){
-        if (studyResult->getSemesterName() == semester){
-            return studyResult->getAvgScore();
+    for (StudyResult& studyResult : studyResults){
+        if (studyResult.getSemesterName() == semester){
+            return studyResult.getAvgScore();
         }
     }
     cout << "No results found for semester: " << semester << endl;
@@ -150,14 +150,15 @@ void Student::inputEntryScore(){
 }
 
 void Student::addStudyResult(string semester, float avgScore) {
-    studyResults.push_back(make_unique<StudyResult>(semester, avgScore));
+    StudyResult newResult(semester, avgScore);
+    studyResults.push_back(newResult);
 }
 
 void Student::displayStudyResults(){
     cout << string(60, '*') << endl;
     cout << "Study Results: " << this->fullName << endl;
-    for (auto &studyResult : studyResults){
-        studyResult->displayStudyResult();
+    for (StudyResult& studyResult : studyResults){
+        studyResult.displayStudyResult();
     }
     cout << string(60, '*') << endl;
 }
@@ -169,8 +170,8 @@ float Student::getLatestSemesterScoreAbove8() {
         
     auto& latestResult = studyResults[studyResults.size() - 1];
 
-    if (latestResult && latestResult->getAvgScore() >= 8.0) {
-        return latestResult->getAvgScore();
+    if (latestResult.getAvgScore() >= 8.0) {
+        return latestResult.getAvgScore();
     }
 
     return -1;
@@ -178,9 +179,9 @@ float Student::getLatestSemesterScoreAbove8() {
 
 float Student::getHighestSemesterScore() {
     float highestScore = 0.0;
-    for (auto& studyResult : studyResults) {
-        if (studyResult && studyResult->getAvgScore() > highestScore) {
-            highestScore = studyResult->getAvgScore();
+    for (StudyResult& studyResult : studyResults) {
+        if (studyResult.getAvgScore() > highestScore) {
+            highestScore = studyResult.getAvgScore();
         }
     }
     return highestScore;
@@ -229,9 +230,9 @@ void Student::inputStudent(){
     }
     cin.ignore();
     for (int i = 0; i < n; i++){
-        unique_ptr<StudyResult> studyResult = make_unique<StudyResult>();
-        studyResult->addStudyResult();
-        studyResults.push_back(move(studyResult));
+        StudyResult studyResult;
+        studyResult.addStudyResult();
+        studyResults.push_back(studyResult);
     }
 }
 

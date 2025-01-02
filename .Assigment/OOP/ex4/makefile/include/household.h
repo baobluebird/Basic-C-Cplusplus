@@ -6,7 +6,7 @@ class Household{
     private:
         int numMember;
         string address;
-        vector<unique_ptr<Person>> listPersons;
+        vector<Person> listPersons;
     public:
         Household();
         void inputInfoHousehold();

@@ -6,7 +6,7 @@
 #define FindStudentSameAgeAndAddress 3
 class School{
     private:
-        vector<unique_ptr<Class>> listClass;
+        vector<Class> listClass;
     public:
         void addClass();
         

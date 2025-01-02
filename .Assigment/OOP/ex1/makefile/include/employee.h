@@ -15,7 +15,7 @@ class Employee{
         string address;
     public:
         Employee();
-        Employee(string , int , string , string );
+        Employee(string, int, string, string);
 
         string getName();
 

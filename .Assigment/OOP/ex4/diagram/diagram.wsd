@@ -14,20 +14,20 @@ class Person {
 class Household {
     - numMember: int
     - address: String
-    - listPersons: vector<unique_ptr<Person>>
+    - listPersons: vector<Person>
     --
     + void inputInfoHousehold()
     + void displayInfoHousehold()
 }
 
 class Neighborhood {
-    - listHouseholds: vector<unique_ptr<Household>>
+    - listHouseholds: vector<Household>
     --
     + void addHousehold()
     + void displayNeighborhood()
 }
 
-Household o--> Person
-Neighborhood o--> Household
+Household *--> Person
+Neighborhood *--> Household
 
 @enduml

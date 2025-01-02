@@ -9,7 +9,7 @@ abstract class Employee {
     - type: enum employeeType
     - Employee_type: int
     - Employee_count: static int
-    - certificates: vector<unique_ptr<Certificate>>
+    - certificates: vector<Certificate>
     - manageId: static set<int> 
     - recycledIds: static set<int>
     --
@@ -120,6 +120,6 @@ Employee <|-- Experience : is-a
 Employee <|-- Fresher : is-a
 Employee <|-- Intern : is-a
 EmployeeManager o--> Employee : manages
-Employee o--> Certificate : has-a
+Employee *--> Certificate : has-a
 
 @enduml

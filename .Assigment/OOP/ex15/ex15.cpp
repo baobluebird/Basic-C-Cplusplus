@@ -147,7 +147,7 @@ private:
     string dob;
     int yearEnrolled;
     float entryScore;
-    vector<unique_ptr<StudyResult>> studyResults;
+    vector<StudyResult> studyResults;
     static set<string> usedStudentIDs;
 protected:
     bool isValidDate(const string& birthday) {
@@ -210,9 +210,9 @@ public:
     }
 
     float getAverageScore(string semester){
-        for (auto &studyResult : studyResults){
-            if (studyResult->getSemesterName() == semester){
-                return studyResult->getAvgScore();
+        for (StudyResult& studyResult : studyResults){
+            if (studyResult.getSemesterName() == semester){
+                return studyResult.getAvgScore();
             }
         }
         cout << "No results found for semester: " << semester << endl;
@@ -300,14 +300,15 @@ public:
     }
 
     void addStudyResult(string semester, float avgScore) {
-        studyResults.push_back(make_unique<StudyResult>(semester, avgScore));
+        StudyResult newResult(semester, avgScore);
+        studyResults.push_back(newResult);
     }
 
     void displayStudyResults(){
         cout << string(60, '*') << endl;
         cout << "Study Results: " << this->fullName << endl;
-        for (auto &studyResult : studyResults){
-            studyResult->displayStudyResult();
+        for (StudyResult& studyResult : studyResults){
+            studyResult.displayStudyResult();
         }
         cout << string(60, '*') << endl;
     }
@@ -317,10 +318,11 @@ public:
             return -1;
         }
         
-        auto& latestResult = studyResults[studyResults.size() - 1];
+        StudyResult latestResult = studyResults[studyResults.size() - 1];
 
-        if (latestResult && latestResult->getAvgScore() >= 8.0) {
-            return latestResult->getAvgScore();
+
+        if (latestResult.getAvgScore() >= 8.0) {
+            return latestResult.getAvgScore();
         }
 
         return -1;
@@ -328,9 +330,9 @@ public:
 
     float getHighestSemesterScore() {
         float highestScore = 0.0;
-        for (auto& studyResult : studyResults) {
-            if (studyResult && studyResult->getAvgScore() > highestScore) {
-                highestScore = studyResult->getAvgScore();
+        for (StudyResult studyResult : studyResults) {
+            if (studyResult.getAvgScore() > highestScore) {
+                highestScore = studyResult.getAvgScore();
             }
         }
         return highestScore;
@@ -379,9 +381,9 @@ public:
         }
         cin.ignore();
         for (int i = 0; i < n; i++){
-            unique_ptr<StudyResult> studyResult = make_unique<StudyResult>();
-            studyResult->addStudyResult();
-            studyResults.push_back(move(studyResult));
+            StudyResult studyResult;
+            studyResult.addStudyResult();
+            studyResults.push_back(studyResult);
         }
     }
 

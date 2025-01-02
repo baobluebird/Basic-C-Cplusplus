@@ -19,7 +19,7 @@ class Class {
 }
 
 class School {
-    - listClass: vector<unique_ptr<Class>>
+    - listClass: vector<Class>
     --
     + void addClass()
     + void displaySchool()

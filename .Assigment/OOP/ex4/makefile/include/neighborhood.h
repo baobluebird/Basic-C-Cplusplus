@@ -4,7 +4,7 @@
 
 class Neighborhood{
     private:
-        vector<unique_ptr<Household>> listHousehold;
+        vector<Household> listHousehold;
     public:
         void addHouseHold();
         void displayNeighborhood();

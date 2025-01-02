@@ -9,7 +9,7 @@ private:
     string dob;
     int yearEnrolled;
     float entryScore;
-    vector<unique_ptr<StudyResult>> studyResults;
+    vector<StudyResult> studyResults;
     static set<string> usedStudentIDs;
 protected:
     bool isValidDate(const string&);

@@ -6,10 +6,10 @@ void Neighborhood::addHouseHold(){
     cin >> n;
     for (int i = 0; i < n; ++i)
     {
-        unique_ptr<Household> household = make_unique<Household>();
+        Household household;
         cout << "Enter information of household " << i + 1 << ":" << endl;
-        household->inputInfoHousehold();
-        listHousehold.push_back(move(household));
+        household.inputInfoHousehold();
+        listHousehold.push_back(household);
     }
 }
 
@@ -18,6 +18,6 @@ void Neighborhood::displayNeighborhood(){
     for (int i = 0; i < num; ++i)
     {
         cout << "Information of household " << i + 1 << ":" << endl;
-        listHousehold[i]->displayInfoHousehold();
+        listHousehold[i].displayInfoHousehold();
     }
 }

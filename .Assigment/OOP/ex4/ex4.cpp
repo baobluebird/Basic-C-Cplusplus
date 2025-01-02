@@ -60,7 +60,7 @@ class Household{
     private:
         int numMember;
         string address;
-        vector<unique_ptr<Person>> listPerson;
+        vector<Person> listPerson;
     public:
         Household(): numMember(0), address(""){}
         
@@ -71,9 +71,9 @@ class Household{
             cin >> this->address;
             for(int i = 0; i < this->numMember; ++i){
                 cout << "Enter information of person " << i + 1 << ":" << endl;
-                unique_ptr<Person> person = make_unique<Person>();
-                person->inputInfoPerson();
-                listPerson.push_back(move(person));
+                Person person;
+                person.inputInfoPerson();
+                listPerson.push_back(person);
             }
         }
 
@@ -87,8 +87,8 @@ class Household{
                  << setw(10) << "Job"
                  << endl;
             cout << string(65, '-') << endl; 
-            for(auto& person : listPerson){
-                person->displayInfoPerson();
+            for(Person person : listPerson){
+                person.displayInfoPerson();
             } 
             cout << string(65, '-') << endl;      
         }
@@ -101,16 +101,16 @@ class Household{
 
 class Neighborhood{
     private:
-        vector<unique_ptr<Household>> listHousehold;
+        vector<Household> listHousehold;
     public:
         void addHouseHold(){
             cout << "Enter number household: ";
             int n; cin >> n;
             for(int i = 0; i < n; ++i){
-                unique_ptr<Household> household = make_unique<Household>();
+                Household household;
                 cout << "Enter information of household " << i + 1 <<":" << endl;
-                household->inputInfoHousehold();
-                listHousehold.push_back(move(household));
+                household.inputInfoHousehold();
+                listHousehold.push_back(household);
             }
         }
 
@@ -118,7 +118,7 @@ class Neighborhood{
             int size = listHousehold.size();
             for(int i = 0; i < size; ++i){
                 cout << "Information of household " << i + 1 << ":" << endl;
-                listHousehold[i]->displayInfoHousehold();
+                listHousehold[i].displayInfoHousehold();
             }
         }
 };

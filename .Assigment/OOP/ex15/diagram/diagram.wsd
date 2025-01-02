@@ -6,7 +6,7 @@ abstract class Student {
     - dob: string 
     - yearEnrolled: int 
     - entryScore: float 
-    - studyResults: vector<unique_ptr<StudyResult>> 
+    - studyResults: vector<StudyResult> 
     - usedStudentIDs: static set<string>
     --
     + bool isValidDate(const string&);
