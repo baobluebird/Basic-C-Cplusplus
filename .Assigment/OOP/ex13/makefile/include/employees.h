@@ -18,7 +18,7 @@ class Employee{
         string email;
         employeeType type;
         static int employeeCount;
-        vector<unique_ptr<Certificate>> certificates;
+        vector<Certificate> certificates;
         set<int> manageIdCer;
     protected:
         bool isValidDate(const string&);

@@ -184,10 +184,10 @@ void Employee::inputCertificates(){
             }
         }
 
-        unique_ptr<Certificate> cer = make_unique<Certificate>();
-        cer->addCertificate(idCer);
-        manageIdCer.insert(cer->getId());
-        certificates.push_back(move(cer));
+        Certificate cer;
+        cer.addCertificate(idCer);
+        manageIdCer.insert(cer.getId());
+        certificates.push_back(cer);
     }
 }
 
@@ -197,8 +197,8 @@ void Employee::displayCertificates() {
     if(certificates.empty()){
         cout << "No certificates found." << endl;
     }else{
-        for (const auto& cert : certificates) {
-            cert->infoCertificates();
+        for (Certificate& cert : certificates) {
+            cert.infoCertificates();
         }
     }
     cout << string(60, '*') << endl;
@@ -270,7 +270,7 @@ void Employee::editEmployee() {
                 cout << "---- Current Certificates ----\n";
                 for (size_t i = 0; i < certificates.size(); ++i) {
                     cout << i + 1 << ". ";
-                    certificates[i]->infoCertificates();
+                    certificates[i].infoCertificates();
                 }
 
                 int selectedId;
@@ -284,13 +284,13 @@ void Employee::editEmployee() {
 
                 bool found = false;
                 for (size_t i = 0; i < certificates.size(); ++i) {
-                    if (certificates[i]->getId() == selectedId) {
+                    if (certificates[i].getId() == selectedId) {
                         found = true;
                         cout << "Editing Certificate ID: " << selectedId << "\n";
 
                         int subChoice;
                         while (true) {
-                            certificates[i]->infoCertificates();
+                            certificates[i].infoCertificates();
                             cout << "\nSelect the attribute to edit:\n";
                             cout << "1. Certificate ID\n";
                             cout << "2. Certificate Name\n";
@@ -320,8 +320,8 @@ void Employee::editEmployee() {
                                                 continue;
                                             }
 
-                                            manageIdCer.erase(certificates[i]->getId());
-                                            certificates[i]->setId(newId);
+                                            manageIdCer.erase(certificates[i].getId());
+                                            certificates[i].setId(newId);
                                             manageIdCer.insert(newId);
                                             break;
                                         }
@@ -341,7 +341,7 @@ void Employee::editEmployee() {
                                             if (!isValidString(newName)) {
                                                 throw MustBeStringException();
                                             }
-                                            certificates[i]->setName(newName);
+                                            certificates[i].setName(newName);
                                             break;
                                         }
                                         catch (const MustBeStringException& e) {
@@ -360,7 +360,7 @@ void Employee::editEmployee() {
                                             if (!isValidString(newRank)) {
                                                 throw MustBeStringException();
                                             }
-                                            certificates[i]->setRank(newRank);
+                                            certificates[i].setRank(newRank);
                                             break;
                                         }
                                         catch (const MustBeStringException& e) {
@@ -379,7 +379,7 @@ void Employee::editEmployee() {
                                             if (!isValidDate(newDate)) {
                                                 throw DateException();
                                             }
-                                            certificates[i]->setDate(newDate);
+                                            certificates[i].setDate(newDate);
                                             break;
                                         }
                                         catch (const DateException& e) {
