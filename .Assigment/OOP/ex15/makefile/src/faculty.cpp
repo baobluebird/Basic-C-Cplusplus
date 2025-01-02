@@ -188,16 +188,17 @@ void Faculty::countStudentsByYear(){
 }
 
 void Faculty::displayStudents(){
-    cout << setw(20) << "Type"
-         << setw(10) << "ID"
-         << setw(25) << "Full Name"
+    cout << left
+         << setw(20) << "Type"
+         << setw(15) << "ID"
+         << setw(30) << "Full Name"
          << setw(15) << "DOB"
          << setw(10) << "Year"
-         << setw(10) << "Entry Score" << endl;
-    cout << string(90, '-') << endl;
+         << setw(12) << "Entry Score" << endl; 
 
-    for (shared_ptr<Student> student : listStudents)
-    {
+    cout << string(102, '-') << endl;  
+
+    for (shared_ptr<Student> student : listStudents) {
         student->displayStudent();
     }
 }

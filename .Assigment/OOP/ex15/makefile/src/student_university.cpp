@@ -237,11 +237,11 @@ void Student::inputStudent(){
 }
 
 void Student::displayStudent() {
-    cout << left << setw(10) << studentID
-        << setw(25) << fullName
-        << setw(15) << dob
-        << setw(10) << yearEnrolled
-        << setw(10) << entryScore << endl;
+    cout << left << setw(15) << studentID
+         << setw(30) << fullName
+         << setw(15) << dob
+         << setw(10) << yearEnrolled
+         << setw(12) << entryScore << endl;
 }
 
 string Student::getLinkedLocation() {

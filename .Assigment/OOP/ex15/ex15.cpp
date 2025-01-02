@@ -392,7 +392,7 @@ public:
             << setw(25) << fullName
             << setw(15) << dob
             << setw(10) << yearEnrolled
-            << setw(10) << entryScore << endl;
+            << setw(12) << entryScore << endl;
     }
 
     virtual string getLinkedLocation() {
@@ -613,7 +613,7 @@ public:
     void sortStudentsByTypeAndYear() {
         sort(listStudents.begin(), listStudents.end(), [](const shared_ptr<Student>& a, const shared_ptr<Student>& b) {
             if (a->isRegular() != b->isRegular()) {
-                return !a->isRegular();  
+                return a->isRegular();  
             }
             return a->getYearEnrolled() > b->getYearEnrolled();
         });
@@ -638,18 +638,21 @@ public:
 
 
     void displayStudents() {
-        cout << setw(20) << "Type"
-             << setw(10) << "ID"
-             << setw(25) << "Full Name"
-             << setw(15) << "DOB"
-             << setw(10) << "Year"
-             << setw(10) << "Entry Score" << endl;
-        cout << string(90, '-') << endl;
+        cout << left
+            << setw(20) << "Type"
+            << setw(10) << "ID"
+            << setw(25) << "Full Name"
+            << setw(15) << "DOB"
+            << setw(10) << "Year"
+            << setw(12) << "Entry Score" << endl;  
+
+        cout << string(92, '-') << endl; 
 
         for (shared_ptr<Student> student : listStudents) {
             student->displayStudent();
         }
     }
+
 
 };
 
@@ -748,7 +751,7 @@ public:
 
         shared_ptr<PartTimeStudent> student3 = make_shared<PartTimeStudent>("SV003", "Le Van C", "10/06/2002", 2020, 7.0, "HCM City");
         shared_ptr<PartTimeStudent> student4 = make_shared<PartTimeStudent>("SV004", "Pham Thi D", "05/05/2001", 2019, 7.5, "Ha Noi");
-        shared_ptr<PartTimeStudent> student5 = make_shared<PartTimeStudent>("SV005", "Le Na", "01/02/2002", 2020, 7.5, "Da Nang");
+        shared_ptr<PartTimeStudent> student5 = make_shared<PartTimeStudent>("SV005", "Le Na", "01/02/1999", 2017, 7.5, "Da Nang");
         
         student1->addStudyResult("1", 8.2);
         student1->addStudyResult("2", 8.5);
