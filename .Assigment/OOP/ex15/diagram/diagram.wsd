@@ -111,7 +111,7 @@ class University{
 
 Student <|-- RegularStudent : is-a
 Student <|-- PartTimeStudent : is-a
-Student o--> StudyResult : has-a
+Student *--> StudyResult : has-a
 Faculty o--> Student : manages
 University o--> Faculty : manages
 @enduml
