@@ -1,5 +1,7 @@
 #include "student_university.h"
 
+set<string> Student::usedStudentIDs;
+
 bool Student::isValidDate(const string &birthday){
     regex pattern(R"(^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$)");
     if (!regex_match(birthday, pattern))
@@ -39,7 +41,9 @@ bool Student::isValidString(const string &str){
 Student::Student() : studentID(""), fullName(""), dob(""), yearEnrolled(0), entryScore(0.0) {}
 
 Student::Student(string studentID, string fullName, string dob, int yearEnrolled, float entryScore)
-    : studentID(studentID), fullName(fullName), dob(dob), yearEnrolled(yearEnrolled), entryScore(entryScore) {}
+    : studentID(studentID), fullName(fullName), dob(dob), yearEnrolled(yearEnrolled), entryScore(entryScore) {
+        usedStudentIDs.insert(studentID);
+    }
 
 string Student::getStudentID(){
     return this->studentID; 
@@ -183,8 +187,21 @@ float Student::getHighestSemesterScore() {
 }
 
 void Student::inputStudent(){
-    cout << "Enter Student ID: ";
-    cin >> studentID;
+    string id;
+    while(true){
+        try{
+            cout << "Enter Student ID: ";
+            cin >> id;
+            if(usedStudentIDs.find(id) != usedStudentIDs.end()){
+                throw invalid_argument("Student ID already exists");
+            }
+            usedStudentIDs.insert(id);
+            break;
+        }catch(const invalid_argument &e){
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
+    this->studentID = id;
     inputName();
     inputBirthday();
     inputYearEnrolled();

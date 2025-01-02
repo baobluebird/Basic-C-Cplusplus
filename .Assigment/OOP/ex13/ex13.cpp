@@ -290,7 +290,6 @@ class Employee{
             while (true) {
                 try {
                     isInput == true ? cout << "Enter Full Name: " : cout << "Enter new Full Name: ";
-                    cin.ignore();
                     getline(cin, this->fullName);
                     if (!isValidFullName(this->fullName)) {
                         throw FullNameException();
@@ -425,7 +424,7 @@ class Employee{
         void displayBasicInfo() {
             cout << left
                 << setw(10) << this->ID
-                << setw(20) << Employee::employeeTypeToString(this->type)
+                << setw(20) << getType()
                 << setw(20) << this->fullName
                 << setw(15) << this->birthDay
                 << setw(15) << this->phone
@@ -684,7 +683,7 @@ class Experience : public Employee{
         }
 
         string getType() override {
-            return "Experience";
+            return employeeTypeToString(this->type);
         }
     
         void detailEmployee() override {
@@ -733,6 +732,7 @@ class Experience : public Employee{
         void inputEmployee() override{
             Employee::inputEmployee();
             inputExperienceInYear(true);
+            cin.ignore();
             inputProSkill(true);
         }
 
@@ -755,6 +755,7 @@ class Experience : public Employee{
                         break;
                     }
                     case EditProSkill: { 
+                        cin.ignore();
                         inputProSkill(false);
                         break;
                     }
@@ -786,7 +787,7 @@ class Fresher : public Employee{
         }
 
         string getType() override {
-            return "Fresher";
+            return employeeTypeToString(this->type);
         }
         
         void detailEmployee() override {
@@ -819,7 +820,6 @@ class Fresher : public Employee{
             while (true) {
                 try {
                     isInput == true ? cout << "Enter Graduation Rank: " : cout << "Enter new Graduation Rank: ";
-                    cin.ignore();
                     getline(cin, this->Graduation_rank);
                     if (!isValidString(this->Graduation_rank)) {
                         throw MustBeStringException();
@@ -851,6 +851,7 @@ class Fresher : public Employee{
         void inputEmployee() override{
             Employee::inputEmployee();
             inputGraduationDate(true);
+            cin.ignore();
             inputGraduationRank(true);
             inputEducation(true);
         }
@@ -874,11 +875,13 @@ class Fresher : public Employee{
                         inputGraduationDate(false);
                         break;
                     }
-                    case EditGraduationRank: {  
+                    case EditGraduationRank: { 
+                        cin.ignore(); 
                         inputGraduationRank(false);
                         break;
                     }
                     case EditEducation: {  
+                        cin.ignore(); 
                         inputEducation(false);
                         break;
                     }
@@ -910,7 +913,7 @@ class Intern : public Employee{
         }
 
         string getType() override {
-            return "Intern";
+            return employeeTypeToString(this->type);
         }
         
         void detailEmployee() override {
@@ -927,7 +930,6 @@ class Intern : public Employee{
             while (true) {
                 try {
                     isInput == true ? cout << "Enter Majors: " : cout << "Enter new Majors: ";
-                    cin.ignore();
                     getline(cin, this->Majors);
                     if (!isValidString(this->Majors)) {
                         throw MustBeStringException();
@@ -962,7 +964,6 @@ class Intern : public Employee{
             while (true) {
                 try {
                     isInput == true ? cout << "Enter University Name: " : cout << "Enter new University Name: ";
-                    cin.ignore();
                     getline(cin, this->University_name);
                     if (!isValidString(this->University_name)) {
                         throw MustBeStringException();
@@ -979,6 +980,7 @@ class Intern : public Employee{
             Employee::inputEmployee();
             inputMajors(true);
             inputSemester(true);
+            cin.ignore();
             inputUniversityName(true);
         }
 
@@ -998,6 +1000,7 @@ class Intern : public Employee{
 
                 switch (choice) {
                     case EditMajors: {  
+                        cin.ignore();
                         inputMajors(false);
                         break;
                     }
@@ -1006,6 +1009,7 @@ class Intern : public Employee{
                         break;
                     }
                     case EditUniversityName: {  
+                        cin.ignore();
                         inputUniversityName(false);
                         break;
                     }
@@ -1036,8 +1040,22 @@ class EmployeeManager{
 
         void addEmployeeByType(employeeType type) {
             int num;
-            cout << "Number of employees to add: ";
-            cin >> num;
+            while(true){
+                try{
+                    cout << "Enter number of employees to add: ";
+                    cin >> num;
+
+                    if (cin.fail() || num < 0) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        throw MustBeNumberException();
+                    }
+                    break;
+                }catch(const MustBeNumberException& e){
+                    cerr << "Error: " << e.what() << endl;
+                }
+            }
+            cin.ignore();
             
             for (int i = 0; i < num; ++i) {
                 shared_ptr<Employee> employee;
@@ -1227,6 +1245,12 @@ int main() {
                             if(input == "exit"){
                                 cout << "Returning to the main menu..." << endl;
                                 break;
+                            }
+
+                            if (cin.fail()) {
+                                cin.clear();
+                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                                throw MenuAddEmployeeException();
                             }
 
                             if (!regex_match(input, regex("[0-2]"))) {

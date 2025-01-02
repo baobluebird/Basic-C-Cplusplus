@@ -11,7 +11,7 @@ Fresher::Fresher(string fullName, string birthDay, string phone, string email, s
 }
 
 string Fresher::getType(){
-    return "Fresher";
+    return employeeTypeToString(this->type);
 }
 
 void Fresher::detailEmployee(){
@@ -44,7 +44,6 @@ void Fresher::inputGraduationRank(bool isInput){
     while (true) {
         try {
             isInput == true ? cout << "Enter Graduation Rank: " : cout << "Enter new Graduation Rank: ";
-            cin.ignore();
             getline(cin, this->Graduation_rank);
             if (!isValidString(this->Graduation_rank)) {
                 throw MustBeStringException();
@@ -76,6 +75,7 @@ void Fresher::inputEducation(bool isInput){
 void Fresher::inputEmployee(){
     Employee::inputEmployee();
     inputGraduationDate(true);
+    cin.ignore();
     inputGraduationRank(true);
     inputEducation(true);
 }
@@ -99,10 +99,12 @@ void Fresher::editEmployee(){
                 break;
             }
             case EditGraduationRank: {  
+                cin.ignore();
                 inputGraduationRank(false);
                 break;
             }
             case EditEducation: {  
+                cin.ignore();
                 inputEducation(false);
                 break;
             }

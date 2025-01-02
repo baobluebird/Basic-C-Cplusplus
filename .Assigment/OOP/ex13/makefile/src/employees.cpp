@@ -1,5 +1,4 @@
 #include "employees.h"
-
 set<int> Employee::manageId;
 set<int> Employee::recycledIds;
 int Employee::employeeCount = 1;
@@ -75,7 +74,6 @@ void Employee::inputName(bool isInput){
     while (true) {
         try {
             isInput == true ? cout << "Enter Full Name: " : cout << "Enter new Full Name: ";
-            cin.ignore();
             getline(cin, this->fullName);
             if (!isValidFullName(this->fullName)) {
                 throw FullNameException();
@@ -209,7 +207,7 @@ void Employee::displayCertificates() {
 void Employee::displayBasicInfo() {
     cout << left
         << setw(10) << this->ID
-        << setw(20) << Employee::employeeTypeToString(this->type)
+        << setw(20) << getType()
         << setw(20) << this->fullName
         << setw(15) << this->birthDay
         << setw(15) << this->phone

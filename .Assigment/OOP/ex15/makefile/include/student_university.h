@@ -1,7 +1,7 @@
 #ifndef STUDENT_UNIVERSITY_H
 #define STUDENT_UNIVERSITY_H
 #include "study_result.h"
-
+#include "exception.h"
 class Student{
 private:
     string studentID;
@@ -10,6 +10,7 @@ private:
     int yearEnrolled;
     float entryScore;
     vector<unique_ptr<StudyResult>> studyResults;
+    static set<string> usedStudentIDs;
 protected:
     bool isValidDate(const string&);
 

@@ -1,6 +1,8 @@
 #ifndef STUDY_RESULT_H
 #define STUDY_RESULT_H
 #include "utils_university.h"
+#include "exception.h"
+using namespace std;
 class StudyResult{
 private:
     string Semester;

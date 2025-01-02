@@ -2,6 +2,7 @@
 #define CERTIFICATE_H
 #include <iostream>
 #include <string>
+#include "exception.h"
 
 using namespace std;
 class Certificate {

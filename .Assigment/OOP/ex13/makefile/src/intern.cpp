@@ -12,7 +12,7 @@ Intern::Intern(string fullName, string birthDay, string phone, string email, str
 }
 
 string Intern::getType(){
-    return "Intern";
+    return employeeTypeToString(this->type);
 }
 
 void Intern::detailEmployee(){
@@ -29,7 +29,6 @@ void Intern::inputMajors(bool isInput){
     while (true) {
         try {
             isInput == true ? cout << "Enter Majors: " : cout << "Enter new Majors: ";
-            cin.ignore();
             getline(cin, this->Majors);
             if (!isValidString(this->Majors)) {
                 throw MustBeStringException();
@@ -64,7 +63,6 @@ void Intern::inputUniversityName(bool isInput){
     while (true) {
         try {
             isInput == true ? cout << "Enter University Name: " : cout << "Enter new University Name: ";
-            cin.ignore();
             getline(cin, this->University_name);
             if (!isValidString(this->University_name)) {
                 throw MustBeStringException();
@@ -82,6 +80,7 @@ void Intern::inputEmployee(){
     Employee::inputEmployee();
     inputMajors(true);
     inputSemester(true);
+    cin.ignore();
     inputUniversityName(true);
 }
 
@@ -100,6 +99,7 @@ void Intern::editEmployee(){
 
         switch (choice) {
             case EditMajors: {  
+                cin.ignore();
                 inputMajors(false);
                 break;
             }
@@ -108,6 +108,7 @@ void Intern::editEmployee(){
                 break;
             }
             case EditUniversityName: {  
+                cin.ignore();
                 inputUniversityName(false);
                 break;
             }

@@ -7,6 +7,7 @@
 #include <map>
 #include <stdexcept>
 #include <iomanip>
+#include <set>
 #include <limits>
 
 //define menu
@@ -147,6 +148,7 @@ private:
     int yearEnrolled;
     float entryScore;
     vector<unique_ptr<StudyResult>> studyResults;
+    static set<string> usedStudentIDs;
 protected:
     bool isValidDate(const string& birthday) {
         regex pattern(R"(^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$)"); 
@@ -187,7 +189,9 @@ public:
     Student() : studentID(""), fullName(""), dob(""), yearEnrolled(0), entryScore(0.0) {}
 
     Student(string studentID, string fullName, string dob, int yearEnrolled, float entryScore)
-        : studentID(studentID), fullName(fullName), dob(dob), yearEnrolled(yearEnrolled), entryScore(entryScore) {}
+        : studentID(studentID), fullName(fullName), dob(dob), yearEnrolled(yearEnrolled), entryScore(entryScore) {
+            usedStudentIDs.insert(studentID);
+        }
 
     string getStudentID(){
         return this->studentID; 
@@ -333,8 +337,21 @@ public:
     }
 
     virtual void inputStudent(){
-        cout << "Enter Student ID: ";
-        cin >> studentID;
+        string id;
+        while(true){
+            try{
+                cout << "Enter Student ID: ";
+                cin >> id;
+                if(usedStudentIDs.find(id) != usedStudentIDs.end()){
+                    throw invalid_argument("Student ID already exists");
+                }
+                usedStudentIDs.insert(id);
+                break;
+            }catch(const invalid_argument &e){
+                cerr << "Error: " << e.what() << endl;
+            }
+        }
+        this->studentID = id;
         inputName();
         inputBirthday();
         inputYearEnrolled();
@@ -384,6 +401,8 @@ public:
 
     virtual ~Student() {}
 };
+
+set<string> Student::usedStudentIDs;
 
 class RegularStudent : public Student{
 public:
@@ -451,6 +470,7 @@ public:
         return linkedLocation;
     }
 };
+
 
 class Faculty{
 private:
@@ -617,11 +637,11 @@ public:
 
     void displayStudents() {
         cout << setw(20) << "Type"
-            << setw(10) << "ID"
-            << setw(25) << "Full Name"
-            << setw(15) << "DOB"
-            << setw(10) << "Year"
-            << setw(10) << "Entry Score" << endl;
+             << setw(10) << "ID"
+             << setw(25) << "Full Name"
+             << setw(15) << "DOB"
+             << setw(10) << "Year"
+             << setw(10) << "Entry Score" << endl;
         cout << string(90, '-') << endl;
 
         for (shared_ptr<Student> student : listStudents) {

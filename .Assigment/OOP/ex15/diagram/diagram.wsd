@@ -6,7 +6,8 @@ abstract class Student {
     - dob: string 
     - yearEnrolled: int 
     - entryScore: float 
-    - studyResults: vector<StudyResult> 
+    - studyResults: vector<unique_ptr<StudyResult>> 
+    - usedStudentIDs: static set<string>
     --
     + bool isValidDate(const string&);
     + bool isValidFullName(const string&);
@@ -72,7 +73,7 @@ class StudyResult {
 
 class Faculty {
     - facultyName: string 
-    - students: vector<unique_ptr<Student>> 
+    - students: vector<shared_ptr<Student>> 
     --
     + Faculty();
     + Faculty(string);

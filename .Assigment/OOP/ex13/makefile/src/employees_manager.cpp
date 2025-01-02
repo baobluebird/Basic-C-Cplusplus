@@ -15,27 +15,44 @@ void EmployeeManager::addEmployee(shared_ptr<Employee> document){
     }
 }
 
-void EmployeeManager::addEmployeeByType(employeeType type) {
+void EmployeeManager::addEmployeeByType(employeeType type)  {
     int num;
-    cout << "Number of employees to add: ";
-    cin >> num;
-    
+    while(true){
+        try{
+            cout << "Enter number of employees to add: ";
+            cin >> num;
+            if (cin.fail() || num < 0) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                throw MustBeNumberException();
+            }
+            break;
+        }catch(const MustBeNumberException& e){
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
+    cin.ignore();
+            
     for (int i = 0; i < num; ++i) {
         shared_ptr<Employee> employee;
         switch (type) {
-            case employeeType::Experience:
+            case employeeType::Experience:{
                 employee = make_shared<Experience>();
                 break;
-            case employeeType::Fresher:
+            }
+            case employeeType::Fresher:{
                 employee = make_shared<Fresher>();
                 break;
-            case employeeType::Intern:
+            }
+            case employeeType::Intern:{
                 employee = make_shared<Intern>();
                 break;
+            }
             default:
                 cout << "Invalid employee type." << endl;
                 return;
         }
+
         cout << "Enter information for employee " << Employee::employeeTypeToString(type) << " " << i + 1 << ":" << endl;
         employee->inputEmployee();
         addEmployee(employee);

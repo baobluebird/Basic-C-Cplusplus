@@ -11,7 +11,7 @@ Experience::Experience(string fullName, string birthDay, string phone, string em
 }
 
 string Experience::getType(){
-    return "Experience";
+    return employeeTypeToString(this->type);
 }
 
 void Experience::detailEmployee(){
@@ -60,6 +60,7 @@ void Experience::inputProSkill(bool isInput){
 void Experience::inputEmployee(){
     Employee::inputEmployee();
     inputExperienceInYear(true);
+    cin.ignore();
     inputProSkill(true);
 }
 
@@ -82,6 +83,7 @@ void Experience::editEmployee(){
                 break;
             }
             case EditProSkill: { 
+                cin.ignore();
                 inputProSkill(false);
                 break;
             }

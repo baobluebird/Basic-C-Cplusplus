@@ -1,6 +1,7 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 #include "utils_student.h"
+#include "exception.h"
 using namespace std;
 
 bool isValidDOB(const string&);
