@@ -3,7 +3,8 @@ set<int> Employee::manageId;
 set<int> Employee::recycledIds;
 int Employee::employeeCount = 1;
 
-string Employee::employeeTypeToString(employeeType type) {
+string Employee::employeeTypeToString(employeeType type) 
+{
     switch (type) {
         case employeeType::Experience: return "Experience";
         case employeeType::Fresher: return "Fresher";
@@ -12,11 +13,13 @@ string Employee::employeeTypeToString(employeeType type) {
     }
 }
 
-bool Employee::isValidDate(const string& birthday) {
+bool Employee::isValidDate(const string& birthday) 
+{
+    int day, month, year;
+
     regex pattern(R"(^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$)"); 
     if (!regex_match(birthday, pattern)) return false;
 
-    int day, month, year;
     sscanf(birthday.c_str(), "%d/%d/%d", &day, &month, &year);
 
     int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -28,7 +31,8 @@ bool Employee::isValidDate(const string& birthday) {
     return day <= daysInMonth[month];
 }
 
-bool Employee::isValidPhone(const string& phone) {
+bool Employee::isValidPhone(const string& phone)
+{
     regex pattern(R"(^0\d{9}$)"); 
     return regex_match(phone, pattern);
 }
@@ -38,12 +42,14 @@ bool Employee::isValidEmail(const string& email) {
     return regex_match(email, pattern);
 }
 
-bool Employee::isValidFullName(const string& fullName) {
+bool Employee::isValidFullName(const string& fullName) 
+{
     regex pattern(R"(^[A-Za-zÀ-ỹ ]{3,}$)");
     return regex_match(fullName, pattern);
 }
 
-bool Employee::isValidString(const string& str) {
+bool Employee::isValidString(const string& str) 
+{
     return !str.empty() && regex_match(str, regex("^[A-Za-zÀ-ỹ\\s]+$"));
 }
 
@@ -194,6 +200,7 @@ void Employee::inputCertificates(){
 void Employee::displayCertificates() {
     cout << string(60, '*') << endl;
     cout << "Certificates of " << fullName << ":" << endl;
+
     if(certificates.empty()){
         cout << "No certificates found." << endl;
     }else{
@@ -230,6 +237,7 @@ void Employee::inputEmployee(){
 
 void Employee::editEmployee() {
     int choice;
+
     while (true) {
         detailEmployee();
         cout << "Select the field to edit:\n";
