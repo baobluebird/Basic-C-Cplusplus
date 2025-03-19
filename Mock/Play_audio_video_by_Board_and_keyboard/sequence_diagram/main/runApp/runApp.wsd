@@ -1,0 +1,75 @@
+@startuml
+actor User
+participant ControllerManager
+participant ModelManager
+participant ViewManager
+participant PlayerController
+participant UARTManager
+
+User -> ControllerManager: runApp()
+alt No folders found
+    ControllerManager -> ControllerManager: return
+end
+
+ControllerManager -> UARTManager: runMediaUart(playerController)
+
+ControllerManager -> ViewManager: getView("MainMenuView")
+ViewManager -> ControllerManager: return MainMenuView
+
+loop Display Menu
+    ControllerManager -> PlayerController: setNotificationsEnabled(true)
+    ControllerManager -> ViewManager: showMenuWithPlayer()
+    ViewManager -> ControllerManager: return choice
+
+    alt User selects METADATA_FILE_HANDLER
+        ControllerManager -> PlayerController: setNotificationsEnabled(false)
+        ControllerManager -> ControllerManager: mediaFileHandler()
+    else User selects MEDIA_FILE_MANAGER
+        ControllerManager -> PlayerController: setNotificationsEnabled(false)
+        ControllerManager -> ControllerManager: mediaFileManager()
+    else User selects PLAYLIST_MANAGER
+        ControllerManager -> PlayerController: setNotificationsEnabled(false)
+        ControllerManager -> ControllerManager: playlistManager()
+    else User selects PLAYLIST_HANDLER
+        ControllerManager -> PlayerController: setNotificationsEnabled(false)
+        ControllerManager -> ControllerManager: playlistHandler()
+    else User selects PLAY_MUSIC
+        ControllerManager -> PlayerController: setNotificationsEnabled(false)
+        ControllerManager -> ControllerManager: playMusicHandler()
+        ControllerManager -> ControllerManager: return music
+        alt music is valid
+            ControllerManager -> ControllerManager: typePlay = "single"
+            ControllerManager -> PlayerController: stop()
+            ControllerManager -> ControllerManager: Create new PlayerController(singleMedia)
+            ControllerManager -> PlayerController: play()
+        end
+    else User selects PLAY_PLAYLIST
+        ControllerManager -> PlayerController: setNotificationsEnabled(false)
+        ControllerManager -> ControllerManager: playPlaylist()
+        ControllerManager -> ControllerManager: return listMedia
+        alt Playlist has media files
+            ControllerManager -> ControllerManager: typePlay = "playlist"
+            ControllerManager -> PlayerController: stop()
+            ControllerManager -> ControllerManager: Create new PlayerController(listMedia)
+            ControllerManager -> PlayerController: play()
+        else No media files
+            ControllerManager -> ControllerManager: error = "No media files to play."
+        end
+    else User selects PLAY_VIDEO
+        ControllerManager -> PlayerController: setNotificationsEnabled(false)
+        ControllerManager -> ControllerManager: playVideoHandler()
+        ControllerManager -> ControllerManager: return video
+        alt video is valid
+            ControllerManager -> ControllerManager: typePlay = "single"
+            ControllerManager -> PlayerController: stop()
+            ControllerManager -> ControllerManager: Create new PlayerController(singleMedia)
+            ControllerManager -> PlayerController: play()
+        end
+    else User selects EXIT_MAIN_MENU
+        ControllerManager -> PlayerController: stop()
+        ControllerManager -> ControllerManager: return
+    else Invalid choice
+        ControllerManager -> ControllerManager: throw InvalidChoiceException
+    end
+end
+@enduml

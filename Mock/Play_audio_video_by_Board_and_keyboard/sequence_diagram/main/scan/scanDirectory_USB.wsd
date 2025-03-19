@@ -1,0 +1,98 @@
+@startuml
+actor User
+participant MediaScannerController
+participant FolderManager
+participant ScanView
+participant System
+
+== Scan Home Directory ==
+User -> MediaScannerController: scanHomeDirectory()
+MediaScannerController -> System: getenv("HOME")
+System -> MediaScannerController: return home_path
+
+alt Home directory not found
+    MediaScannerController -> MediaScannerController: throw HomeDirectoryException
+end
+
+MediaScannerController -> System: list_folders(home_path)
+System -> MediaScannerController: return folder list
+
+alt No folders found
+    MediaScannerController -> MediaScannerController: throw NoFoldersFoundException
+end
+
+MediaScannerController -> ScanView: showListFolder(folders)
+ScanView -> MediaScannerController: return selected_folder
+
+MediaScannerController -> System: list_media_files(selected_folder)
+System -> MediaScannerController: return media_files
+
+MediaScannerController -> FolderManager: getFolderDirectory(selected_folder)
+FolderManager -> MediaScannerController: return "Folder not found."
+
+alt Folder exists
+    MediaScannerController -> FolderManager: updateFolderDirectory(selected_folder)
+else Folder does not exist
+    MediaScannerController -> FolderManager: saveFolderDirectory(selected_folder)
+end
+
+loop Add media files
+    MediaScannerController -> MediaScannerController: Add file to listPaths
+end
+
+alt No media files found
+    MediaScannerController -> MediaScannerController: throw NoMediaFilesFoundException
+else Media files found
+    MediaScannerController -> FolderManager: addDataFolderDirectory(selected_folder, listPathToAdd)
+    MediaScannerController -> MediaScannerController: addDataFileWithFolder(selected_folder, "Directory")
+end
+
+== Scan USB Devices ==
+User -> MediaScannerController: scanUSBDevices()
+MediaScannerController -> System: getenv("USER")
+System -> MediaScannerController: return user
+
+MediaScannerController -> System: list_folders("/media/" + user)
+System -> MediaScannerController: return usb_devices
+
+alt No USB devices found
+    MediaScannerController -> MediaScannerController: throw NoUSBDevicesFoundException
+end
+
+MediaScannerController -> ScanView: showListUSBName(usb_devices)
+ScanView -> MediaScannerController: return selected_usb
+
+MediaScannerController -> System: list_folders(selected_usb)
+System -> MediaScannerController: return folders
+
+alt No folders found in USB
+    MediaScannerController -> MediaScannerController: throw NoFoldersFoundException
+end
+
+MediaScannerController -> ScanView: showListFolder(folders)
+ScanView -> MediaScannerController: return selected_folder
+
+MediaScannerController -> System: list_media_files(selected_folder)
+System -> MediaScannerController: return media_files
+
+MediaScannerController -> FolderManager: getFolderUSB(selected_folder)
+FolderManager -> MediaScannerController: return "Folder not found."
+
+alt Folder exists
+    MediaScannerController -> FolderManager: updateFolderUSB(selected_folder)
+else Folder does not exist
+    MediaScannerController -> FolderManager: saveFolderUSB(selected_folder)
+end
+
+loop Add media files
+    MediaScannerController -> MediaScannerController: Add file to listPaths
+end
+
+alt No media files found
+    MediaScannerController -> MediaScannerController: throw NoMediaFilesFoundException
+else Media files found
+    MediaScannerController -> FolderManager: addDataFolderUSB(selected_folder, listPathToAdd)
+    MediaScannerController -> MediaScannerController: addDataFileWithFolder(selected_folder, "USB")
+end
+
+@enduml

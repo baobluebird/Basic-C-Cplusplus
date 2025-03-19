@@ -1,0 +1,39 @@
+@startuml
+actor User
+participant ControllerManager
+participant ViewManager
+participant UARTManager
+
+User -> ControllerManager: checkUart()
+ControllerManager -> ViewManager: getView("UartView")
+ViewManager -> ControllerManager: return uartView
+
+ControllerManager -> UARTManager: getPortList()
+UARTManager -> ControllerManager: return portList
+
+ControllerManager -> UARTManager: getBaudRateOptions()
+UARTManager -> ControllerManager: return baudRateOptions
+
+loop Choose port UART
+    ControllerManager -> ViewManager: getPortAndBaudRate(portList, baudRateOptions)
+    ViewManager -> ControllerManager: return (port, baudRate)
+    
+    ControllerManager -> ControllerManager: Print "Port: port, Baud Rate: baudRate"
+    
+    alt User choose "exit"
+        ControllerManager -> ControllerManager: return false
+    else User choose valid port
+        ControllerManager -> UARTManager: checkPortConnection(port, baudRate)
+        alt Connection failed
+            UARTManager -> ControllerManager: return false
+            ControllerManager -> ControllerManager: Print "Failed to connect"
+        else Connection successful
+            UARTManager -> ControllerManager: return true
+            ControllerManager -> ControllerManager: Print "Connected to port"
+            break
+        end
+    end
+end
+
+ControllerManager -> ControllerManager: return true
+@enduml

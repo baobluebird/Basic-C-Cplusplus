@@ -1,0 +1,134 @@
+@startuml
+class App {
+  - currentDirectory : String
+  - playlists : vector<shared_ptr<Playlist>>
+  - player : Player
+  - metadataManager : MetadataManager
+  - boardController : BoardS32K144
+  + viewAllMediaFiles() : void
+  + listAllPlaylists() : void
+  + listPlaylistContents(playlistName : String) : void
+  + addMediaFileToPlaylist(file : MediaFile, playlistName : String) : void
+  + removeMediaFileFromPlaylist(file : MediaFile, playlistName : String) : void
+  + playMedia(mediaFile : MediaFile) : void
+  + adjustVolume(volume : int) : void
+  + processKeyboardInput(key : char) : void
+}
+
+abstract class MediaFile {
+  - fileName : String
+  - pathName : String
+  - size : double
+  - duration : String
+  - fileType : String
+  + virtual inputMediaFile() : void
+  + virtual editMediaFile() : void
+  + virtual detailMediaFile() : void
+  + virtual MediaFile();
+}
+
+class MediaFileVideo {
+  - resolution : String
+  - frameRate : float
+  - codec : String
+  - bitrate : int
+  + inputMediaFile() override : void
+  + detailMediaFile() override : void
+}
+
+class MediaFileAudio {
+  - trackName : String
+  - album : String
+  - artist : String
+  - publisher : String
+  - genre : String
+  - bitrate : int
+  - sampleRate : int
+  + inputMediaFile() override : void
+  + detailMediaFile() override : void
+}
+
+class MetadataManager {
+  - listMediaFiles : vector<shared_ptr<MediaFile>>
+  + addMediaFileFromUSB(file : shared_ptr<MediaFile>) : void
+  + addMediaFileFromPC(file : shared_ptr<MediaFile>) : void
+  + editMediaFile(file : shared_ptr<MediaFile>) : void
+  + removeMediaFile(file : shared_ptr<MediaFile>) : void
+  + displayAllMediaFiles() : void
+}
+
+class Playlist {
+  - name : String
+  - listPlayListAudio : vector<shared_ptr<PlayerAudio>>
+  - listPlayListVideo : vector<shared_ptr<PlaylistVideo>>
+  + createPlayList(name : String) : void
+  + deletePlayList(name : String) : void
+  + changePlayListName(name : String) : void
+  + displayAllPlayList() : void
+}
+
+class PlaylistAudio {
+  - listAudio : vector<shared_ptr<MediaFile>>
+  + inputMediaFileToList(file : shared_ptr<MediaFile>) : void
+  + deleteMediaFileFromList(file : shared_ptr<MediaFile>) : void
+  + listAudio() : void
+}
+
+class PlaylistVideo {
+  - listVideo : vector<shared_ptr<MediaFile>>
+  + inputMediaFileToList(file : shared_ptr<MediaFile>) : void
+  + deleteMediaFileFromList(file : shared_ptr<MediaFile>) : void
+  + listVideo() : void
+}
+
+class Player {
+  - currentTrack : shared_ptr<MediaFile>
+  - volume : int
+  + play(file : MediaFile) : void
+  + pause() : void
+  + stop() : void
+  + next() : void
+  + previous() : void
+  + adjustVolume(volume : int) : void
+}
+
+class BoardS32K144 {
+  - adcVolumeControl : ADC
+  - buttonControls : enum {Next, Previous, Play, Stop}
+  + sendSignalToApp(signal : String) : void
+  + updateDisplay(mediaFile : MediaFile) : void
+}
+
+class KeyboardController {
+  + processKeyPress(key : char) : void
+  + mapKeyToAction(key : char) : String
+}
+
+class Menu {
+  + displayMenu() : void
+  + processOption(option : int) : void
+}
+
+App "1" --> "*" Playlist
+App "1" --> "1" Player
+App "1" --> "1" MetadataManager
+App "1" <--> "1" BoardS32K144
+App "1" --> "1" KeyboardController
+App "1" --> "1" Menu
+
+MetadataManager o--> MediaFile
+
+Playlist --> PlaylistAudio : manages
+Playlist --> PlaylistVideo : manages
+
+PlaylistAudio o--> MediaFile : has-a
+PlaylistVideo o--> MediaFile : has-a
+
+
+Player     --> PlaylistAudio : plays
+Player     --> PlaylistVideo : plays
+Player "1" --> "1" MediaFile : plays
+
+MediaFile <|-- MediaFileVideo : is-a
+MediaFile <|-- MediaFileAudio : is-a
+@enduml

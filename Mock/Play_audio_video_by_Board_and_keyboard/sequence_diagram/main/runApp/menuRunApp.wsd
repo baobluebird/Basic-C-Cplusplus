@@ -1,0 +1,133 @@
+@startuml
+actor User
+participant ControllerManager
+participant MediaFileManagerController
+participant MediaFileController
+participant MediaPlaylistManagerController
+participant MediaPlaylistController
+participant PlayerController
+participant ViewManager
+participant ModelManager
+
+== Media File Handler ==
+User -> ControllerManager: mediaFileHandler()
+ControllerManager -> ViewManager: getView("MediaFileHandlerView")
+ViewManager -> ControllerManager: return MediaFileHandlerView
+
+ControllerManager -> ViewManager: getView("MediaFileManagerView")
+ViewManager -> ControllerManager: return MediaFileManagerView
+
+alt mediaFileManagerController not initialized
+    ControllerManager -> MediaFileManagerController: Create MediaFileManagerController
+end
+
+ControllerManager -> MediaFileManagerController: showAllMediaFile()
+MediaFileManagerController -> ControllerManager: return fileName
+
+alt File is playing
+    ControllerManager -> ControllerManager: return "File is running, can't edit"
+else File is not playing
+    ControllerManager -> MediaFileController: Create MediaFileController
+    ControllerManager -> MediaFileManagerController: addMediaFileController()
+    ControllerManager -> MediaFileController: handlerMediaFile()
+end
+
+== Media File Manager ==
+User -> ControllerManager: mediaFileManager()
+ControllerManager -> ViewManager: getView("ScanView")
+ViewManager -> ControllerManager: return ScanView
+
+alt scannerController not initialized
+    ControllerManager -> ControllerManager: Create MediaScannerController
+end
+
+ControllerManager -> ViewManager: getView("MediaFileManagerView")
+ViewManager -> ControllerManager: return MediaFileManagerView
+
+alt mediaFileManagerController not initialized
+    ControllerManager -> MediaFileManagerController: Create MediaFileManagerController
+end
+
+ControllerManager -> MediaFileManagerController: handleMediaFileManager()
+
+== Playlist Handler ==
+User -> ControllerManager: playlistHandler()
+ControllerManager -> ViewManager: getView("PlaylistManagerView")
+ViewManager -> ControllerManager: return PlaylistManagerView
+
+alt mediaPlaylistManagerController not initialized
+    ControllerManager -> MediaPlaylistManagerController: Create MediaPlaylistManagerController
+end
+
+ControllerManager -> MediaPlaylistManagerController: displayAllPlaylist()
+MediaPlaylistManagerController -> ControllerManager: return playlistName
+
+alt Playlist exists
+    ControllerManager -> MediaPlaylistController: Create MediaPlaylistController
+    ControllerManager -> MediaPlaylistManagerController: addMediaPlaylistController()
+    ControllerManager -> MediaPlaylistController: handlerPlaylist()
+else Playlist does not exist
+    ControllerManager -> ViewManager: showMenuCreatePlaylist()
+    ViewManager -> ControllerManager: return name
+    ControllerManager -> MediaPlaylistManagerController: createPlaylist(name)
+end
+
+== Playlist Manager ==
+User -> ControllerManager: playlistManager()
+alt mediaPlaylistManagerController not initialized
+    ControllerManager -> MediaPlaylistManagerController: Create MediaPlaylistManagerController
+end
+
+ControllerManager -> MediaPlaylistManagerController: handlerPlaylistManager()
+
+== Play Music ==
+User -> ControllerManager: playMusicHandler()
+ControllerManager -> ViewManager: getView("MediaFileManagerView")
+ViewManager -> ControllerManager: return MediaFileManagerView
+
+ControllerManager -> ViewManager: displayAllMediaFileOfAudio()
+ViewManager -> ControllerManager: return fileName
+
+alt User selects exit
+    ControllerManager -> ControllerManager: return "exit"
+else Valid file selected
+    ControllerManager -> ModelManager: getMediaFile(fileName)
+    ModelManager -> ControllerManager: return filePath
+    ControllerManager -> ControllerManager: return filePath
+end
+
+== Play Playlist ==
+User -> ControllerManager: playPlaylist()
+alt mediaPlaylistManagerController not initialized
+    ControllerManager -> MediaPlaylistManagerController: Create MediaPlaylistManagerController
+end
+
+ControllerManager -> MediaPlaylistManagerController: displayAllPlaylist()
+MediaPlaylistManagerController -> ControllerManager: return playlistName
+
+alt User selects exit
+    ControllerManager -> ControllerManager: return {"exit"}
+else Valid playlist selected
+    ControllerManager -> MediaPlaylistController: Create MediaPlaylistController
+    ControllerManager -> MediaPlaylistController: getListPathMediaFiles()
+    MediaPlaylistController -> ControllerManager: return listMedia
+    ControllerManager -> ControllerManager: return listMedia
+end
+
+== Play Video ==
+User -> ControllerManager: playVideoHandler()
+ControllerManager -> ViewManager: getView("MediaFileManagerView")
+ViewManager -> ControllerManager: return MediaFileManagerView
+
+ControllerManager -> ViewManager: displayAllMediaFileOfVideo()
+ViewManager -> ControllerManager: return fileName
+
+alt User selects exit
+    ControllerManager -> ControllerManager: return "exit"
+else Valid file selected
+    ControllerManager -> ModelManager: getMediaFile(fileName)
+    ModelManager -> ControllerManager: return filePath
+    ControllerManager -> ControllerManager: return filePath
+end
+
+@enduml

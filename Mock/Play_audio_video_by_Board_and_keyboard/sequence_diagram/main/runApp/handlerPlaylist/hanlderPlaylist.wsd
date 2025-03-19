@@ -1,0 +1,76 @@
+@startuml
+actor User
+participant MediaPlaylistController
+participant MediaFileManager
+participant Playlist
+participant BaseView
+participant System
+
+== Open Playlist Handler ==
+User -> MediaPlaylistController: handlerPlaylist()
+MediaPlaylistController -> System: clear screen
+MediaPlaylistController -> BaseView: showMenuWithMediaListInPlaylist()
+BaseView -> MediaPlaylistController: return choice
+
+alt User selects ADD_MEDIA_FILE_TO_PLAYLIST
+    MediaPlaylistController -> BaseView: displayAllMediaFile(mediaFileManager)
+    BaseView -> MediaPlaylistController: return fileName
+
+    alt User selects exit
+        MediaPlaylistController -> MediaPlaylistController: return
+    else Valid file selected
+        MediaPlaylistController -> MediaPlaylistController: addMediaFileInPlaylist(fileName)
+        alt File already in playlist
+            MediaPlaylistController -> MediaPlaylistController: error = "File is already in playlist"
+        else File added
+            MediaPlaylistController -> MediaPlaylistController: message = "File has been added"
+        end
+    end
+else User selects ADD_MEDIA_FILE_TO_PLAYLIST_BY_PATH
+    MediaPlaylistController -> MediaPlaylistController: addMediaFileByFolder()
+    alt Files added successfully
+        MediaPlaylistController -> MediaPlaylistController: message = "All files added"
+    else No files added
+        MediaPlaylistController -> MediaPlaylistController: error = "No files added"
+    end
+else User selects DELETE_MEDIA_FILE_FROM_PLAYLIST
+    loop Select File to Delete
+        MediaPlaylistController -> BaseView: displayAllMediaFileInPlaylist(playlist)
+        BaseView -> MediaPlaylistController: return fileName
+
+        alt User selects exit
+            MediaPlaylistController -> MediaPlaylistController: return
+        else Valid file selected
+            MediaPlaylistController -> BaseView: showConfirmMenu()
+            BaseView -> MediaPlaylistController: return confirmation
+
+            alt User confirms delete
+                MediaPlaylistController -> Playlist: deleteMediaFile(fileName)
+                Playlist -> MediaPlaylistController: return bool
+                alt Deletion successful
+                    MediaPlaylistController -> MediaPlaylistController: message = "File deleted from playlist"
+                else Deletion failed
+                    MediaPlaylistController -> MediaPlaylistController: continue loop
+                end
+            else User cancels
+                MediaPlaylistController -> MediaPlaylistController: continue loop
+            end
+        end
+    end
+else User selects RENAME_PLAYLIST
+    MediaPlaylistController -> BaseView: showMenuCreatePlaylist()
+    BaseView -> MediaPlaylistController: return newPlaylistName
+
+    alt User selects exit
+        MediaPlaylistController -> MediaPlaylistController: return
+    else Valid name selected
+        MediaPlaylistController -> Playlist: setPlaylistName(newPlaylistName)
+        Playlist -> MediaPlaylistController: return
+        MediaPlaylistController -> MediaPlaylistController: message = "Playlist renamed"
+    end
+else User selects EXIT_MENU_PLAYLIST_HANDLER
+    MediaPlaylistController -> MediaPlaylistController: return
+else Invalid Choice
+    MediaPlaylistController -> MediaPlaylistController: throw InvalidChoiceException
+end
+@enduml

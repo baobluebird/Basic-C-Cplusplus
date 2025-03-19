@@ -1,0 +1,65 @@
+Để chạy đoạn code của bạn trên Ubuntu, bạn cần cài đặt các thư viện cần thiết. Đây là các lệnh cài đặt đầy đủ và tóm gọn:
+
+---
+
+### **1. Cài đặt FFmpeg**
+FFmpeg được sử dụng để trích xuất âm thanh từ video.
+
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+---
+
+### **2. Cài đặt SDL2**
+SDL2 là thư viện chính để xử lý âm thanh.
+
+```bash
+sudo apt install libsdl2-dev
+```
+
+---
+
+### **3. Cài đặt SDL2_mixer**
+SDL2_mixer được sử dụng để phát nhạc (`.mp3`, `.wav`).
+
+```bash
+sudo apt install libsdl2-mixer-dev
+```
+
+---
+
+### **4. Biên dịch code**
+Sau khi cài đặt thư viện, bạn sử dụng lệnh `g++` để biên dịch file C++ với các thư viện liên kết:
+
+```bash
+g++ main.cpp -o app -I/usr/include/SDL2 -lSDL2 -lSDL2_mixer
+```
+
+---
+
+### **5. Chạy ứng dụng**
+Sau khi biên dịch thành công, chạy ứng dụng bằng lệnh:
+
+```bash
+./app
+```
+
+---
+
+### **Tóm gọn các lệnh**
+Dưới đây là danh sách đầy đủ và ngắn gọn:
+
+```bash
+sudo apt update
+sudo apt install ffmpeg libsdl2-dev libsdl2-mixer-dev
+g++ main.cpp -o app -I/usr/include/SDL2 -lSDL2 -lSDL2_mixer
+./app
+```
+
+---
+
+### **Lưu ý**
+1. Đảm bảo các file âm thanh (`confession.mp3`) và video (`take.mp4`) có đường dẫn chính xác và tồn tại trên máy.
+2. Nếu bạn gặp lỗi hoặc vấn đề gì khi chạy, hãy cho tôi biết để hỗ trợ thêm!

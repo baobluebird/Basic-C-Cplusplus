@@ -1,0 +1,71 @@
+@startuml
+actor User
+participant MediaPlaylistManagerController
+participant PlaylistManager
+participant MediaPlaylistController
+participant BaseView
+participant System
+
+== Open Playlist Manager ==
+User -> MediaPlaylistManagerController: handlerPlaylistManager()
+MediaPlaylistManagerController -> System: clear screen
+MediaPlaylistManagerController -> BaseView: showMenuWithPlaylist(playlistManager.getAllPlaylist())
+BaseView -> MediaPlaylistManagerController: return choice
+
+alt User selects CREATE_PLAYLIST
+    MediaPlaylistManagerController -> BaseView: showMenuCreatePlaylist()
+    BaseView -> MediaPlaylistManagerController: return name
+
+    alt User selects exit
+        MediaPlaylistManagerController -> MediaPlaylistManagerController: return
+    else Valid name selected
+        MediaPlaylistManagerController -> MediaPlaylistManagerController: createPlaylist(name)
+        alt Playlist creation successful
+            MediaPlaylistManagerController -> MediaPlaylistManagerController: message = "Playlist created successfully"
+        else Playlist already exists
+            MediaPlaylistManagerController -> MediaPlaylistManagerController: error = "Playlist already exists"
+        end
+    end
+else User selects DELETE_PLAYLIST
+    loop Select Playlist to Delete
+        MediaPlaylistManagerController -> BaseView: displayAllPlaylist()
+        BaseView -> MediaPlaylistManagerController: return playlistName
+
+        alt User selects exit
+            MediaPlaylistManagerController -> MediaPlaylistManagerController: return
+        else Valid playlist selected
+            MediaPlaylistManagerController -> BaseView: showConfirmMenu()
+            BaseView -> MediaPlaylistManagerController: return confirmation
+
+            alt User confirms delete
+                MediaPlaylistManagerController -> PlaylistManager: deletePlaylist(playlistName)
+                PlaylistManager -> MediaPlaylistManagerController: return bool
+                alt Deletion successful
+                    MediaPlaylistManagerController -> MediaPlaylistManagerController: message = "Playlist deleted successfully"
+                else Deletion failed
+                    MediaPlaylistManagerController -> MediaPlaylistManagerController: continue loop
+                end
+            else User cancels
+                MediaPlaylistManagerController -> MediaPlaylistManagerController: continue loop
+            end
+        end
+    end
+else User selects DISPLAY_ALL_PLAYLIST
+    MediaPlaylistManagerController -> BaseView: displayAllPlaylist()
+    BaseView -> MediaPlaylistManagerController: return playlistName
+
+    alt User selects exit
+        MediaPlaylistManagerController -> MediaPlaylistManagerController: return
+    else Valid playlist selected
+        alt Controller does not exist
+            MediaPlaylistManagerController -> MediaPlaylistController: Create MediaPlaylistController
+            MediaPlaylistManagerController -> MediaPlaylistManagerController: addMediaPlaylistController()
+        end
+        MediaPlaylistController -> MediaPlaylistController: handlerPlaylist()
+    end
+else User selects EXIT_MENU_PLAYLIST_MANAGER
+    MediaPlaylistManagerController -> MediaPlaylistManagerController: return
+else Invalid Choice
+    MediaPlaylistManagerController -> MediaPlaylistManagerController: throw InvalidChoiceException
+end
+@enduml

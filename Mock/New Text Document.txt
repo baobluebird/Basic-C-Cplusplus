@@ -1,0 +1,66 @@
+
+//#include "fsl_device_registers.h"
+//#include "fsl_debug_console.h"
+//#include "board.h"
+//
+//#include "pin_mux.h"
+
+#include "fsl_gpio.h"
+#include "fsl_port.h"
+#include "fsl_uart.h"
+#include "fsl_device_registers.h"
+#include "board.h"
+#include "pin_mux.h"
+#include <string.h>
+#include "fsl_debug_console.h"
+
+#define SW1_GPIO       GPIOC
+#define SW1_PIN        3U
+#define SW3_GPIO       GPIOC
+#define SW3_PIN        12U
+
+void init_hardware(void) {
+    CLOCK_EnableClock(kCLOCK_PortC);
+
+    port_pin_config_t sw_config = {
+        kPORT_PullUp,
+        kPORT_SlowSlewRate,
+        kPORT_PassiveFilterDisable,
+        kPORT_LowDriveStrength,
+        kPORT_MuxAsGpio
+    };
+
+    PORT_SetPinMux(PORTC, SW1_PIN, kPORT_MuxAsGpio);
+    PORT_SetPinConfig(PORTC, SW1_PIN, &sw_config);
+    GPIO_PinInit(SW1_GPIO, SW1_PIN, &(gpio_pin_config_t){kGPIO_DigitalInput, 0});
+
+    PORT_SetPinMux(PORTC, SW3_PIN, kPORT_MuxAsGpio);
+    PORT_SetPinConfig(PORTC, SW3_PIN, &sw_config);
+    GPIO_PinInit(SW3_GPIO, SW3_PIN, &(gpio_pin_config_t){kGPIO_DigitalInput, 0});
+}
+
+
+int main(void)
+{
+
+    /* Init board hardware. */
+    BOARD_InitPins();
+    BOARD_BootClockRUN();
+    BOARD_InitDebugConsole();
+
+   // BOARD_InitBootPins();
+    init_hardware();
+    //init_uart();
+
+
+    while (1) {
+        if (GPIO_ReadPinInput(SW1_GPIO, SW1_PIN) == 0) {
+        	PRINTF("1");
+            while (GPIO_ReadPinInput(SW1_GPIO, SW1_PIN) == 0);
+        }
+        else if (GPIO_ReadPinInput(SW3_GPIO, SW3_PIN) == 0) {
+        	PRINTF("2");
+            while (GPIO_ReadPinInput(SW3_GPIO, SW3_PIN) == 0);
+        }
+    }
+}

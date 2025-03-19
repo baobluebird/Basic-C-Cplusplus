@@ -1,0 +1,44 @@
+@startuml
+actor User
+participant ControllerManager
+participant UARTManager
+participant PlayerController
+participant System
+
+== Start UART ==
+User -> ControllerManager: runApp()
+ControllerManager -> UARTManager: runMediaUart(playerController)
+
+alt UART setup successful
+    UARTManager -> UARTManager: asyncHandleUart(serial, playerController)
+
+    loop Listen for UART Input
+        UARTManager -> System: async_read_until(serial, '\n')
+        System -> UARTManager: return received_data
+
+        alt Data received successfully
+            UARTManager -> UARTManager: Clean received_data
+
+            alt Received "play" or "pause"
+                UARTManager -> PlayerController: togglePlayback()
+            else Received "SW3"
+                UARTManager -> PlayerController: stop()
+            else Received "next"
+                UARTManager -> PlayerController: playNext()
+            else Received "previous"
+                UARTManager -> PlayerController: playPrevious()
+            else Received valid volume command
+                UARTManager -> PlayerController: setVolume(newVolume)
+            else Invalid data
+                UARTManager -> UARTManager: Log "Ignored invalid data"
+            end
+
+            UARTManager -> UARTManager: asyncHandleUart(serial, playerController)
+        else UART error
+            UARTManager -> UARTManager: Log "UART shutdown"
+        end
+    end
+else UART setup failed
+    UARTManager -> UARTManager: Log "Failed to set up UART"
+end
+@enduml

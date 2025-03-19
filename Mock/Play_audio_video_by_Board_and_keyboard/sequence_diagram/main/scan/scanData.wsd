@@ -1,0 +1,50 @@
+@startuml
+actor User
+participant ControllerManager
+participant ViewManager
+participant MediaScannerController
+participant FolderManager
+participant ScanView
+
+User -> ControllerManager: ScanData()
+ControllerManager -> ViewManager: getView("ScanView")
+ViewManager -> ControllerManager: return ScanView
+
+alt scannerController does not exist
+    ControllerManager -> MediaScannerController: Create MediaScannerController
+    MediaScannerController -> FolderManager: getListFolderDirectory()
+    FolderManager -> MediaScannerController: return listFolder
+    MediaScannerController -> FolderManager: getListFolderUSB()
+    FolderManager -> MediaScannerController: return listFolderUSB
+end
+
+ControllerManager -> MediaScannerController: handleScan(false)
+
+alt No folders found or scanning is running
+    loop Display scan menu
+        MediaScannerController -> ScanView: setListPathNameIsAdded()
+        ScanView -> MediaScannerController: return
+        MediaScannerController -> ScanView: showMenu()
+        ScanView -> MediaScannerController: return choice
+
+        alt User selects SCAN_HOME_DIRECTORY
+            MediaScannerController -> MediaScannerController: scanHomeDirectory()
+        else User selects SCAN_USB
+            MediaScannerController -> MediaScannerController: scanUSBDevices()
+        else User selects EXIT_MENU_SCAN
+            MediaScannerController -> MediaScannerController: return
+        else Invalid choice
+            MediaScannerController -> MediaScannerController: throw InvalidChoiceException
+        end
+    end
+else Data is available
+    MediaScannerController -> MediaScannerController: loadData()
+    MediaScannerController -> MediaScannerController: loadFolder()
+    MediaScannerController -> MediaScannerController: loadMediaPlaylist()
+end
+
+alt ScanException occurs
+    MediaScannerController -> MediaScannerController: Catch ScanException
+end
+
+@enduml

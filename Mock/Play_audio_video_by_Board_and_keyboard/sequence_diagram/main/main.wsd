@@ -1,0 +1,30 @@
+@startuml
+actor User
+participant "main()" as Main
+participant ModelManager
+participant ViewManager
+participant UARTManager
+participant ControllerManager
+
+User -> Main: Start Application
+
+Main -> ModelManager: Create ModelManager
+Main -> ViewManager: Create ViewManager
+Main -> UARTManager: Create UARTManager (shared_ptr)
+Main -> ControllerManager: Create ControllerManager(model, view, uartManager)
+
+Main -> ControllerManager: checkUart()
+alt UART Not Available
+    ControllerManager -> Main: return false
+    Main -> Main: exit()
+else UART Available
+    ControllerManager -> Main: return true
+    Main -> ControllerManager: ScanData()
+    ControllerManager -> ControllerManager: Processing Data
+
+    Main -> ControllerManager: runApp()
+    ControllerManager -> ControllerManager: Running Application Logic
+end
+
+Main -> Main: return 0
+@enduml

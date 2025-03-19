@@ -1,0 +1,78 @@
+@startuml
+actor User
+participant MediaFileController
+participant MediaFileHandlerView
+participant MediaFile
+
+== Metadata Handling Menu ==
+User -> MediaFileController: handlerMediaFile()
+MediaFileController -> MediaFileController: getDetailMediaFile()
+MediaFileController -> MediaFileHandlerView: showMenu()
+MediaFileHandlerView -> MediaFileController: return choice
+
+alt User selects ADD_METADATA
+    MediaFileController -> MediaFileController: addMetadata()
+    loop Add Metadata Process
+        MediaFileController -> MediaFileHandlerView: displayMenuAddMetadata()
+        MediaFileHandlerView -> MediaFileController: return key, value
+        alt Value is invalid
+            MediaFileController -> MediaFileController: throw InvalidValueFormatException
+        else Value is valid
+            MediaFileController -> MediaFile: addNewKey(key, value)
+            alt Key already exists
+                MediaFile -> MediaFileController: return false
+                MediaFileController -> MediaFileController: throw runtime_error("Key already exists.")
+            else Key added
+                MediaFile -> MediaFileController: return true
+                MediaFileController -> MediaFileController: return success message
+            end
+        end
+    end
+else User selects EDIT_METADATA
+    MediaFileController -> MediaFileController: editMetadata()
+    loop Edit Metadata Process
+        MediaFileController -> MediaFileHandlerView: displayMenuEditMetadata()
+        MediaFileHandlerView -> MediaFileController: return key, value
+        alt Value is invalid
+            MediaFileController -> MediaFileController: throw InvalidValueFormatException
+        else Value is valid
+            MediaFileController -> MediaFile: editKey(key, value)
+            alt Edit failed
+                MediaFile -> MediaFileController: return false
+                MediaFileController -> MediaFileController: throw EditFailException
+            else Edit successful
+                MediaFile -> MediaFileController: return true
+                MediaFileController -> MediaFileController: return success message
+            end
+        end
+    end
+else User selects DELETE_METADATA
+    MediaFileController -> MediaFileController: deleteMetadata()
+    loop Delete Metadata Process
+        MediaFileController -> MediaFileHandlerView: displayMenuDeleteMetadata()
+        MediaFileHandlerView -> MediaFileController: return key
+        alt User cancels
+            MediaFileController -> MediaFileController: return
+        else User confirms deletion
+            MediaFileController -> MediaFileHandlerView: showConfirmMenu()
+            MediaFileHandlerView -> MediaFileController: return confirmation
+            alt User confirms
+                MediaFileController -> MediaFile: deleteKey(key)
+                alt Deletion failed
+                    MediaFile -> MediaFileController: return false
+                    MediaFileController -> MediaFileController: throw EditFailException
+                else Deletion successful
+                    MediaFile -> MediaFileController: return true
+                    MediaFileController -> MediaFileController: return success message
+                end
+            else User cancels
+                MediaFileController -> MediaFileController: return
+            end
+        end
+    end
+else User selects EXIT_MENU_METADATA_EDIT
+    MediaFileController -> MediaFileController: return
+else Invalid Choice
+    MediaFileController -> MediaFileController: throw InvalidChoiceException
+end
+@enduml

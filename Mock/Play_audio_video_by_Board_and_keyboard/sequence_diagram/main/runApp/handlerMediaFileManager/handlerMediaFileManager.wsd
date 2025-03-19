@@ -1,0 +1,103 @@
+@startuml
+actor User
+participant MediaFileManagerController
+participant MediaScannerController
+participant MediaFileController
+participant MediaFileManager
+participant BaseView
+participant System
+
+== Open Media File Manager ==
+User -> MediaFileManagerController: handlerMediaFileManager()
+MediaFileManagerController -> System: clear screen
+MediaFileManagerController -> BaseView: showMenuWithMediaList(mediaManager)
+BaseView -> MediaFileManagerController: return choice
+
+alt User selects ADD_FILE_PATH
+    loop Enter File Path
+        MediaFileManagerController -> System: Get file path input
+        System -> MediaFileManagerController: return pathFile
+
+        alt Invalid path format
+            MediaFileManagerController -> MediaFileManagerController: throw InvalidFilePathException
+        else Valid path
+            MediaFileManagerController -> System: fileExists(pathFile)
+            System -> MediaFileManagerController: return bool
+
+            alt File does not exist
+                MediaFileManagerController -> MediaFileManagerController: throw FileNotFoundException
+            else File exists
+                MediaFileManagerController -> MediaFileManager: addDataFile(pathFile)
+                MediaFileManager -> MediaFileManagerController: return result
+
+                alt Unsupported file type
+                    MediaFileManagerController -> MediaFileManagerController: throw UnsupportedFileTypeException
+                else File added
+                    MediaFileManagerController -> MediaFileManagerController: Display success message
+                end
+            end
+        end
+    end
+else User selects ADD_FOLDER_PATH
+    MediaFileManagerController -> MediaScannerController: handleScan(true)
+else User selects DELETE_FILE
+    loop Select File to Delete
+        MediaFileManagerController -> MediaFileManagerController: showAllMediaFile()
+        MediaFileManagerController -> MediaFileManager: getMediaFile(fileName)
+        MediaFileManager -> MediaFileManagerController: return file
+
+        alt File is playing
+            MediaFileManagerController -> MediaFileManagerController: Display "File is running, can't delete"
+        else Confirm Delete
+            MediaFileManagerController -> BaseView: showConfirmMenu()
+            BaseView -> MediaFileManagerController: return confirmation
+
+            alt User confirms delete
+                MediaFileManagerController -> MediaFileManager: deleteMediaFile(fileName)
+                MediaFileManager -> MediaFileManagerController: return bool
+                alt Deletion successful
+                    MediaFileManagerController -> MediaFileManagerController: Display success message
+                else Deletion failed
+                    MediaFileManagerController -> MediaFileManagerController: Continue loop
+                end
+            else User cancels
+                MediaFileManagerController -> MediaFileManagerController: Continue loop
+            end
+        end
+    end
+else User selects SHOW_ALL_MEDIAFILE
+    MediaFileManagerController -> MediaFileManagerController: showAllMediaFile()
+    MediaFileManagerController -> MediaFileManager: getMediaFile(filename)
+    MediaFileManager -> MediaFileManagerController: return file
+
+    alt Controller does not exist
+        MediaFileManagerController -> MediaFileController: Create MediaFileController
+        MediaFileManagerController -> MediaFileManagerController: addMediaFileController()
+    end
+    MediaFileController -> MediaFileController: handlerMediaFile()
+else User selects SHOW_ALL_MEDIAFILE_AUDIO
+    MediaFileManagerController -> MediaFileManagerController: showAllMediaFileOfAudio()
+    MediaFileManagerController -> MediaFileManager: getMediaFile(filename)
+    MediaFileManager -> MediaFileManagerController: return file
+
+    alt Controller does not exist
+        MediaFileManagerController -> MediaFileController: Create MediaFileController
+        MediaFileManagerController -> MediaFileManagerController: addMediaFileController()
+    end
+    MediaFileController -> MediaFileController: handlerMediaFile()
+else User selects SHOW_ALL_MEDIAFILE_VIDEO
+    MediaFileManagerController -> MediaFileManagerController: showAllMediaFileOfVideo()
+    MediaFileManagerController -> MediaFileManager: getMediaFile(filename)
+    MediaFileManager -> MediaFileManagerController: return file
+
+    alt Controller does not exist
+        MediaFileManagerController -> MediaFileController: Create MediaFileController
+        MediaFileManagerController -> MediaFileManagerController: addMediaFileController()
+    end
+    MediaFileController -> MediaFileController: handlerMediaFile()
+else User selects EXIT_MENU_MEDIAFILE_MANAGER
+    MediaFileManagerController -> MediaFileManagerController: return
+else Invalid Choice
+    MediaFileManagerController -> MediaFileManagerController: throw InvalidChoiceException
+end
+@enduml
